@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+.typeOfShip {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.date {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.enterButton {
+  background-color: #0000FF; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  float: right;
+
+}
+</style>
+</head>
+    <body>
+        <header class="mdl-layout__header" >
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+
+
+    <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic"><font color='black'>Call Your Ship</font> </span>
+      <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+    </div>
+</div>
+
+
+      </header>
+
+<br><br>
+<button type="button" class="collapsible" >Set Route: <span style="font-size:14pt" style = 'text-align: right'>🔽</span></button>
+<div class="content">
+  <p style='text-align: center'>Departure: <input id='departure' type = 'text' > <br>
+    Destination: <input id='destination' type = 'text' >
+    <br><br>
+  </p>
+</div>
+<div class='typeOfShip' style='text-align: center'>
+Set ship: <input id='ship' type = 'text' >
+
+</div>
+<button type="button" class="collapsible">Date & Time:  <span style="font-size:14pt" class="mdl-cell mdl-cell--5-col">🔽</span></button>
+
+
+  <div class='content'>
+    <p style='text-align: center'>Set Date: <input id='date' type = 'date' > <br>
+    Set Time: <input id='time' type = 'time'>
+  </p>
+</div>
+<br><br>
+<button type = 'button' class = 'enterButton' onmouseup ="window.location.href='file:///C:/Users/User/Desktop/java.script/week%207%20submission/a.html';submit ()">Enter</button>
+<script>
+
+
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+
+    </body>
+</html>
