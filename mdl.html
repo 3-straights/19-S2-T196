@@ -14,31 +14,78 @@
   cursor: pointer;
   padding: 18px;
   width: 100%;
+  height: 100%;
   border: none;
   outline: none;
-  font-size: 15px;
+  font-size: 20px;
+
+  overflow: hidden;
+
+
 }
 
 .active, .collapsible:hover {
   background-color: #555;
 }
+.boatDetail {
+background-color: #F0F8FF;
+height: 250px;
+width: 400px;
+text-align: center;
+font-size: 20px;
+color: blue;
+border-width: 9px;
+border-style: solid;
+border-color: darkblue;
+}
 
 .content {
-  padding: 0 18px;
+  padding: 18px;
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
+  width: 100%;
+  height: 100%;
+  outline: none;
 }
+
+div.content div {width: 33%; float: left}
+.clear { clear: both; height: 30px}
+
 .typeOfShip {
   background-color: #777;
   color: white;
-  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  overflow: hidden;
+
+
+}
+.chooseBoat {  padding: 18px;
+  display: block;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border-width: 9px;
+  border-style: solid;
+  border-color: orange;}
+
+div.chooseBoat div {float:left; margin-left: 375px}
+.location {
+  background-color: #777;
+  color: white;
   padding: 18px;
   width: 100%;
   border: none;
   text-align: left;
   outline: none;
-  font-size: 15px;
+  font-size: 20px;
+
 }
 .date {
   background-color: #777;
@@ -58,19 +105,38 @@
   padding: 15px 32px;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 20px;
   float: right;
+  cursor: pointer
+}
+.mdl-layout__header-row {
+  margin-left: 550px;
+  width: 100%;
+  height: 100%;
+
+}
+select {
+    width: 180px;
+    height: 40px;
+    margin: 10px;
+}
+p {
+  width: 100%;
+}
+.inputOther {
+text-align: middle;
+margin-right: 42px;
+background-color: #000080;
+color: white;
 
 }
 </style>
+<title>Ships Detail & Route Information</title>
 </head>
     <body>
         <header class="mdl-layout__header" >
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-
-
-
-    <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic"><font color='black'>Call Your Ship</font> </span>
+    <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
       <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
     </div>
 </div>
@@ -79,27 +145,41 @@
       </header>
 
 <br><br>
-<button type="button" class="collapsible" >Set Route: <span style="font-size:14pt" style = 'text-align: right'>🔽</span></button>
-<div class="content">
-  <p style='text-align: center'>Departure: <input id='departure' type = 'text' > <br>
-    Destination: <input id='destination' type = 'text' >
-    <br><br>
-  </p>
+<button type="button" class="collapsible" title= 'Click to view/hide selected route' ><strong>Display Route: </strong><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
+<div class="content" id = 'content'><br>
 </div>
+<div class='clear'></div>
+<div class = 'location' style = 'text-align: center'>
+  <b>Choose your location: </b> &nbsp;
+  <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a>
+</div>
+
 <div class='typeOfShip' style='text-align: center'>
-Set ship: <input id='ship' type = 'text' >
+<b>Choose your ship:</b> <br>
 
 </div>
-<button type="button" class="collapsible">Date & Time:  <span style="font-size:14pt" class="mdl-cell mdl-cell--5-col">🔽</span></button>
+<div class = 'chooseBoat'>
+<div><p>
+         <select name="boatOpt" id = "boatOpt" onchange= " boatDetail(this.options[this.selectedIndex].value); insertOther(this.options[this.selectedIndex].value); insertShipName(this.options[this.selectedIndex].value) ">
+           <option selected="selected">Choose your boat...</option>
+         </select>
+       </p>
+         </div>
+
+<div class='inputOther' id="Other"></div>
+<div class='boatDetail' id='boatDetail'></div>
+</div>
 
 
-  <div class='content'>
-    <p style='text-align: center'>Set Date: <input id='date' type = 'date' > <br>
+<button type="button" class="collapsible" title = 'Click to expand/hide'><b>Date & Time: </b> <span style="font-size:14pt" class="mdl-cell mdl-cell--1-col">🔽</span></button>
+  <div class='content'><br>
+    <p style='text-align: center'>Set Date: <input id='date' type = 'date' > <br><br>
     Set Time: <input id='time' type = 'time'>
+    <br>
   </p>
 </div>
 <br><br>
-<button type = 'button' class = 'enterButton' onmouseup ="window.location.href='file:///C:/Users/User/Desktop/java.script/week%207%20submission/a.html';submit ()">Enter</button>
+<button type = 'button' class = 'enterButton' onmouseup ="newDiv()">Enter</button>
 <script>
 
 
@@ -117,6 +197,193 @@ Set ship: <input id='ship' type = 'text' >
       }
     });
   }
+  let ships = [
+		{
+			"name": "Bumble Bee",
+			"maxSpeed": 15,
+			"range": 6576,
+			"desc": "tanker",
+			"cost": 2,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Honey Bee",
+			"maxSpeed": 14,
+			"range": 9999,
+			"desc": "supertanker",
+			"cost": 2.50,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Beetle",
+			"maxSpeed": 13,
+			"range": 8012,
+			"desc": "supermaxtanker",
+			"cost": 3,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Caterpillar",
+			"maxSpeed": 12,
+			"range": 6087,
+			"desc": "supermaxtanker",
+			"cost": 3.50,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Lady Bug",
+			"maxSpeed": 12,
+			"range": 6045,
+			"desc": "supermaxtanker",
+			"cost": 1.50,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Butterfly",
+			"maxSpeed": 16,
+			"range": 4000,
+			"desc": "supermaxtanker",
+			"cost": 2.00,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Firefly",
+			"maxSpeed": 12.5,
+			"range": 2000,
+			"desc": "tanker",
+			"cost": 1.00,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Dragonfly",
+			"maxSpeed": 10,
+			"range": 4875,
+			"desc": "maxtanker",
+			"cost": 1.00,
+			"status": "unavailable",
+			"comments": "Destroyed by somali pirates in 2018"
+		},
+		{
+			"name": "Grasshopper",
+			"maxSpeed": 10.5,
+			"range": 6790,
+			"desc": "maxtanker",
+			"cost": 1.00,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Mantis",
+			"maxSpeed": 12.5,
+			"range": 7000,
+			"desc": "maxtanker",
+			"cost": 1.00,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Assassin Bug",
+			"maxSpeed": 12.5,
+			"range": 7000,
+			"desc": "maxtanker",
+			"cost": 1.00,
+			"status": "available",
+			"comments": ""
+		},
+		{
+			"name": "Damselflies",
+			"maxSpeed": 12.5,
+			"range": 3500,
+			"desc": "maxtanker",
+			"cost": 2.00,
+			"status": "available",
+			"comments": ""
+		},
+    {
+      "name": "Other",
+      "status": 'available'
+    }
+	]
+  var boatOpt = document.getElementById('boatOpt');
+  for (let i = 0; i<ships.length; i++)
+  {
+    let options = document.createElement("OPTION");
+    let txt = document.createTextNode(ships[i].name);
+    options.appendChild(txt);
+    options.setAttribute('value',ships[i].name);
+    boatOpt.insertBefore(options,boatOpt.lastChild);
+  }
+
+  function insertShipName(boat)
+  {
+    for(let i=0; i<ships.length; i++)
+    {
+if (boat== ships[i].name)
+    {
+      if (ships[i].status !== 'available' )
+      {
+      alert('The ship is currently unavailable, please choose another ship instead!');
+
+}
+    }
+    }
+}
+
+  function insertOther(boatName){
+    if(boatName=='Other')
+    {
+      document.getElementById('Other').innerHTML='Other: <input type="text" name="other" />';
+  }
+    else
+    {
+      document.getElementById('Other').innerHTML='';
+  }
+}
+function newDiv()
+{
+var div = document.createElement("div");
+div.setAttribute('class', 'myclass');
+div.style.width = "20%";
+div.style.height = "200px";
+div.style.background = "#191970";
+div.style.color = "white";
+div.style.fontSize = '18px';
+div.style.textAlign = 'center';
+div.style.overflowY = 'scroll';
+div.innerHTML+= '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Departure: KL to Johor </span> ';
+div.innerHTML += '<br>';
+div.innerHTML += 'date: 08/3/2019 <br>';
+div.innerHTML += 'Weather: Sunny <br>';
+div.innerHTML += '...'
+
+
+document.getElementById("content").appendChild(div);
+}
+
+
+function boatDetail(Detail)
+{
+let shipInfoSec = document.getElementById('boatDetail');
+for (let i=0; i<ships.length ;i++)
+{
+if (Detail == ships[i].name)
+{
+shipInfoSec.innerHTML = '<br><br><br><br> Status: ' + ships[i].status + '<br>';
+shipInfoSec.innerHTML += 'Ship Name: ' + Detail +'<br>';
+shipInfoSec.innerHTML += 'Maximum speed: ' + ships[i].maxSpeed + '<br>';
+shipInfoSec.innerHTML += 'Full tank range: ' + ships[i].range + '<br>';
+shipInfoSec.innerHTML += 'Cost: ' + ships[i].cost + ' /L <br>';
+}
+
+}
+}
 </script>
 
     </body>
