@@ -77,8 +77,9 @@ div.content div {width: 33%; float: left}
 
 div.chooseBoat div {float:left; margin-left: 375px}
 .location {
-  background-color: #777;
-  color: white;
+  display: none;
+    background-color: #f1f1f1;
+  color: black;
   padding: 18px;
   width: 100%;
   border: none;
@@ -149,9 +150,15 @@ color: white;
 <div class="content" id = 'content'><br>
 </div>
 <div class='clear'></div>
+
+<button type = 'button' class = 'collapsible'title='location...'><b>Choose your location: </b><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
 <div class = 'location' style = 'text-align: center'>
-  <b>Choose your location: </b> &nbsp;
-  <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a>
+
+  Choose from map:  &nbsp; &nbsp; <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
+
+  <span style = 'margin-left: 275px '>Select Ports:  &nbsp; &nbsp; <input type='text' class= 'Intport' id='Intport' placeholder='select initial port...'></input> &nbsp; &nbsp;  <input type='text' class= 'Finport' id='Finport' placeholder='select destination port...'></input></span>
+
+
 </div>
 
 <div class='typeOfShip' style='text-align: center'>
