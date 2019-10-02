@@ -4,7 +4,7 @@ class ship
   constructor(boatName,maxSpeed,range,cost,status)
   {
 
-  this._boatName = boatName;
+  this._boatName = boat
   this._maxSpeed = maxSpeed;
   this._range = range;
   this._cost = cost;
@@ -170,7 +170,7 @@ constructor()
 {
 
 
-  
+
 }
   shortestRoute()
   {
