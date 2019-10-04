@@ -1,7 +1,7 @@
 
 class ship
 {
-  constructor(boatName,maxSpeed,range,cost,status)
+  constructor(boatName,maxSpeed,range,cost,status,comment)
   {
 
   this._boatName = boatName;
@@ -9,6 +9,7 @@ class ship
   this._range = range;
   this._cost = cost;
   this._status = status;
+  this._comment = comment;
   }
 
   get boatName()
@@ -55,9 +56,16 @@ set status(newStatus)
   this._status = newStatus;
 }
 }
-
-
+get comment()
+{
+  return this._comment
 }
+set comment(newComment)
+{
+  this._comment = newComment;
+}
+}
+
 
 class shipFaculty{
 constructor(shipFacultyName)
@@ -98,26 +106,18 @@ createShip(newShip)
       {
           // check if student already enrolled
           let searchResult = this._searchForShip(newShip.boatName);
-          if (searchResult!== isNaN)
+          if (searchResult == -1)
           {
             this._ships.push(newShip);
           }
-          else if (searchResult == -1)
-          {
-            newShip.maxSpeed = document.getElementById('');
-            newShip.range = document.getElementById('');
-            newShip.maxSpeed = document.getElementById('');
-            newShip.cost = document.getElementById('');
-            newShip.status = document.getElementById('');
 
-            this._ships.push(newShip);
-          }
-      }
       else
       {
           console.log("Error: not an instance of ship!");
       }
   }
+
+
 
 }
 
@@ -131,7 +131,6 @@ constructor(portName,country,lat,lng)
   this._country = country;
 
   this._lat = lat;
-
 
   this._lng = lng;
 }
@@ -166,12 +165,19 @@ get lng()
 {
   return this._lng;
 }
+
 set lng(newLng)
 {
   this._lng = newLng;
 }
 
-
+innerData(portDetails)
+{
+  this._portName = portDetails._portName;
+  this._country = portDetails._country;
+  this._lat = portDetails._lat;
+  this._lng = portDetails._lng;
+}
 
 }
 
@@ -182,7 +188,7 @@ constructor(portPlace)
 this._portPlace= portPlace;
 this._ports = [];
 }
-get portName()
+get portPlace()
 {
   return this._portPlace;
 }
@@ -230,9 +236,21 @@ createPort(ownPort)
       }
   }
 
+  overallPort(portDetails)
+  {
+this._portPlace = portDetails._portPlace;
+
+for (let i=0; i<portDetails._ports.length; i++)
+{
+let ship = new Ship();
+
+ship.innerData(portDetails._ships[i]);
+this._ships.push(ship);
 }
+  }
 
 }
+
 class route
 {
 constructor()
@@ -252,31 +270,14 @@ constructor()
 
 }
 
+    let shipA = new ship(ship_new.Name, ship_new.maxSpeed, ship_new.range, ship_new.cost, ship_new.status, ship_new.comment);
+  	myShipArray.createShip(shipA);
 
-
-function insertShip()
-{
-  let ship_name = document.getElementById("chooseBoat").value;
-  let ship_new =
-  {
-    Name: ship_name,
-    maxRange:  [_searchForShip(ship_name)],
-    maxSpeed:  document.getElementById("first_name").value,
-    cost:  document.getElementById("first_name").value,
-    status:  document.getElementById("first_name").value,
-    comment:  document.getElementById("first_name").value
-  };
-
-    let shipA = new ship(ship_new.Name, ship_new.maxSpeed, ship_new.maxRange, ship_new.cost, ship_new.status, ship_new.comment);
-  	ship_faculty.createShip(shipA);
-
-
-  /
 
     //check if current browser support local storage.
     if(typeof (Storage) !== "undefined") //
     {
-      let faculty_of_ship = JSON.stringify(ship_faculty); // never able to store the data in the code if u dun do
+      let faculty_of_ship = JSON.stringify(myShipArray); // never able to store the data in the code if u dun do
       // this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
       // it is an in build black-box method.
 
@@ -317,8 +318,7 @@ if(typeof (Storage) !== "undefined" && "FACULTY" in localStorage) //
 		// this empty array will set under this._points. an empty array of private attribute for Polygon Class.
 		faculty.fromData(data);// restore completely. --> pass from wat i have into the
 		//console.log(faculty_storage); // manage to call out the stuff
-		document.getElementById("studentList").innerHTML = insertShip(myShipArray);
-		document.getElementById("studentInfoCard").style.visibility = "hidden";
+
 	}
 else if(typeof (Storage) == "undefined")
 	{
