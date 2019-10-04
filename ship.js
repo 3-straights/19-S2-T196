@@ -1,7 +1,7 @@
 
 class ship
 {
-  constructor(boatName,maxSpeed,range,cost,status)
+  constructor(boatName,maxSpeed,range,cost,status,comment)
   {
 
   this._boatName = boat
@@ -9,6 +9,7 @@ class ship
   this._range = range;
   this._cost = cost;
   this._status = status;
+  this._comment = comment;
   }
 
   get boatName()
@@ -55,9 +56,16 @@ set status(newStatus)
   this._status = newStatus;
 }
 }
-
-
+get comment()
+{
+  return this._comment
 }
+set comment(newComment)
+{
+  this._comment = newComment;
+}
+}
+
 
 class shipFaculty{
 constructor(shipFacultyName)
@@ -98,22 +106,24 @@ createShip(newShip)
       {
           // check if student already enrolled
           let searchResult = this._searchForShip(newShip.boatName);
-          if (searchResult == -1) // student not found
+          if (searchResult == -1)
           {
-              // we can enrol the student
-              this._ships.push(newShip);
+            this._ships.push(newShip);
           }
-      }
+
       else
       {
           console.log("Error: not an instance of ship!");
       }
   }
 
+
+
 }
 
 
-class port{
+class port
+{
 constructor(portName,country,lat,lng)
 {
   this._portName = portName;
@@ -121,7 +131,6 @@ constructor(portName,country,lat,lng)
   this._country = country;
 
   this._lat = lat;
-
 
   this._lng = lng;
 }
@@ -156,15 +165,93 @@ get lng()
 {
   return this._lng;
 }
+
 set lng(newLng)
 {
   this._lng = newLng;
 }
 
-
+innerData(portDetails)
+{
+  this._portName = portDetails._portName;
+  this._country = portDetails._country;
+  this._lat = portDetails._lat;
+  this._lng = portDetails._lng;
+}
 
 }
-class route()
+
+class PortClass
+{
+constructor(portPlace)
+{
+this._portPlace= portPlace;
+this._ports = [];
+}
+get portPlace()
+{
+  return this._portPlace;
+}
+set portPlace(newPort)
+{
+  this._portPlace = newPort;
+}
+get ports()
+{
+  return this._ports;
+}
+_searchForPorts(nameOfPort)
+{
+let ports = this._ports;
+let portsResult = -1; //let it be 'none'
+if (ports.length >= 1)
+{
+    portsResult = ports.findIndex(
+        function(arrayItem)
+        {
+            return arrayItem.portName == nameOfPort;
+        }
+    );
+}
+return portsResult;
+
+}
+
+createPort(ownPort)
+{
+      // check if student is an instance of Student
+      if (ownPort instanceof port)
+      {
+          // check if student already enrolled
+          let searchResult = this._searchForPorts(ownPort.portName);
+          if (searchResult == -1) // student not found
+          {
+              // we can enrol the student
+              this._ports.push(ownPort);
+          }
+      }
+      else
+      {
+          console.log("Error: not an instance of port!");
+      }
+  }
+
+  overallPort(portDetails)
+  {
+this._portPlace = portDetails._portPlace;
+
+for (let i=0; i<portDetails._ports.length; i++)
+{
+let ship = new Ship();
+
+ship.innerData(portDetails._ships[i]);
+this._ships.push(ship);
+}
+  }
+
+}
+
+class route
 {
 constructor()
 {
@@ -182,3 +269,58 @@ constructor()
 
 
 }
+
+    let shipA = new ship(ship_new.Name, ship_new.maxSpeed, ship_new.range, ship_new.cost, ship_new.status, ship_new.comment);
+  	myShipArray.createShip(shipA);
+
+
+    //check if current browser support local storage.
+    if(typeof (Storage) !== "undefined") //
+    {
+      let faculty_of_ship = JSON.stringify(myShipArray); // never able to store the data in the code if u dun do
+      // this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
+      // it is an in build black-box method.
+
+      localStorage.setItem('shipArray',faculty_of_ship);
+      // this is an in build method that requires 2 method, which requires a Storage key and the JSON file.
+      // SO you need a KEY with its Value. You use key to retrieve a data.
+
+    }
+    else
+    {
+      alert("Your Browser does not support local storage.");
+    }
+}
+
+let myShipArray = new shipFaculty("ship1");
+//faculty.enrolStudent(s0);
+//faculty.enrolStudent(s1);
+//faculty.enrolStudent(s2);
+
+/* code to run on load to display content on page */
+document.getElementById("studentList").innerHTML = generateStudentList(faculty);
+document.getElementById("studentInfoCard").style.visibility = "hidden";
+
+// retrieve data
+const STORAGE_KEY = "FACULTY"; //
+
+//check if current browser support local storage.
+if(typeof (Storage) !== "undefined" && "FACULTY" in localStorage) //
+	{
+		let data = localStorage.getItem(STORAGE_KEY); // get the data using an existing key.
+		console.log(data); // just display json file
+		data = JSON.parse(localStorage.getItem(STORAGE_KEY)); // get JSON data from local storage, and convert back to JS object.
+		console.log(data); // just display
+		// convert JSON object to the JS object. Intermediate Step, not sufficient for restoring polygon class instance.
+
+		//let faculty_storage = new Faculty([]); // before calling the poly.fromData, we create empty array so that it initialize private attribute value (points) with empty array.
+		//console.log(faculty_storage); // will display empty array as the points.
+		// this empty array will set under this._points. an empty array of private attribute for Polygon Class.
+		faculty.fromData(data);// restore completely. --> pass from wat i have into the
+		//console.log(faculty_storage); // manage to call out the stuff
+
+	}
+else if(typeof (Storage) == "undefined")
+	{
+		alert("Your Browser does not support local storage.");
+	}
