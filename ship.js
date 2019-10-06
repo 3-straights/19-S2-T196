@@ -120,7 +120,7 @@ createShip(newShip)
 
 
 }
-
+}
 
 class port
 {
@@ -240,12 +240,11 @@ createPort(ownPort)
   {
 this._portPlace = portDetails._portPlace;
 
-for (let i=0; i<portDetails._ports.length; i++)
+for (let p=0; p<portDetails._ports.length; p++)
 {
-let ship = new Ship();
-
-ship.innerData(portDetails._ships[i]);
-this._ships.push(ship);
+  var myPort = new port();
+  myport.innerData(portDetails._ports[p]);
+this._ports.push(myPort);
 }
   }
 
@@ -290,37 +289,50 @@ constructor()
     {
       alert("Your Browser does not support local storage.");
     }
-}
 
-let myShipArray = new shipFaculty("ship1");
-//faculty.enrolStudent(s0);
-//faculty.enrolStudent(s1);
-//faculty.enrolStudent(s2);
 
-/* code to run on load to display content on page */
-document.getElementById("studentList").innerHTML = generateStudentList(faculty);
-document.getElementById("studentInfoCard").style.visibility = "hidden";
 
-// retrieve data
-const STORAGE_KEY = "FACULTY"; //
 
-//check if current browser support local storage.
-if(typeof (Storage) !== "undefined" && "FACULTY" in localStorage) //
-	{
-		let data = localStorage.getItem(STORAGE_KEY); // get the data using an existing key.
-		console.log(data); // just display json file
-		data = JSON.parse(localStorage.getItem(STORAGE_KEY)); // get JSON data from local storage, and convert back to JS object.
-		console.log(data); // just display
-		// convert JSON object to the JS object. Intermediate Step, not sufficient for restoring polygon class instance.
 
-		//let faculty_storage = new Faculty([]); // before calling the poly.fromData, we create empty array so that it initialize private attribute value (points) with empty array.
-		//console.log(faculty_storage); // will display empty array as the points.
-		// this empty array will set under this._points. an empty array of private attribute for Polygon Class.
-		faculty.fromData(data);// restore completely. --> pass from wat i have into the
-		//console.log(faculty_storage); // manage to call out the stuff
+  function portsFromAPI()
+  {
+  let url = 'https://eng1003.monash/api/v1/ports/';
+  let callbackPort =
+  {
+    callback: "portInfo"
+  };
+  webServiceRequest(url, callbackPort)
 
-	}
-else if(typeof (Storage) == "undefined")
-	{
-		alert("Your Browser does not support local storage.");
-	}
+  }
+  portsFromAPI()
+
+  function portInfo(myPort)
+  {
+    let portVer1 = new PortClass(myPort.portPlace)
+    for (let p=0; p< myPort.ports.length; p++)
+    {
+      var singlePort = new port(myPort.ports[p].portName, myPort.ports[p].country, myPort.ports[p].lat, myPort.ports[p].lng)
+
+      portVer1.addPort(singlePort)
+    }
+    if(typeof (Storage) !== "undefined") //
+  	{
+  		let portStorage = JSON.stringify(portVer1); // never able to store the data in the code if u dun do
+  		// this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
+  		// it is an in build black-box method.
+  		localStorage.setItem('portList', portStorage);
+
+
+      /*let portData = JSON.parse(localStorage.getItem('portList'));
+
+      let portA = new PortClass([]);
+      portA.innerData(portData);
+
+    return portData*/
+  	}
+  	else
+  	{
+  		alert("Your Browser does not support local storage.");
+  	}
+
+  }
