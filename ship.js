@@ -1,4 +1,3 @@
-
 class ship
 {
   constructor(boatName,maxSpeed,range,cost,status,comment)
@@ -359,10 +358,8 @@ constructor()
 
 
       /*let portData = JSON.parse(localStorage.getItem('portList'));
-
       let portA = new PortClass([]);
       portA.innerData(portData);
-
     return portData*/
   	}
   	else
@@ -402,5 +399,6 @@ constructor()
         }
 
     localStorage.setItem("shipInformation",JSON.stringify(shippies))
+
 
 }
