@@ -1,22 +1,52 @@
+<!doctype html>
+<!--
+ *
+ * Utilising Mapbox API
+ *
+ * Copyright (c) 2019  Monash University
+ *
+ * Written by Arvind Kaur
+ *
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
 <html>
 <head>
-	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />
-		<title>Utilising  MapBox API</title>
-		<style type="text/css">
-			#map{height: calc(100vh - 56px);}
-		</style>
-		<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
-		<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet'>
-	</head>
-	<body>
-		<input type="button" id = '1' value="Pan to clayton" onclick="panToClayton()">
-		<input type="button" id = '2' value="Show Path" onclick="showPath()">
-		<input type="button" id = '3' value="Show Polygon" onclick="showPolygon()" >
+  <title>Utilising Mapbox API</title>
+  <style type="text/css">
+    #map{
+      height: calc(100vh - 56px);
+    }
+  </style>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
+  </head>
+  <body>
+    <input type = "button" value="Pan to clayton" onclick="panToClayton()"/>
+    <input type = "button" value="Show Path" onclick="showPath()"/>
+    <input type = "button" value="Show Polygon" onclick="showPolygon()" />
+    <div id="map"></div>
 
-		<div id="map"></div>
-	</body>
-	<script src="map.js"></script>
+  </body>
+
+    <script src="map.js"></script>
+
+
 </html>

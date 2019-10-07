@@ -269,26 +269,6 @@ constructor()
 
 }
 
-    let shipA = new ship(ship_new.Name, ship_new.maxSpeed, ship_new.range, ship_new.cost, ship_new.status, ship_new.comment);
-  	myShipArray.createShip(shipA);
-
-
-    //check if current browser support local storage.
-    if(typeof (Storage) !== "undefined") //
-    {
-      let faculty_of_ship = JSON.stringify(myShipArray); // never able to store the data in the code if u dun do
-      // this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
-      // it is an in build black-box method.
-
-      localStorage.setItem('shipArray',faculty_of_ship);
-      // this is an in build method that requires 2 method, which requires a Storage key and the JSON file.
-      // SO you need a KEY with its Value. You use key to retrieve a data.
-
-    }
-    else
-    {
-      alert("Your Browser does not support local storage.");
-    }
 
 
 
@@ -360,7 +340,6 @@ constructor()
 
 }
 
-  portsFromAPI()
 
   function portInfo(myPort)
   {

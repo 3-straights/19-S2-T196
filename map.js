@@ -1,50 +1,38 @@
-mapboxgl.accessToken = "pk.eyJ1IjoieGtldmluNTU2NngiLCJhIjoiY2sxMzJ4NXFwMDU2dTNjcnNibDlrdjBnYyJ9.Uk7sDJWQ1WbUFBAbN9L8cg";
-let map = new  mapboxgl.Map({
+mapboxgl.accessToken = 'pk.eyJ1IjoiaW5maW5pdHlrYWkiLCJhIjoiY2swemU1dmJzMDAyazNnbnR2Y2t5M3p6YiJ9.x2eR57RbO3WuXy5zsMV6FA';
+let map = new mapboxgl.Map({
   container: 'map',
- center: [144.9648731,-37.8182711],
- zoom: 16,
- style: 'mapbox://styles/mapbox/streets-v9'
-
+  center: [144.9648731,-37.8182711],
+  zoom: 16,
+  style: 'mapbox://styles/mapbox/streets-v9'
 });
-	let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+let locations=[]
+;
+for (let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
+    {
+         locations=[
+            {
+                coordinates:[JSON.parse(localStorage.getItem("portInformation")).lng[j],JSON.parse(localStorage.getItem("portInformation")).lat[j]],
+                name:JSON.parse(localStorage.getItem("portInformation")).name[j]
+            }
+        ]
+        let marker=new mapboxgl.Marker({"color":"#FF8C00"});
+          	let popup = new mapboxgl.Popup({ offset: 45});
 
-let dropoffs = turf.featureCollection([]);
-let locations = [
-	{
-		coordinates: [145.133934, -37.910572],
-		description: 'Faculty of Information Technology'
-	},
-	{
-		coordinates: [145.1338553, -37.9092552],
-		description: 'Faculty of Engineering'
-	},
-	{
-		coordinates: [145.132676, -37.913843],
-		description: 'Learning and Teaching Building'
-	},
-	{
-		coordinates: [145.137224, -37.914594],
-		description: 'Multi-level Car Parking'
-	}
-];
-for (let i = 0; i < locations.length; i++)
-{
-	let location = locations[i];
-    	let popup = new mapboxgl.Popup({ offset: 45});
-
-	marker.setLngLat(location.coordinates);
+      	marker.setLngLat(locations.coordinates);
 
 
-	popup.setText(location.description);
+      	popup.setText(locations[j].name);
 
-	marker.setPopup(popup)
+      	marker.setPopup(popup)
 
-	// Display the marker.
-	marker.addTo(map);
+      	// Display the marker.
+      	marker.addTo(map);
 
-	// Display the popup.
-	popup.addTo(map);
-}
+      	// Display the popup.
+      	popup.addTo(map);
+    }
+
+
 let object = {
 type: "geojson",
 data: {
