@@ -294,16 +294,72 @@ constructor()
 
 
 
-  function portsFromAPI()
+    function jsonpRequest(url, data)
   {
-  let url = 'https://eng1003.monash/api/v1/ports/';
-  let callbackPort =
-  {
-    callback: "portInfo"
-  };
-  webServiceRequest(url, callbackPort)
+      // Build URL parameters from data object.
+      let params = "";
+      // For each key in data object...
+      for (let key in data)
+      {
+          if (data.hasOwnProperty(key))
+          {
+              if (params.length == 0)
+              {
+                  // First parameter starts with '?'
+                  params += "?";
+              }
+              else
+              {
+                  // Subsequent parameter separated by '&'
+                  params += "&";
+              }
 
+              let encodedKey = encodeURIComponent(key);
+              let encodedValue = encodeURIComponent(data[key]);
+
+              params += encodedKey + "=" + encodedValue;
+           }
+      }
+      let script = document.createElement('script');
+      script.src = url + params;
+      document.body.appendChild(script);
   }
+
+  let portData={
+      callback:"extractPort"
+  }
+
+
+  jsonpRequest("https://eng1003.monash/api/v1/ports/",portData)
+
+  function extractPort(portData)
+{
+    let porto={
+        name:[portData.ports[0].name] ,
+        country:[portData.ports[0].country],
+        type:[portData.ports[0].type],
+        size:[portData.ports[0].size],
+        locprecision:[portData.ports[0].locprecision],
+        lat:[portData.ports[0].lat]   ,
+        lng:[portData.ports[0].lng]
+
+    }
+    for (let i=1;i<(portData.ports.length);i++)
+        {
+            porto.name.push(portData.ports[i].name)
+            porto.country.push(portData.ports[i].country)
+            porto.type.push(portData.ports[i].type)
+            porto.size.push(portData.ports[i].size)
+            porto.locprecision.push(portData.ports[i].locprecision)
+            porto.lat.push(portData.ports[i].lat)
+            porto.lng.push(portData.ports[i].lng)
+
+        }
+
+    localStorage.setItem("portInformation",JSON.stringify(porto))
+
+}
+
   portsFromAPI()
 
   function portInfo(myPort)
@@ -336,3 +392,36 @@ constructor()
   	}
 
   }
+
+  let shipData={
+      callback:"extractShip"
+  }
+
+  jsonpRequest("https://eng1003.monash/api/v1/ships/",shipData)
+
+  function extractShip(shipData)
+{
+    let shippies={
+        name:[shipData.ships[0].name] ,
+        maxSpeed:[shipData.ships[0].maxSpeed],
+        range:[shipData.ships[0].range],
+        desc:[shipData.ships[0].desc],
+        cost:[shipData.ships[0].cost],
+        status:[shipData.ships[0].status]   ,
+        comments:[shipData.ships[0].comments]
+    }
+
+    for (let i=1;i<(shipData.ships.length);i++)
+        {
+            shippies.name.push(shipData.ships[i].name)
+            shippies.maxSpeed.push(shipData.ships[i].maxSpeed)
+            shippies.range.push(shipData.ships[i].range)
+            shippies.desc.push(shipData.ships[i].desc)
+            shippies.cost.push(shipData.ships[i].cost)
+            shippies.status.push(shipData.ships[i].status)
+            shippies.comments.push(shipData.ships[i].comments)
+        }
+
+    localStorage.setItem("shipInformation",JSON.stringify(shippies))
+
+}
