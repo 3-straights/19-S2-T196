@@ -1,4 +1,3 @@
-
 class ship
 {
   constructor(boatName,maxSpeed,range,cost,status,comment)
@@ -340,6 +339,28 @@ constructor()
 
 }
 
+function shipInfo(myShip)
+{
+let shipVer1 = new facultyShip(myShip.shipFacultyName)
+ for (let s=0; s<myShip.ships.length; s++)
+{
+var shipA = new ship(myShip.ships[s].boatName,myShip.ships[s].maxSpeed,myShip.ships[s].range,myShip.ships[s].cost,myShip.ships[s].status,myShip.ships[s].comment)
+shipVer1.createShip(shipA);
+}
+if (typeof (Storage) !== 'undefined')
+{
+localStorage.shipList = shipVer1;
+
+}
+else
+{
+  alert("Your Browser does not support local storage.");
+}
+
+}
+
+
+
 
   function portInfo(myPort)
   {
@@ -348,7 +369,7 @@ constructor()
     {
       var singlePort = new port(myPort.ports[p].portName, myPort.ports[p].country, myPort.ports[p].lat, myPort.ports[p].lng)
 
-      portVer1.addPort(singlePort)
+      portVer1.createPort(singlePort);
     }
     if(typeof (Storage) !== "undefined") //
   	{
@@ -359,10 +380,8 @@ constructor()
 
 
       /*let portData = JSON.parse(localStorage.getItem('portList'));
-
       let portA = new PortClass([]);
       portA.innerData(portData);
-
     return portData*/
   	}
   	else
@@ -403,5 +422,6 @@ constructor()
 
     localStorage.setItem("shipInformation",JSON.stringify(shippies))
     console.log(JSON.parse(localStorage.getItem("shipInformation")).name)
+
 
 }

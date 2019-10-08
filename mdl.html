@@ -154,7 +154,7 @@ color: white;
 <button type = 'button' class = 'collapsible'title='location...'><b>Choose your location: </b><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
 <div class = 'location' style = 'text-align: center'>
 
-  Choose from map:  &nbsp; &nbsp; <a href= 'file:///C:/Users/xin%20yi/Desktop/19-S2-T196/map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
+  Choose from map:  &nbsp; &nbsp; <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
 
   <span style = 'margin-left: 275px '>Select Ports:  &nbsp; &nbsp; <input type='text' class= 'Intport' id='Intport' placeholder='select initial port...'></input> &nbsp; &nbsp;  <input type='text' class= 'Finport' id='Finport' placeholder='select destination port...'></input></span>
 
@@ -165,7 +165,7 @@ color: white;
 <b>Choose your ship:</b> <br>
 
 </div>
-<div class = 'chooseBoat'>
+<div class = 'chooseBoat' id='chooseBoat'>
 <div><p>
          <select name="boatOpt" id = "boatOpt" onchange= " boatDetail(this.options[this.selectedIndex].value); insertOther(this.options[this.selectedIndex].value); insertShipName(this.options[this.selectedIndex].value) ">
            <option selected="selected">Choose your boat...</option>
@@ -204,137 +204,24 @@ color: white;
       }
     });
   }
-  let ships = [
-		{
-			"name": "Bumble Bee",
-			"maxSpeed": 15,
-			"range": 6576,
-			"desc": "tanker",
-			"cost": 2,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Honey Bee",
-			"maxSpeed": 14,
-			"range": 9999,
-			"desc": "supertanker",
-			"cost": 2.50,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Beetle",
-			"maxSpeed": 13,
-			"range": 8012,
-			"desc": "supermaxtanker",
-			"cost": 3,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Caterpillar",
-			"maxSpeed": 12,
-			"range": 6087,
-			"desc": "supermaxtanker",
-			"cost": 3.50,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Lady Bug",
-			"maxSpeed": 12,
-			"range": 6045,
-			"desc": "supermaxtanker",
-			"cost": 1.50,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Butterfly",
-			"maxSpeed": 16,
-			"range": 4000,
-			"desc": "supermaxtanker",
-			"cost": 2.00,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Firefly",
-			"maxSpeed": 12.5,
-			"range": 2000,
-			"desc": "tanker",
-			"cost": 1.00,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Dragonfly",
-			"maxSpeed": 10,
-			"range": 4875,
-			"desc": "maxtanker",
-			"cost": 1.00,
-			"status": "unavailable",
-			"comments": "Destroyed by somali pirates in 2018"
-		},
-		{
-			"name": "Grasshopper",
-			"maxSpeed": 10.5,
-			"range": 6790,
-			"desc": "maxtanker",
-			"cost": 1.00,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Mantis",
-			"maxSpeed": 12.5,
-			"range": 7000,
-			"desc": "maxtanker",
-			"cost": 1.00,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Assassin Bug",
-			"maxSpeed": 12.5,
-			"range": 7000,
-			"desc": "maxtanker",
-			"cost": 1.00,
-			"status": "available",
-			"comments": ""
-		},
-		{
-			"name": "Damselflies",
-			"maxSpeed": 12.5,
-			"range": 3500,
-			"desc": "maxtanker",
-			"cost": 2.00,
-			"status": "available",
-			"comments": ""
-		},
-    {
-      "name": "Other",
-      "status": 'available'
-    }
-	]
+
   var boatOpt = document.getElementById('boatOpt');
-  for (let i = 0; i<ships.length; i++)
+  for (let i = 0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length; i++)
   {
     let options = document.createElement("OPTION");
-    let txt = document.createTextNode(ships[i].name);
+    let txt = document.createTextNode(JSON.parse(localStorage.getItem('shipInformation')).name[i]);
     options.appendChild(txt);
-    options.setAttribute('value',ships[i].name);
+    options.setAttribute('value',JSON.parse(localStorage.getItem('shipInformation')).name[i]);
     boatOpt.insertBefore(options,boatOpt.lastChild);
   }
 
   function insertShipName(boat)
   {
-    for(let i=0; i<ships.length; i++)
+    for(let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length; i++)
     {
-if (boat== ships[i].name)
+if (boat== JSON.parse(localStorage.getItem('shipInformation')).name[i])
     {
-      if (ships[i].status !== 'available' )
+      if (JSON.parse(localStorage.getItem('shipInformation')).status[i] !== 'available' )
       {
       alert('The ship is currently unavailable, please choose another ship instead!');
 
@@ -378,23 +265,23 @@ document.getElementById("content").appendChild(div);
 function boatDetail(Detail)
 {
 let shipInfoSec = document.getElementById('boatDetail');
-for (let i=0; i<ships.length ;i++)
+for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
-if (Detail == ships[i].name)
+if (Detail == JSON.parse(localStorage.getItem('shipInformation')).name[i])
 {
-shipInfoSec.innerHTML = '<br><br><br><br> Status: ' + ships[i].status + '<br>';
+shipInfoSec.innerHTML = '<br><br><br><br> Status: ' + JSON.parse(localStorage.getItem('shipInformation')).status[i] + '<br>';
 shipInfoSec.innerHTML += 'Ship Name: ' + Detail +'<br>';
-shipInfoSec.innerHTML += 'Maximum speed: ' + ships[i].maxSpeed + '<br>';
-shipInfoSec.innerHTML += 'Full tank range: ' + ships[i].range + '<br>';
-shipInfoSec.innerHTML += 'Cost: ' + ships[i].cost + ' /L <br>';
+shipInfoSec.innerHTML += 'Maximum speed: ' + JSON.parse(localStorage.getItem('shipInformation')).maxSpeed[i] + '<br>';
+shipInfoSec.innerHTML += 'Full tank range: ' + JSON.parse(localStorage.getItem('shipInformation')).range[i] + '<br>';
+shipInfoSec.innerHTML += 'Cost: ' + JSON.parse(localStorage.getItem('shipInformation')).cost[i] + ' /L <br>';
 }
 
 }
 }
+
+
 </script>
+
     </body>
     <script src="ship.js"></script>
-
-
-
 </html>
