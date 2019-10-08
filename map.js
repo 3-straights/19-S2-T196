@@ -17,12 +17,12 @@ for (let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j
     {
       locations.coordinates.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]+","+JSON.parse(localStorage.getItem("portInformation")).lat[j])
       locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j])
-      
+
       let marker= new mapboxgl.Marker({"color":"FF8C00"});
-      marker.setLngLat(locations.coordinates[j]);
+      marker.setLngLat(locations.coordinates);
 
       let popup = new mapboxgl.Popup({ offset: 45});
-      popup.setText(locations.name[j]);
+      popup.setText(locations.name);
 
       marker.addTO(map);
 
