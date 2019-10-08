@@ -402,5 +402,6 @@ constructor()
         }
 
     localStorage.setItem("shipInformation",JSON.stringify(shippies))
+    console.log(JSON.parse(localStorage.getItem("shipInformation")).name)
 
 }
