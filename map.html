@@ -32,16 +32,29 @@
   <title>Utilising Mapbox API</title>
   <style type="text/css">
     #map{
-      height: calc(100vh - 56px);
+      height: calc(90vh - 70px);
     }
+    input[type=text], select {
+  width: 50%;
+  padding: 6px 10px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  }
+
   </style>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
   </head>
   <body>
-    <input type = "button" value="Pan to clayton" onclick="panToClayton()"/>
-    <input type = "button" value="Show Path" onclick="showPath()"/>
-    <input type = "button" value="Show Polygon" onclick="showPolygon()" />
+    Departure:
+    <input type="text" id="departure" name="departure" placeholder="From..">
+    <button type = 'button' onclick = 'setDeparture()' oninput = 'setDeparture()'> Set </button><br>
+    Destination:
+    <input type="text" id="destination" name="destination" placeholder="To..">
+    <button type = 'button' onclick = 'setDestination()' oninput = 'setDestination()'> Set </button>
     <div id="map"></div>
 
   </body>
