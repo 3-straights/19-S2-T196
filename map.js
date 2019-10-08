@@ -2,36 +2,83 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaW5maW5pdHlrYWkiLCJhIjoiY2swemU1dmJzMDAyazNnb
 let map = new mapboxgl.Map({
   container: 'map',
   center: [144.9648731,-37.8182711],
-  zoom: 16,
+  zoom: 8,
   style: 'mapbox://styles/mapbox/streets-v9'
 });
 ;
-let locations={
 
-    coordinates:[],
-    name:[]
 
+
+function setDeparture()
+{
+  for(let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
+  {
+  if (document.getElementById("departure").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
+  {
+  let locations=
+  {
+
+      lon:[],
+      lat:[],
+      name:[]
+  }
+        locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
+        locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
+        locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]])
+
+        let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+        marker.setLngLat([locations.lon[j], locations.lat[j]]);
+
+
+        let popup = new mapboxgl.Popup({ offset: 45});
+        popup.setText(locations.name[j].toString());
+
+        marker.setPopup(popup)
+
+        // Display the marker.
+        marker.addTo(map);
+
+        // Display the popup.
+        popup.addTo(map);
+
+      }
+    }
 }
 
-for (let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
-    {
-      locations.coordinates.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]+","+JSON.parse(localStorage.getItem("portInformation")).lat[j])
-      locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j])
+function setDestination()
+{
+  for(let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
+  {
+  if (document.getElementById("destination").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
+  {
+  let locations=
+  {
+      lon:[],
+      lat:[],
+      name:[]
+  }
+        locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
+        locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
+        locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]])
 
-      let marker= new mapboxgl.Marker({"color":"FF8C00"});
-      marker.setLngLat(locations.coordinates);
-
-      let popup = new mapboxgl.Popup({ offset: 45});
-      popup.setText(locations.name);
-
-      marker.addTO(map);
-
-      popup.addTo(map);
+        let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+        marker.setLngLat([locations.lon[j], locations.lat[j]]);
 
 
+        let popup = new mapboxgl.Popup({ offset: 45});
+        popup.setText(locations.name[j].toString());
+
+        marker.setPopup(popup)
+
+        // Display the marker.
+        marker.addTo(map);
+
+        // Display the popup.
+        popup.addTo(map);
+
+      }
     }
-
-
+}
 let object = {
 type: "geojson",
 data: {
