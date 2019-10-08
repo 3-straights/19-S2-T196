@@ -5,31 +5,30 @@ let map = new mapboxgl.Map({
   zoom: 16,
   style: 'mapbox://styles/mapbox/streets-v9'
 });
-let locations=[]
 ;
+let locations={
+
+    coordinates:[],
+    name:[]
+
+}
+
 for (let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
     {
-         locations=[
-            {
-                coordinates:[JSON.parse(localStorage.getItem("portInformation")).lng[j],JSON.parse(localStorage.getItem("portInformation")).lat[j]],
-                name:JSON.parse(localStorage.getItem("portInformation")).name[j]
-            }
-        ]
-        let marker=new mapboxgl.Marker({"color":"#FF8C00"});
-          	let popup = new mapboxgl.Popup({ offset: 45});
+      locations.coordinates.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]+","+JSON.parse(localStorage.getItem("portInformation")).lat[j])
+      locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j])
 
-      	marker.setLngLat(locations.coordinates);
+      let marker= new mapboxgl.Marker({"color":"FF8C00"});
+      marker.setLngLat(locations.coordinates);
+
+      let popup = new mapboxgl.Popup({ offset: 45});
+      popup.setText(locations.name);
+
+      marker.addTO(map);
+
+      popup.addTo(map);
 
 
-      	popup.setText(locations[j].name);
-
-      	marker.setPopup(popup)
-
-      	// Display the marker.
-      	marker.addTo(map);
-
-      	// Display the popup.
-      	popup.addTo(map);
     }
 
 
