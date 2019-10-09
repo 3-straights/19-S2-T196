@@ -18,12 +18,8 @@
   border: none;
   outline: none;
   font-size: 20px;
-
   overflow: hidden;
-
-
 }
-
 .active, .collapsible:hover {
   background-color: #555;
 }
@@ -38,7 +34,6 @@ border-width: 9px;
 border-style: solid;
 border-color: darkblue;
 }
-
 .content {
   padding: 18px;
   display: none;
@@ -48,10 +43,8 @@ border-color: darkblue;
   height: 100%;
   outline: none;
 }
-
 div.content div {width: 33%; float: left}
 .clear { clear: both; height: 30px}
-
 .typeOfShip {
   background-color: #777;
   color: white;
@@ -61,8 +54,6 @@ div.content div {width: 33%; float: left}
   outline: none;
   font-size: 20px;
   overflow: hidden;
-
-
 }
 .chooseBoat {  padding: 18px;
   display: block;
@@ -74,7 +65,6 @@ div.content div {width: 33%; float: left}
   border-width: 9px;
   border-style: solid;
   border-color: orange;}
-
 div.chooseBoat div {float:left; margin-left: 375px}
 .location {
   display: none;
@@ -86,7 +76,6 @@ div.chooseBoat div {float:left; margin-left: 375px}
   text-align: left;
   outline: none;
   font-size: 20px;
-
 }
 .date {
   background-color: #777;
@@ -114,7 +103,6 @@ div.chooseBoat div {float:left; margin-left: 375px}
   margin-left: 550px;
   width: 100%;
   height: 100%;
-
 }
 select {
     width: 180px;
@@ -129,7 +117,6 @@ text-align: middle;
 margin-right: 42px;
 background-color: #000080;
 color: white;
-
 }
 </style>
 <title>Ships Detail & Route Information</title>
@@ -138,7 +125,7 @@ color: white;
         <header class="mdl-layout__header" >
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
-      <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+      <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
     </div>
 </div>
 
@@ -154,7 +141,7 @@ color: white;
 <button type = 'button' class = 'collapsible'title='location...'><b>Choose your location: </b><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
 <div class = 'location' style = 'text-align: center'>
 
-  Choose from map:  &nbsp; &nbsp; <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
+  Choose from map:  &nbsp; &nbsp; <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
 
   <span style = 'margin-left: 275px '>Select Ports:  &nbsp; &nbsp; <input type='text' class= 'Intport' id='Intport' placeholder='select initial port...'></input> &nbsp; &nbsp;  <input type='text' class= 'Finport' id='Finport' placeholder='select destination port...'></input></span>
 
@@ -188,11 +175,8 @@ color: white;
 <br><br>
 <button type = 'button' class = 'enterButton' onmouseup ="newDiv()">Enter</button>
 <script>
-
-
   var coll = document.getElementsByClassName("collapsible");
   var i;
-
   for (i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function() {
       this.classList.toggle("active");
@@ -204,7 +188,6 @@ color: white;
       }
     });
   }
-
   var boatOpt = document.getElementById('boatOpt');
   for (let i = 0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length; i++)
   {
@@ -214,7 +197,6 @@ color: white;
     options.setAttribute('value',JSON.parse(localStorage.getItem('shipInformation')).name[i]);
     boatOpt.insertBefore(options,boatOpt.lastChild);
   }
-
   function insertShipName(boat)
   {
     for(let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length; i++)
@@ -224,12 +206,10 @@ if (boat== JSON.parse(localStorage.getItem('shipInformation')).name[i])
       if (JSON.parse(localStorage.getItem('shipInformation')).status[i] !== 'available' )
       {
       alert('The ship is currently unavailable, please choose another ship instead!');
-
 }
     }
     }
 }
-
   function insertOther(boatName){
     if(boatName=='Other')
     {
@@ -256,12 +236,8 @@ div.innerHTML += '<br>';
 div.innerHTML += 'date: 08/3/2019 <br>';
 div.innerHTML += 'Weather: Sunny <br>';
 div.innerHTML += '...'
-
-
 document.getElementById("content").appendChild(div);
 }
-
-
 function boatDetail(Detail)
 {
 let shipInfoSec = document.getElementById('boatDetail');
@@ -275,11 +251,8 @@ shipInfoSec.innerHTML += 'Maximum speed: ' + JSON.parse(localStorage.getItem('sh
 shipInfoSec.innerHTML += 'Full tank range: ' + JSON.parse(localStorage.getItem('shipInformation')).range[i] + '<br>';
 shipInfoSec.innerHTML += 'Cost: ' + JSON.parse(localStorage.getItem('shipInformation')).cost[i] + ' /L <br>';
 }
-
 }
 }
-
-
 </script>
 
     </body>
