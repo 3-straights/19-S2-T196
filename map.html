@@ -31,45 +31,130 @@
 <head>
   <title>Utilising Mapbox API</title>
   <style type="text/css">
-    #map{
+    .map {
       height: calc(90vh - 70px);
     }
-    input[type=text], select {
-  width: 50%;
-  padding: 6px 10px;
-  margin: 4px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  }
-  .backButton {
-    background-color: #808080; /* Green */
-    border: none;
-    color: white;
-    padding: 12px 28px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 20px;
-    float: right;
-    cursor: pointer
+
+
+  .otherDep
+  {
+    width: 100%;
+    overflow-y: scroll;
+    background-color: #f1f1f1;
   }
 
+  .otherDes
+  {
+    width: 100%;
+    overflow-y: scroll;
+    background-color: #f1f1f1;
+  }
+.destination{
+  width: 20%;
+  margin-left: 200px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: orange;
+}
+
+.departure
+{
+  width: 20%;
+  margin-left: 360px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: orange;
+}
+
+  div.yoyo div {float:left}
   </style>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
   </head>
   <body>
-    Departure:
-    <input type="text" id="departure" name="departure" placeholder="From..">
-    <button type = 'button' onclick = 'setDeparture()' oninput = 'setDeparture()'> Set </button><br>
-    Destination:
-    <input type="text" id="destination" name="destination" placeholder="To..">
-    <button type = 'button' onclick = 'setDestination()' oninput = 'setDestination()'> Set </button>
-    <div id="map"></div>
-    <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'backButton' onmouseup ="newDiv()">Back</button>
+    <div class='yoyo'>
+      <div class='departure'>
+    <b>Departure:</b>
+    <input type="text" id="departure" name="departure" style="float: right" placeholder="From.." onchange = 'otherDep();searchDepPort()'>
+    <button type = 'button' style="float: right" onclick = 'setDeparture()' oninput = 'setDeparture()'> Set </button><br>
+    <div class= 'otherDep' id='otherDep'></div>
+  </div>
+  <div class= 'destination' >
+    <b>Destination:</b>
+    <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
+    <button type = 'button' style="float: right" onclick = 'setDestination()' oninput = 'setDestination()'> Set </button><br>
+    <div class ='otherDes' id = 'otherDes'></div>
+  </div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+<div id = 'portSection'></div>
+<br><br>
+    <div class='map' id="map"></div>
+
   </body>
 
+  <script>
+function otherDep()
+{
+  let newDep;
+  if (document.getElementById('departure').value == 'other'|| document.getElementById('departure').value == 'Other')
+  {
+    newDep = 'Departure port: <input type="text" name="departurePort" style="float: right"/><br><br><br>';
+    newDep += 'Country: <input type="text" name="departureCountry" style="float: right"/><br><br><br>';
+    newDep += 'Longtitude: <input type="text" name="departureLng" style="float: right"/><br><br><br>';
+    newDep += 'Latitude: <input type="text" name="departureLat" style="float: right"/><br><br>';
+  }
+  else
+   {
+    newDep = ''
+  }
+    document.getElementById('otherDep').innerHTML = newDep;
+  }
+
+function otherDes()
+
+{
+  let newDes;
+
+  if (document.getElementById('destination').value == 'other'|| document.getElementById('destination').value == 'Other')
+  {
+    newDes = 'Departure port: <input type="text" name="departurePort" style="float: right"/><br><br><br>';
+    newDes += 'Country: <input type="text" name="departureCountry" style="float: right"/><br><br><br>';
+    newDes += 'Longtitude: <input type="text" name="departureLng" style="float: right"/><br><br><br>';
+    newDes += 'Latitude: <input type="text" name="departureLat" style="float: right"/><br><br>';
+  }
+  else
+  {
+    newDes ='';
+
+  }
+  document.getElementById('otherDes').innerHTML = newDes;
+}
+let portoArray =[];
+
+  for (let p=0; p< JSON.parse(localStorage.getItem("portInformation")).name.length;p++)
+  {
+portoArray.push(JSON.parse(localStorage.getItem("portInformation")).name[p])
+  }
+
+function searchDepPort()
+{
+  document.getElementById("portSection").innerHTML = '';
+  let searchQuery = document.getElementById('departure').value;
+
+  let filterDepPort = portoArray.filter(x => x.includes(searchQuery));
+  filterDepPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
+}
+
+function searchDesPort()
+{
+  document.getElementById("portSection").innerHTML = '';
+  let searchQuery2 = document.getElementById('destination').value;
+
+  let filterDesPort = portoArray.filter(x => x.includes(searchQuery2));
+  filterDesPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
+}
+  </script>
     <script src="map.js"></script>
 
 
