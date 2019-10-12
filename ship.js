@@ -3,7 +3,7 @@ class ship
   constructor(boatName,maxSpeed,range,cost,status,comment)
   {
 
-  this._boatName = boat
+  this._boatName = boatName;
   this._maxSpeed = maxSpeed;
   this._range = range;
   this._cost = cost;
@@ -57,7 +57,7 @@ set status(newStatus)
 }
 get comment()
 {
-  return this._comment
+  return this._comment;
 }
 set comment(newComment)
 {
@@ -139,7 +139,7 @@ get portName()
 }
 set portName(newPortName)
 {
-this._portName = portName;
+this._portName = newPortName;
 }
 
 get country()
@@ -251,10 +251,33 @@ this._ports.push(myPort);
 
 class route
 {
-constructor()
+constructor(intPort, finPort)
 {
+this._intPort = intPort;
+this._finPort = finPort;
+this._routes =[];
 
-
+}
+get intPort()
+{
+  return this._intPort;
+}
+set intPort(newIntPort)
+{
+  this._intPort = newIntPort;
+}
+get finPort()
+{
+  return this._finport;
+}
+set finPort(newFinPort)
+{
+  this._finPort = newFinPort;
+}
+innerData(routeDetails)
+{
+  this._intPort = routeDetails._intPort;
+  this._finPort = portDetails._finPort;
 
 }
   shortestRoute()
@@ -339,14 +362,39 @@ constructor()
 
 }
 
-function shipInfo(myShip)
+function shipInfo()
 {
-let shipVer1 = new facultyShip(myShip.shipFacultyName)
- for (let s=0; s<myShip.ships.length; s++)
+let shipVer1 = new facultyShip('shipVer1')
+let maxSpeed, range, cost, status, comments;
+
+for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
-var shipA = new ship(myShip.ships[s].boatName,myShip.ships[s].maxSpeed,myShip.ships[s].range,myShip.ships[s].cost,myShip.ships[s].status,myShip.ships[s].comment)
-shipVer1.createShip(shipA);
+
+if (document.getElementById("boatOpt").value == JSON.parse(localStorage.getItem('shipInformation')).name[i])
+{
+maxSpeed = JSON.parse(localStorage.getItem('shipInformation')).maxSpeed[i];
+range = JSON.parse(localStorage.getItem('shipInformation')).range[i];
+cost = JSON.parse(localStorage.getItem('shipInformation')).cost[i];
+status = JSON.parse(localStorage.getItem('shipInformation')).status[i];
+comments = JSON.parse(localStorage.getItem('shipInformation')).comments[i];
 }
+
+}
+let myShip =
+{
+
+  boatName: document.getElementById("boatOpt").value,
+  maxSpeed: maxSpeed,
+  range: range,
+  cost: cost,
+  status: status,
+  comments: comments
+
+};
+
+var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments)
+shipVer1.createShip(shipA);
+
 if (typeof (Storage) !== 'undefined')
 {
 localStorage.shipList = shipVer1;
@@ -362,34 +410,54 @@ else
 
 
 
-  function portInfo(myPort)
+  function portInfo()
   {
-    let portVer1 = new PortClass(myPort.portPlace)
-    for (let p=0; p< myPort.ports.length; p++)
+    let intPort = new PortClass('intPort');
+    let portName, country, lat, lng;
+    for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
     {
-      var singlePort = new port(myPort.ports[p].portName, myPort.ports[p].country, myPort.ports[p].lat, myPort.ports[p].lng)
+      if (document.getElementById("departure").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
+      {
 
-      portVer1.createPort(singlePort);
+        portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
+        country = JSON.parse(localStorage.getItem('portInformation')).country[i];
+        lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
+        lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+
+      }
     }
+      let myPort =
+      {
+
+        portName: portName,
+        country: country,
+        lat: lat,
+        lng: lng
+
+      };
+
+      var singlePort = new port(myPort.portName, myPort.country, myPort.lat, myPort.lng);
+
+      intPort.createPort(singlePort);
+
     if(typeof (Storage) !== "undefined") //
   	{
-  		let portStorage = JSON.stringify(portVer1); // never able to store the data in the code if u dun do
+  		let portStorage = JSON.stringify(intPort); // never able to store the data in the code if u dun do
   		// this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
   		// it is an in build black-box method.
   		localStorage.setItem('portList', portStorage);
-
-
-      /*let portData = JSON.parse(localStorage.getItem('portList'));
-      let portA = new PortClass([]);
-      portA.innerData(portData);
-    return portData*/
   	}
+
   	else
   	{
   		alert("Your Browser does not support local storage.");
   	}
 
   }
+
+
+
+
 
   let shipData={
       callback:"extractShip"
@@ -421,7 +489,6 @@ else
         }
 
     localStorage.setItem("shipInformation",JSON.stringify(shippies))
-    console.log(JSON.parse(localStorage.getItem("shipInformation")).name)
 
 
 }
