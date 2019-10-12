@@ -291,6 +291,51 @@ innerData(routeDetails)
 
 }
 
+function jsonpRequestWeather(url,lat,lng, data)
+{
+  // Build URL parameters from data object.
+  let params = "";
+  // For each key in data object...
+  for (let key in data)
+  {
+      if (data.hasOwnProperty(key))
+      {
+          if (params.length == 0)
+          {
+              // First parameter starts with '?'
+              params += "?";
+          }
+          else
+          {
+              // Subsequent parameter separated by '&'
+              params += "&";
+          }
+
+          let encodedKey = encodeURIComponent(key);
+          let encodedValue = encodeURIComponent(data[key]);
+
+          params += encodedKey + "=" + encodedValue;
+       }
+  }
+  let script = document.createElement('script');
+  script.src = url +lat +","+ lng+ params;
+  document.body.appendChild(script);
+}
+
+function processWeatherData(data)
+{
+  console.log(data.daily.data[1].summary)
+}
+
+let data={
+  callback:"processWeatherData"
+}
+let lat=JSON.parse(localStorage.getItem("portInformation")).lat[3]
+let lng=JSON.parse(localStorage.getItem("portInformation")).lng[3]
+let url="https://api.darksky.net/forecast/5fcb82f0ef3d79bba109f5bbc3c9fc48/"
+
+
+jsonpRequestWeather(url,lat,lng,data)
 
 
 
