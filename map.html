@@ -65,6 +65,17 @@
   border-style: solid;
   border-color: orange;
 }
+.enterButton {
+  background-color: #0000FF; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  float: right;
+  cursor: pointer
+}
 
   div.yoyo div {float:left}
   </style>
@@ -76,15 +87,14 @@
       <div class='departure'>
     <b>Departure:</b>
     <input type="text" id="departure" name="departure" style="float: right" placeholder="From.." onchange = 'otherDep();searchDepPort()'>
-    <button type = 'button' style="float: right" onclick = 'setDeparture()' oninput = 'setDeparture()'> Set </button><br>
     <div class= 'otherDep' id='otherDep'></div>
   </div>
   <div class= 'destination' >
     <b>Destination:</b>
     <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
-    <button type = 'button' style="float: right" onclick = 'setDeparture();setDestination()'> Set </button><br>
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
+  <button type = 'button' class = 'enterButton' onmouseup ='setDeparture();setDestination()'>Set</button>
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <div id = 'portSection'></div>

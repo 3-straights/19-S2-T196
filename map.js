@@ -209,4 +209,4 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
-alert('press "enter" to toggle search bar after input!');
+alert('press "Set" to toggle search bar after input!');
