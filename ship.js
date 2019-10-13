@@ -251,7 +251,7 @@ this._ports.push(myPort);
 
 class route
 {
-constructor(intPort, finPort)
+constructor(intPort, finPort,)
 {
 this._intPort = intPort;
 this._finPort = finPort;
@@ -361,10 +361,10 @@ innerData(routeDetails)
     localStorage.setItem("portInformation",JSON.stringify(porto))
 
 }
-
+//setting up key in localStorage
+ localStorage.setItem('selectedShip')="";
 function shipInfo()
 {
-let shipVer1 = new facultyShip('shipVer1');
 let maxSpeed, range, cost, status, comments;
 
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
@@ -379,6 +379,7 @@ status = JSON.parse(localStorage.getItem('shipInformation')).status[i];
 comments = JSON.parse(localStorage.getItem('shipInformation')).comments[i];
 }
 }
+
 if (document.getElementById("boatOpt").value == 'Other')
 {
   maxSpeed = document.getElementById('shipSpeed').value;
@@ -387,6 +388,7 @@ if (document.getElementById("boatOpt").value == 'Other')
   status = document.getElementById('shipStatus').value;
   comments = document.getElementById('shipComments').value;
 }
+
 let myShip =
 {
 
@@ -397,14 +399,26 @@ let myShip =
   status: status,
   comments: comments
 
+
 };
 
 var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments)
-shipVer1.createShip(shipA);
 
-if (typeof (Storage) !== 'undefined')
+
+if (localStorage.getItem('selectedShip') == null)
 {
+  let shipVer1 = new shipFaculty([]);
+  shipVer1.createShip(shipA);
+  JSON.parse(localStorage.getItem('selectedShip')).push(shipVer1);
+
 localStorage.selectedShip = shipVer1;
+}
+
+else if(localStorage.getItem('selectedShip') !== null)
+{
+  let shipVer1 = JSON.parse(localStorage.getItem('selectedShip'));
+
+
 
 }
 else
