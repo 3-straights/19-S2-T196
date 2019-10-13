@@ -291,51 +291,6 @@ innerData(routeDetails)
 
 }
 
-function jsonpRequestWeather(url,lat,lng, data)
-{
-  // Build URL parameters from data object.
-  let params = "";
-  // For each key in data object...
-  for (let key in data)
-  {
-      if (data.hasOwnProperty(key))
-      {
-          if (params.length == 0)
-          {
-              // First parameter starts with '?'
-              params += "?";
-          }
-          else
-          {
-              // Subsequent parameter separated by '&'
-              params += "&";
-          }
-
-          let encodedKey = encodeURIComponent(key);
-          let encodedValue = encodeURIComponent(data[key]);
-
-          params += encodedKey + "=" + encodedValue;
-       }
-  }
-  let script = document.createElement('script');
-  script.src = url +lat +","+ lng+ params;
-  document.body.appendChild(script);
-}
-
-function processWeatherData(data)
-{
-  console.log(data.daily.data[1].summary)
-}
-
-let data={
-  callback:"processWeatherData"
-}
-let lat=JSON.parse(localStorage.getItem("portInformation")).lat[3]
-let lng=JSON.parse(localStorage.getItem("portInformation")).lng[3]
-let url="https://api.darksky.net/forecast/5fcb82f0ef3d79bba109f5bbc3c9fc48/"
-
-
-jsonpRequestWeather(url,lat,lng,data)
 
 
 
@@ -409,7 +364,7 @@ jsonpRequestWeather(url,lat,lng,data)
 
 function shipInfo()
 {
-let shipVer1 = new facultyShip('shipVer1')
+let shipVer1 = new facultyShip('shipVer1');
 let maxSpeed, range, cost, status, comments;
 
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
@@ -423,7 +378,14 @@ cost = JSON.parse(localStorage.getItem('shipInformation')).cost[i];
 status = JSON.parse(localStorage.getItem('shipInformation')).status[i];
 comments = JSON.parse(localStorage.getItem('shipInformation')).comments[i];
 }
-
+}
+if (document.getElementById("boatOpt").value == 'Other')
+{
+  maxSpeed = document.getElementById('shipSpeed').value;
+  range = document.getElementById('fullTank').value;
+  cost = document.getElementById('shipCost').value;
+  status = document.getElementById('shipStatus').value;
+  comments = document.getElementById('shipComments').value;
 }
 let myShip =
 {
@@ -442,7 +404,7 @@ shipVer1.createShip(shipA);
 
 if (typeof (Storage) !== 'undefined')
 {
-localStorage.shipList = shipVer1;
+localStorage.selectedShip = shipVer1;
 
 }
 else
