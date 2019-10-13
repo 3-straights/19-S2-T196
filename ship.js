@@ -361,17 +361,17 @@ innerData(routeDetails)
     localStorage.setItem("portInformation",JSON.stringify(porto))
 
 }
-//setting up key in localStorage
- localStorage.setItem('selectedShip')="";
+
 function shipInfo()
 {
-let maxSpeed, range, cost, status, comments;
+let boat_name, maxSpeed, range, cost, status, comments;
 
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
 
 if (document.getElementById("boatOpt").value == JSON.parse(localStorage.getItem('shipInformation')).name[i])
 {
+boat_name = document.getElementById("boatOpt").value;
 maxSpeed = JSON.parse(localStorage.getItem('shipInformation')).maxSpeed[i];
 range = JSON.parse(localStorage.getItem('shipInformation')).range[i];
 cost = JSON.parse(localStorage.getItem('shipInformation')).cost[i];
@@ -382,6 +382,7 @@ comments = JSON.parse(localStorage.getItem('shipInformation')).comments[i];
 
 if (document.getElementById("boatOpt").value == 'Other')
 {
+  boat_name = document.getElementById("shipName").value;
   maxSpeed = document.getElementById('shipSpeed').value;
   range = document.getElementById('fullTank').value;
   cost = document.getElementById('shipCost').value;
@@ -392,7 +393,7 @@ if (document.getElementById("boatOpt").value == 'Other')
 let myShip =
 {
 
-  boatName: document.getElementById("boatOpt").value,
+  boatName: boat_name,
   maxSpeed: maxSpeed,
   range: range,
   cost: cost,
@@ -409,16 +410,17 @@ if (localStorage.getItem('selectedShip') == null)
 {
   let shipVer1 = new shipFaculty([]);
   shipVer1.createShip(shipA);
-  JSON.parse(localStorage.getItem('selectedShip')).push(shipVer1);
+  localStorage.setItem('selectedShip', JSON.stringify(shipVer1))
 
-localStorage.selectedShip = shipVer1;
 }
 
 else if(localStorage.getItem('selectedShip') !== null)
 {
-  let shipVer1 = JSON.parse(localStorage.getItem('selectedShip'));
+ let shipVer1 = new shipFaculty([]);
+ shipVer1.createShip(shipA);
+ let invData = localStorage.getItem('selectedShip') + JSON.stringify(shipVer1);
 
-
+ localStorage.setItem('selectedShip',invData)
 
 }
 else
@@ -431,50 +433,125 @@ else
 
 
 
-  function portInfo()
+function intPortInfo()
+{
+let portName, country, lat, lng;
+
+
+for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
+{
+  if (document.getElementById("departure").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
   {
-    let intPort = new PortClass('intPort');
-    let portName, country, lat, lng;
-    for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
-    {
-      if (document.getElementById("departure").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
-      {
 
-        portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
-        country = JSON.parse(localStorage.getItem('portInformation')).country[i];
-        lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-        lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
-
-      }
-    }
-      let myPort =
-      {
-
-        portName: portName,
-        country: country,
-        lat: lat,
-        lng: lng
-
-      };
-
-      var singlePort = new port(myPort.portName, myPort.country, myPort.lat, myPort.lng);
-
-      intPort.createPort(singlePort);
-
-    if(typeof (Storage) !== "undefined") //
-  	{
-  		let portStorage = JSON.stringify(intPort); // never able to store the data in the code if u dun do
-  		// this is to stringify it and convert it to JSON file , so that all class attribute/method is removed.
-  		// it is an in build black-box method.
-  		localStorage.setItem('portList', portStorage);
-  	}
-
-  	else
-  	{
-  		alert("Your Browser does not support local storage.");
-  	}
+    portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
+    country = JSON.parse(localStorage.getItem('portInformation')).country[i];
+    lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
+    lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
 
   }
+
+  else if (document.getElementById("departure").value == "Other" || document.getElementById("departure").value == "other")
+  {
+    portName = document.getElementById("departure").value;
+    country = document.getElementById("depCountry").value;
+    lat = document.getElementById("depLat").value;
+    lng = document.getElementById("depLng").value;
+
+  }
+
+}
+
+
+  let intPort =
+  {
+
+    portName: portName,
+    country: country,
+    lat: lat,
+    lng: lng
+
+  };
+
+let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng);
+
+if (localStorage.getItem('initialPort') == null)
+{
+  let intPorts = new PortClass('Initial Port');
+  intPorts.createPort(firstPort);
+  localStorage.setItem('initialPort', JSON.stringify(intPorts))
+}
+
+else if(localStorage.getItem('initialPort') !== null)
+{
+  let intPorts = new PortClass('Initial Port');
+  intPorts.createPort(firstPort);
+  let intPortStr = localStorage.getItem('initialPort') + JSON.stringify(intPorts);
+  localStorage.setItem('initialPort',intPortStr)
+
+}
+else
+{
+  alert("Your Browser does not support local storage.");
+}
+
+}
+
+function finPortInfo()
+{
+  let portName, country, lat, lng;
+  for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
+  {
+    if (document.getElementById("destination").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
+    {
+
+      portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
+      country = JSON.parse(localStorage.getItem('portInformation')).country[i];
+      lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
+      lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+
+    }
+    else if(document.getElementById("destination").value == "Other" || document.getElementById("departure").value == "other")
+    {
+      portName = document.getElementById("destination").value;
+      country = document.getElementById("desCountry").value;
+      lat = document.getElementById("desLat").value;
+      lng = document.getElementById("desLng").value;
+
+    }
+  }
+
+let finPort =
+{
+  portName: portName,
+  country: country,
+  lat: lat,
+  lng: lng
+
+};
+
+let secPort = new port(finPort.portName, finPort.country, finPort.lat, finPort.lng);
+
+if (localStorage.getItem('finalPort') == null)
+{
+  let finPorts = new PortClass('final Port');
+  finPorts.createPort(secPort);
+  localStorage.setItem('finalPort', JSON.stringify(finPorts))
+}
+
+else if(localStorage.getItem('finalPort') !== null)
+{
+  let finPorts = new PortClass('final Port');
+  finPorts.createPort(secPort);
+  let finPortStr = localStorage.getItem('finalPort') + JSON.stringify(finPorts);
+  localStorage.setItem('finalPort',finPortStr)
+
+}
+else
+{
+  alert("Your Browser does not support local storage.");
+}
+
+}
 
 
 
