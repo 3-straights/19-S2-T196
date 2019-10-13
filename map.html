@@ -82,7 +82,7 @@
   <div class= 'destination' >
     <b>Destination:</b>
     <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
-    <button type = 'button' style="float: right" onclick = 'setDestination()' oninput = 'setDestination()'> Set </button><br>
+    <button type = 'button' style="float: right" onclick = 'setDeparture();setDestination()'> Set </button><br>
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -99,10 +99,10 @@ function otherDep()
   let newDep;
   if (document.getElementById('departure').value == 'other'|| document.getElementById('departure').value == 'Other')
   {
-    newDep = 'Departure port: <input type="text" name="departurePort" style="float: right"/><br><br><br>';
-    newDep += 'Country: <input type="text" name="departureCountry" style="float: right"/><br><br><br>';
-    newDep += 'Longtitude: <input type="text" name="departureLng" style="float: right"/><br><br><br>';
-    newDep += 'Latitude: <input type="text" name="departureLat" style="float: right"/><br><br>';
+    newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br><br>';
+    newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br><br>';
+    newDep += 'Longtitude: <input type="text" name="depLng" id="depLng" style="float: right"/><br><br><br>';
+    newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br>';
   }
   else
    {
@@ -118,10 +118,10 @@ function otherDes()
 
   if (document.getElementById('destination').value == 'other'|| document.getElementById('destination').value == 'Other')
   {
-    newDes = 'Departure port: <input type="text" name="departurePort" style="float: right"/><br><br><br>';
-    newDes += 'Country: <input type="text" name="departureCountry" style="float: right"/><br><br><br>';
-    newDes += 'Longtitude: <input type="text" name="departureLng" style="float: right"/><br><br><br>';
-    newDes += 'Latitude: <input type="text" name="departureLat" style="float: right"/><br><br>';
+    newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
+    newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
+    newDes += 'Longtitude: <input type="text" name="desLng" id="desLng" style="float: right"/><br><br><br>';
+    newDes += 'Latitude: <input type="text" name="desLat" id="desLat" style="float: right"/><br><br>';
   }
   else
   {
