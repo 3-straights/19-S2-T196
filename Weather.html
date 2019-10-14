@@ -36,7 +36,45 @@
   height:400px;
   margin-left: 20px;
 }
-
+#table-weather{
+  width:100%;
+  border-collapse: collapse;
+}
+.enterButton {
+  background-color: #0000FF; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  float: right;
+  cursor: pointer
+}
+.cancelButton {
+  background-color: #FF0000; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  float: right;
+  cursor: pointer
+}
+table, th, td{
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+th, td{
+  padding: 10px;
+}
+tr:nth-child(even){
+  background-color: #fff
+}
+tr:nth-child(odd){
+  background-color: #ddd
+}
 </style>
 </head>
     <body>
@@ -61,11 +99,22 @@
         </div>
         <div class='typeOfShip' style='text-align: left'>
           Weather: <output id='weather' type = 'text' >
-            <button type="button" name="button" onclick=getCurrentWeather()>Get current Weather</button>
+            <button type="button" name="button" onclick='intPortWeather();finPortWeather()'>Get current Weather</button>
         </div>
+        Initial Port: <output id = 'intPortName' type = 'text'></output><br>
+          <table id='intPortWeatherTable'>
+          </table>
+        Final Port: <output id = 'finPortName' type = 'text'></output><br>
+          <table id='finPortWeatherTable'>
+          </table>
         <div class='typeOfShip' style='text-align: left'>
           Durations (mins): <output id='durations' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
           Number of ports passed: <output id='durations' type = 'number' >
         </div>
+        <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'cancelButton' onmouseup =" newDiv()">Cancel</button></a>
+        <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Confirm</button></a>
+    </body>
+    <script src="weather.js"></script>
+</html>
