@@ -402,6 +402,7 @@ let myShip =
 
 
 };
+localStorage.setItem('myShip', JSON.stringify(myShip));
 
 var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments)
 
@@ -446,7 +447,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
     portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
     country = JSON.parse(localStorage.getItem('portInformation')).country[i];
     lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-    lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+    lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
 
   }
 
@@ -471,7 +472,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
     lng: lng
 
   };
-localStorage.setItem("intPort", JSON.stringtify(intPort))
+  localStorage.setItem('intPort', JSON.stringify(intPort));
 
 let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng);
 
@@ -508,7 +509,7 @@ function finPortInfo()
       portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
       country = JSON.parse(localStorage.getItem('portInformation')).country[i];
       lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-      lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+      lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
 
     }
     else if(document.getElementById("destination").value == "Other" || document.getElementById("departure").value == "other")
@@ -529,7 +530,8 @@ let finPort =
   lng: lng
 
 };
-localStorage.setItem("finPort", JSON.stringtify(finPort))
+  localStorage.setItem('finPort', JSON.stringify(finPort))
+
 let secPort = new port(finPort.portName, finPort.country, finPort.lat, finPort.lng);
 
 if (localStorage.getItem('finalPort') == null)
