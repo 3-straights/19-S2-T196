@@ -8,7 +8,7 @@ let map = new mapboxgl.Map({
 ;
 
 
-function setDeparture()
+/*function setDeparture()
 {
 let markers = [];
 
@@ -27,7 +27,7 @@ let markers = [];
 
         locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
         locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
-        locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]]);
+        locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j]);
 
         let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
         marker.setLngLat([locations.lon[0], locations.lat[0]]);
@@ -51,8 +51,56 @@ let markers = [];
       alert('Please insert a valid departure port name or type "Other"');
     }
 }
+*/
+function findAPIPort(nameOfPort)
+{
+let portFound;
+let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;
+let locations=
+{
 
-function setDestination()
+    lon:[],
+    lat:[],
+    name:[]
+};
+
+portFound = allAPIPorts.findIndex(
+    function(arrayItem)
+    {
+        return arrayItem == nameOfPort;
+    }
+  )
+
+if (portFound !== undefined)
+{
+  locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
+  locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
+  locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[portFound]);
+
+  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  marker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+  let popup = new mapboxgl.Popup({ offset: 45});
+  popup.setText(locations.name[0].toString());
+
+  marker.setPopup(popup)
+
+  // Display the marker.
+  marker.addTo(map);
+
+  // Display the popup.
+  popup.addTo(map);
+
+}
+
+else
+{
+  alert('Please insert a valid departure port name or type "Other"');
+}
+
+}
+
+/*function setDestination()
 {
   let locations=
   {
@@ -93,7 +141,7 @@ function setDestination()
     }
 }
 
-
+*/
 let object = {
 type: "geojson",
 data: {
@@ -209,4 +257,4 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
-alert('press "Enter" to toggle search bar after input!');
+alert('press "enter" to toggle search bar after input!');
