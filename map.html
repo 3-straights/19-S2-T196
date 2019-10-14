@@ -32,7 +32,7 @@
   <title>Utilising Mapbox API</title>
   <style type="text/css">
     .map {
-      height: calc(90vh - 70px);
+      height: calc(70vh - 40px);
     }
 
 
@@ -76,7 +76,13 @@
   float: right;
   cursor: pointer
 }
+.enterButton:hover {background-color: #3e8e41}
 
+.enterButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
   div.yoyo div {float:left}
   </style>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
@@ -94,12 +100,13 @@
     <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
-  <button type = 'button' class = 'enterButton' onmouseup ='setDeparture();setDestination()'>Set</button>
+  <button type = 'button' class = 'enterButton' onmouseup ='setDeparture();setDestination();intPortInfo()'>Set</button>
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <div id = 'portSection'></div>
 <br><br>
     <div class='map' id="map"></div>
+    <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'enterButton'>Confirm</button></a>
 
   </body>
 
@@ -144,7 +151,7 @@ let portoArray =[];
 
   for (let p=0; p< JSON.parse(localStorage.getItem("portInformation")).name.length;p++)
   {
-portoArray.push(JSON.parse(localStorage.getItem("portInformation")).name[p])
+    portoArray.push(JSON.parse(localStorage.getItem("portInformation")).name[p])
   }
 
 function searchDepPort()
