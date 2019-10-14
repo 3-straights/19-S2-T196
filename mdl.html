@@ -43,14 +43,20 @@
 
 /* Modal Content */
 .helpContent {
-  background-color: #fefefe;
-  color: black;
+  background-color: lightgrey;
+  color: darkBlue;
   margin: auto;
-  height: 70%;
+  height: 45%;
   border: 1px solid #888;
   width: 35%;
 }
 
+.helpToggle {
+cursor: pointer;
+margin-left: 50px;
+font-weight: bold;
+color: darkBlue;
+}
 /* The Close Button */
 .closeHelp {
   color: black;
@@ -185,11 +191,11 @@ height: 70%;
         <div class = 'helpContent' id= 'helpContent'>
         <span class="closeHelp" id = 'closeHelp'> &times; </span>
         <p>
-          <b>How to use?</b> <hr>
+          <span class = 'help_use' style = "font-size:18pt"><b>How to use?</b> <hr></span>
           1) Press the button 'Choose your location' once <br>
-          2) Select your port through the world icon <br>
+          2) Select your ports through the world icon <br>
           3) Input values into 'Departure' and 'Destination' <br>
-          4) Press enter to toggle searchbar <br>
+          4) Press 'Enter' to toggle searchbar <br>
           5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
           #  Fill in the given sections if 'Other' is selected
           6) Click 'Set' once the inputs have been filled <br>
@@ -198,7 +204,7 @@ height: 70%;
           9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
           10) Set date & time
           11) Click 'Enter' and you will see the selected result <br>
-          12) Transition history(ies) can be found in 'Display Route' <br> 
+          12) Transition history(ies) can be found in 'Display Route' <br>
         </p>
 </div>
 </div>
