@@ -447,7 +447,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
     portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
     country = JSON.parse(localStorage.getItem('portInformation')).country[i];
     lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-    lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+    lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
 
   }
 
@@ -509,7 +509,7 @@ function finPortInfo()
       portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
       country = JSON.parse(localStorage.getItem('portInformation')).country[i];
       lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-      lng = JSON.parse(localStorage.getItem('shipInformation')).lng[i];
+      lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
 
     }
     else if(document.getElementById("destination").value == "Other" || document.getElementById("departure").value == "other")
