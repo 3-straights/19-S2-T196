@@ -402,6 +402,7 @@ let myShip =
 
 
 };
+localStorage.setItem('myShip', JSON.stringify(myShip));
 
 var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments)
 
@@ -471,7 +472,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
     lng: lng
 
   };
-localStorage.setItem("intPort", JSON.stringtify(intPort))
+  localStorage.setItem('intPort', JSON.stringify(intPort));
 
 let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng);
 
@@ -529,7 +530,8 @@ let finPort =
   lng: lng
 
 };
-localStorage.setItem("finPort", JSON.stringtify(finPort))
+  localStorage.setItem('finPort', JSON.stringify(finPort))
+
 let secPort = new port(finPort.portName, finPort.country, finPort.lat, finPort.lng);
 
 if (localStorage.getItem('finalPort') == null)
