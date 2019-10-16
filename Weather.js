@@ -40,7 +40,7 @@ function testInt(data)
     listHTML += "<tr><th>" + header_needed[i] + "</th><td>" + stuff_needed[i] + "</td></tr>" + "<br>";
     document.getElementById('intPortWeatherTable').innerHTML = listHTML;
   }
-  let weatherIntOverall = 'Source port current date is' + 'and the current weather is ' + data.currently.summary;
+  let weatherIntOverall = 'Source port current date is ' + JSON.parse(localStorage.getItem('date')) + ' and the current weather is ' + data.currently.summary;
   document.getElementById('weatherIntSummary').innerHTML = weatherIntOverall;
   localStorage.setItem('intWeather',JSON.stringify(data.currently.summary));
 }
@@ -98,7 +98,7 @@ function testFin(data)
     listHTML += "<tr><th>" + header_needed[i] + "</th><td>" + stuff_needed[i] + "</td></tr>" + "<br>";
     document.getElementById('finPortWeatherTable').innerHTML = listHTML;
   }
-  let weatherFinOverall = '.The ship will arrive at the destination port after 7 days. Therefore, the destination port date will be the 6th of Sept 2019 and the weather forecast will be ' + data.currently.summary + ".";
+  let weatherFinOverall = '.The ship will arrive at the destination port after 1 day. Therefore, the destination port date will be the 2019-10-18 and the weather forecast will be ' + data.currently.summary + ".";
   document.getElementById('weatherFinSummary').innerHTML = weatherFinOverall;
   localStorage.setItem('finWeather',JSON.stringify(data.currently.summary));
 }
