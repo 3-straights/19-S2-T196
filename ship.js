@@ -335,12 +335,7 @@ set fuelCost(newFuelCost)
 {
   this._fuelCost = newFuelCost;
 }
-innerData(routeDetails)
-{
-  this._intPort = routeDetails._intPort;
-  this._finPort = portDetails._finPort;
 
-}
 
 }
 
@@ -524,11 +519,12 @@ if (localStorage.getItem('selectedShip') == null)
 
 else if(localStorage.getItem('selectedShip') !== null)
 {
- let shipVer1 = new shipFaculty([]);
- shipVer1.createShip(shipA);
- let invData = localStorage.getItem('selectedShip') + JSON.stringify(shipVer1);
 
- localStorage.setItem('selectedShip',invData)
+
+ let invData = JSON.parse(localStorage.getItem('selectedShip'))
+ invData._ships.push(shipA);
+
+ localStorage.setItem('selectedShip',JSON.stringify(invData))
 
 }
 else
@@ -560,7 +556,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
 
   else if (document.getElementById("departure").value == "Other" || document.getElementById("departure").value == "other")
   {
-    portName = document.getElementById("departure").value;
+    portName = document.getElementById("depPort").value;
     country = document.getElementById("depCountry").value;
     lat = document.getElementById("depLat").value;
     lng = document.getElementById("depLng").value;
@@ -588,15 +584,14 @@ if (localStorage.getItem('initialPort') == null)
 {
   let intPorts = new PortClass('Initial Port');
   intPorts.createPort(firstPort);
-  localStorage.setItem('initialPort', JSON.stringify(intPorts))
+  localStorage.setItem('initialPort', JSON.stringify(intPorts));
 }
 
 else if(localStorage.getItem('initialPort') !== null)
 {
-  let intPorts = new PortClass('Initial Port');
-  intPorts.createPort(firstPort);
-  let intPortStr = localStorage.getItem('initialPort') + JSON.stringify(intPorts);
-  localStorage.setItem('initialPort',intPortStr)
+  let intPortStr = JSON.parse(localStorage.getItem('initialPort'));
+  intPortStr._ports.push(firstPort);
+  localStorage.setItem('initialPort',JSON.stringify(intPortStr));
 
 }
 
@@ -622,9 +617,9 @@ function finPortInfo()
       lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
 
     }
-    else if(document.getElementById("destination").value == "Other" || document.getElementById("departure").value == "other")
+    else if(document.getElementById("destination").value == "Other" || document.getElementById("destination").value == "other")
     {
-      portName = document.getElementById("destination").value;
+      portName = document.getElementById("desPort").value;
       country = document.getElementById("desCountry").value;
       lat = document.getElementById("desLat").value;
       lng = document.getElementById("desLng").value;
@@ -653,10 +648,9 @@ if (localStorage.getItem('finalPort') == null)
 
 else if(localStorage.getItem('finalPort') !== null)
 {
-  let finPorts = new PortClass('final Port');
-  finPorts.createPort(secPort);
-  let finPortStr = localStorage.getItem('finalPort') + JSON.stringify(finPorts);
-  localStorage.setItem('finalPort',finPortStr)
+  let finPortStr = JSON.parse(localStorage.getItem('finalPort'));
+  finPortStr._ports.push(secPort);
+  localStorage.setItem('finalPort',JSON.stringify(finPortStr))
 
 }
 else
@@ -674,6 +668,7 @@ function storingRoute()
   let departPort = intPortInfo();
   let destiPort = finPortInfo();
   let date = document.getElementById('date').value;
+
   let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost);
 
   if (localStorage.getItem('Routes') == null)
@@ -685,10 +680,10 @@ function storingRoute()
 
   else if(localStorage.getItem('Routes') !== null)
   {
-    let new_route = new routeStorage([]);
-    new_route.createRoute(routeA);
-    let finRouteStr = localStorage.getItem('Routes') + JSON.stringify(new_route);
-    localStorage.setItem('Routes',finRouteStr)
+
+    let finRouteStr = JSON.parse(localStorage.getItem('Routes'));
+    finRouteStr._routes.push(routeA);
+    localStorage.setItem('Routes',JSON.stringify(finRouteStr));
 
   }
   else
@@ -696,6 +691,13 @@ function storingRoute()
     alert("Your Browser does not support local storage.");
   }
 
+
+}
+
+function storeDate()
+{
+  let date = document.getElementById('date').value;
+  localStorage.setItem('date', JSON.stringify(date))
 
 }
 
