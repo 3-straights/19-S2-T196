@@ -185,7 +185,7 @@ height: 70%;
         <header class="mdl-layout__header" >
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
-      <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+      <a onclick="location.href= 'mdl.html'"><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
       <button id= 'helpToggle' class = 'helpToggle'>HELP!? </button>
       <div id = 'helpAssist' class = 'helpAssist'>
         <div class = 'helpContent' id= 'helpContent'>
@@ -210,21 +210,21 @@ height: 70%;
 </div>
       </div>
     </div>
-</div>
 
 
       </header>
 
 <br><br>
 <button type="button" class="collapsible" title= 'Click to view/hide selected route' ><strong>Display Route: </strong><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
-<div class="content" id = 'content'><br>
+<div class="content" id = 'content'> <br>
+  <div id = 'blankHistory'></div>
 </div>
 <div class='clear'></div>
 
 <button type = 'button' class = 'collapsible'title='location...'><b>Choose your location: </b><span class= 'mdl_arrow1' style="font-size:14pt" >🔽</span></button>
 <div class = 'location' style = 'text-align: center'>
 
-  Select Ports:  &nbsp; &nbsp; <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\map.html'><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
+  Select Ports:  &nbsp; &nbsp; <a onclick="location.href='map.html'"><input type='image' name = 'map' src = 'https://cdn.pixabay.com/photo/2012/04/14/16/33/globe-34526_960_720.png' title="map" width = '30' height = '30'></a><br><br>
 
 
 
@@ -250,13 +250,14 @@ height: 70%;
 
 <button type="button" class="collapsible" title = 'Click to expand/hide'><b>Date & Time: </b> <span style="font-size:14pt" class="mdl-cell mdl-cell--1-col">🔽</span></button>
   <div class='content'><br>
-    <p style='text-align: center'>Set Date: <input id='date' type = 'date' > <br><br>
+    <p style='text-align: center'>Set Date: <input id='date' type = 'date' onchange = 'storeDate()'> <br><br>
     Set Time: <input id='time' type = 'time'>
     <br>
   </p>
 </div>
 <br><br>
-<a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\weather.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv();shipInfo();calculateTime()">Enter</button></a>
+<button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Enter</button> <br>
+<button type = 'button' onmouseup='shipInfo()'>yoyooy</button>
 <script>
 
 
@@ -324,6 +325,7 @@ if (boat== JSON.parse(localStorage.getItem('shipInformation')).name[i])
 function newDiv()
 {
 
+
 var div = document.createElement("div");
 div.setAttribute('class', 'myclass');
 div.style.width = "20%";
@@ -333,22 +335,32 @@ div.style.color = "white";
 div.style.fontSize = '18px';
 div.style.textAlign = 'center';
 div.style.overflowY = 'scroll';
+if (localStorage.getItem('intPort') !== null && localStorage.getItem('Routes') !== null  )
+{
 div.innerHTML += 'Ship: '+JSON.parse(localStorage.getItem('myShip')).boatName;
 div.innerHTML+= '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Departure: ' + JSON.parse(localStorage.getItem('intPort')).portName +'Country: '+JSON.parse(localStorage.getItem('intPort')).country+ '</span><br>';
 div.innerHTML += '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Destination: ' + JSON.parse(localStorage.getItem('finPort')).portName+ 'Country: '+ JSON.parse(localStorage.getItem('finPort')).country+'</span><br>';
 
-div.innerHTML += 'date: 08/3/2019 <br>';
-div.innerHTML += 'Weather: Sunny <br>';
-div.innerHTML += '...'
-
+div.innerHTML += 'date:' +JSON.parse(localStorage.getItem('date'))+' <br>';
+div.innerHTML += 'Departure Weather:' +  '<br>';
+div.innerHTML += 'Destination Weather: ' + '<br>';
+div.innerHTML += '...';
 
 document.getElementById("content").appendChild(div);
+}
+else if (localStorage.getItem('Routes') == null)
+{
+  document.getElementById('blankHistory').innerHTML = 'No transition history currently!';
+}
+
+
 }
 
 
 function boatDetail(Detail)
 {
-let shipInfoSec = document.getElementById('boatDetail');
+
+
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
 if (Detail == JSON.parse(localStorage.getItem('shipInformation')).name[i])
@@ -389,7 +401,5 @@ window.onclick = function(event){
 
     </body>
     <script src="ship.js"></script>
-    <script src="Weather.js"></script>
-    <script src="map.js"></script>
 
 </html>
