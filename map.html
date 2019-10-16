@@ -100,7 +100,19 @@
     <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
+<<<<<<< HEAD
   <button type = 'button' class = 'enterButton' onmouseup ='setDeparture();setDestination();intPortInfo();finPortInfo()'>Set</button>
+=======
+  <button type = 'button' class = 'enterButton' onmouseup ='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>Set</button>
+  <br><br><br><br>
+  <button type = 'button' class = 'enterButton' onmouseup ='showRoute()'>Set route</button>
+  <br><br><br><br>
+  <button type = 'button' class = 'enterButton' onmouseup ='reset()'>Reset</button>
+  <br><br><br><br>
+  <button type = 'button' class = 'enterButton' onmouseup ='calculateDistance()'>Calculate Distance</button>
+
+
+>>>>>>> master
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <div id = 'portSection'></div>
@@ -127,12 +139,9 @@ function otherDep()
   }
     document.getElementById('otherDep').innerHTML = newDep;
   }
-
 function otherDes()
-
 {
   let newDes;
-
   if (document.getElementById('destination').value == 'other'|| document.getElementById('destination').value == 'Other')
   {
     newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
@@ -143,31 +152,25 @@ function otherDes()
   else
   {
     newDes ='';
-
   }
   document.getElementById('otherDes').innerHTML = newDes;
 }
 let portoArray =[];
-
   for (let p=0; p< JSON.parse(localStorage.getItem("portInformation")).name.length;p++)
   {
     portoArray.push(JSON.parse(localStorage.getItem("portInformation")).name[p])
   }
-
 function searchDepPort()
 {
   document.getElementById("portSection").innerHTML = '';
   let searchQuery = document.getElementById('departure').value;
-
   let filterDepPort = portoArray.filter(x => x.includes(searchQuery));
   filterDepPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
 }
-
 function searchDesPort()
 {
   document.getElementById("portSection").innerHTML = '';
   let searchQuery2 = document.getElementById('destination').value;
-
   let filterDesPort = portoArray.filter(x => x.includes(searchQuery2));
   filterDesPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
 }
