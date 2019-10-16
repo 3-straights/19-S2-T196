@@ -34,12 +34,15 @@
     .map {
       height: calc(70vh - 40px);
     }
+
+
   .otherDep
   {
     width: 100%;
     overflow-y: scroll;
     background-color: #f1f1f1;
   }
+
   .otherDes
   {
     width: 100%;
@@ -53,6 +56,7 @@
   border-style: solid;
   border-color: orange;
 }
+
 .departure
 {
   width: 20%;
@@ -78,6 +82,60 @@
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+
+}
+.mdl-layout__header-row {
+  margin-left: 550px;
+  width: 100%;
+  height: 100%;
+
+}
+.helpAssist {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);}
+
+/* Modal Content */
+.helpContent {
+  background-color: lightgrey;
+  color: darkBlue;
+  margin: auto;
+  height: 45%;
+  border: 1px solid #888;
+  width: 35%;
+}
+
+.helpToggle {
+cursor: pointer;
+margin-left: 50px;
+font-weight: bold;
+color: darkBlue;
+}
+/* The Close Button */
+.closeHelp {
+  color: black;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.closeHelp:hover,
+.closeHelp:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+p {
+  width: 100%;
+  text-align: center;
 }
   div.yoyo div {float:left}
   </style>
@@ -85,10 +143,41 @@
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
   </head>
   <body>
+    <header class="mdl-layout__header" >
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
+  <a onclick="location.href= 'mdl.html'"><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+  <button id= 'helpToggle' class = 'helpToggle'>HELP!? </button>
+  <div id = 'helpAssist' class = 'helpAssist'>
+    <div class = 'helpContent' id= 'helpContent'>
+    <span class="closeHelp" id = 'closeHelp'> &times; </span>
+    <p>
+      <span class = 'help_use' style = "font-size:18pt"><b>How to use?</b> <hr></span>
+      1) Press the button 'Choose your location' once <br>
+      2) Select your ports through the world icon <br>
+      3) Input values into 'Departure' and 'Destination' <br>
+      4) Press 'Enter' to toggle searchbar <br>
+      5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
+      #  Fill in the given sections if 'Other' is selected
+      6) Click 'Set' once the inputs have been filled <br>
+      7) The selected ports will be shown in the given map <br>
+      8) Select 'Confirm' to proceed <br>
+      9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
+      10) Set date & time
+      11) Click 'Enter' and you will see the selected result <br>
+      12) Transition history(ies) can be found in 'Display Route' <br>
+    </p>
+    <br><br><br><br>
+</div>
+</div>
+  </div>
+</div>
+
+  </header>
     <div class='yoyo'>
       <div class='departure'>
     <b>Departure:</b>
-    <input type="text" id="departure" name="departure" style="float: right" placeholder="From.." onchange = 'otherDep();searchDepPort()'>
+    <input type="text" id="departure" name="departure" style="float: right" placeholder="From.." onchange = 'otherDep()' onkeyup = "searchDepPort()">
     <div class= 'otherDep' id='otherDep'></div>
   </div>
   <div class= 'destination' >
@@ -96,9 +185,6 @@
     <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
-<<<<<<< HEAD
-  <button type = 'button' class = 'enterButton' onmouseup ='setDeparture();setDestination();intPortInfo();finPortInfo()'>Set</button>
-=======
   <button type = 'button' class = 'enterButton' onmouseup ='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>Set</button>
   <br><br><br><br>
   <button type = 'button' class = 'enterButton' onmouseup ='showRoute()'>Set route</button>
@@ -106,19 +192,34 @@
   <button type = 'button' class = 'enterButton' onmouseup ='reset()'>Reset</button>
   <br><br><br><br>
   <button type = 'button' class = 'enterButton' onmouseup ='calculateDistance()'>Calculate Distance</button>
-
-
->>>>>>> master
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <div id = 'portSection'></div>
 <br><br>
     <div class='map' id="map"></div>
-    <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'enterButton'>Confirm</button></a>
+    <a onclick="location.href= 'mdl.html'"><button type = 'button' class = 'enterButton'>Confirm</button></a>
 
   </body>
 
   <script>
+  let helpToggle = document.getElementById("helpAssist");
+  let helpButton = document.getElementById("helpToggle");
+  let closeHelp = document.getElementById("closeHelp");
+
+  helpButton.onclick = function() {
+    helpToggle.style.display ="block";
+  }
+
+  closeHelp.onclick = function() {
+    helpToggle.style.display ='none';
+  }
+
+  window.onclick = function(event){
+    if (event.target == helpToggle){
+      helpToggle.style.display = 'none';
+    }
+  }
+
 function otherDep()
 {
   let newDep;
@@ -131,13 +232,16 @@ function otherDep()
   }
   else
    {
-    newDep = ''
+    newDep = '';
   }
     document.getElementById('otherDep').innerHTML = newDep;
   }
+
 function otherDes()
+
 {
   let newDes;
+
   if (document.getElementById('destination').value == 'other'|| document.getElementById('destination').value == 'Other')
   {
     newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
@@ -148,30 +252,37 @@ function otherDes()
   else
   {
     newDes ='';
+
   }
   document.getElementById('otherDes').innerHTML = newDes;
 }
-let portoArray =[];
-  for (let p=0; p< JSON.parse(localStorage.getItem("portInformation")).name.length;p++)
-  {
-    portoArray.push(JSON.parse(localStorage.getItem("portInformation")).name[p])
-  }
+
 function searchDepPort()
 {
   document.getElementById("portSection").innerHTML = '';
-  let searchQuery = document.getElementById('departure').value;
-  let filterDepPort = portoArray.filter(x => x.includes(searchQuery));
-  filterDepPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
+  let searchQuery = document.getElementById('departure').value.toUpperCase();
+
+  let filterDepPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery));
+
+    document.getElementById('portSection').innerText += filterDepPort +"\n";
+
+
+
 }
 function searchDesPort()
 {
   document.getElementById("portSection").innerHTML = '';
-  let searchQuery2 = document.getElementById('destination').value;
-  let filterDesPort = portoArray.filter(x => x.includes(searchQuery2));
+  let searchQuery2 = document.getElementById('destination').value.toUpperCase();
+
+  let filterDesPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery2));
   filterDesPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
 }
+
+
+
   </script>
     <script src="map.js"></script>
-    <script src="ship.js"></script>
-    <script src="weather.js"></script>
+
+
+
 </html>
