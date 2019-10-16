@@ -26,6 +26,53 @@
 .active, .collapsible:hover {
   background-color: #555;
 }
+
+
+.helpAssist {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);}
+
+/* Modal Content */
+.helpContent {
+  background-color: lightgrey;
+  color: darkBlue;
+  margin: auto;
+  height: 45%;
+  border: 1px solid #888;
+  width: 35%;
+}
+
+.helpToggle {
+cursor: pointer;
+margin-left: 50px;
+font-weight: bold;
+color: darkBlue;
+}
+/* The Close Button */
+.closeHelp {
+  color: black;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.closeHelp:hover,
+.closeHelp:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
 .boatDetail {
 background-color: #F0F8FF;
 height: 250px;
@@ -122,7 +169,9 @@ select {
 }
 p {
   width: 100%;
+  text-align: center;
 }
+
 .inputOther {
 
 margin-top: -170px;
@@ -136,7 +185,30 @@ height: 70%;
         <header class="mdl-layout__header" >
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
-      <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+      <a href= 'file:///C:/Users/User/Desktop/java.script/week%207%20submission/mdl.html'><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
+      <button id= 'helpToggle' class = 'helpToggle'>HELP!? </button>
+      <div id = 'helpAssist' class = 'helpAssist'>
+        <div class = 'helpContent' id= 'helpContent'>
+        <span class="closeHelp" id = 'closeHelp'> &times; </span>
+        <p>
+          <span class = 'help_use' style = "font-size:18pt"><b>How to use?</b> <hr></span>
+          1) Press the button 'Choose your location' once <br>
+          2) Select your ports through the world icon <br>
+          3) Input values into 'Departure' and 'Destination' <br>
+          4) Press 'Enter' to toggle searchbar <br>
+          5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
+          #  Fill in the given sections if 'Other' is selected
+          6) Click 'Set' once the inputs have been filled <br>
+          7) The selected ports will be shown in the given map <br>
+          8) Select 'Confirm' to proceed <br>
+          9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
+          10) Set date & time
+          11) Click 'Enter' and you will see the selected result <br>
+          12) Transition history(ies) can be found in 'Display Route' <br>
+        </p>
+</div>
+</div>
+      </div>
     </div>
 </div>
 
@@ -184,7 +256,7 @@ height: 70%;
   </p>
 </div>
 <br><br>
-<a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\weather.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv();shipInfo()">Enter</button></a>
+<a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\weather.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv();shipInfo();calculateTime()">Enter</button></a>
 <script>
 
 
@@ -251,6 +323,7 @@ if (boat== JSON.parse(localStorage.getItem('shipInformation')).name[i])
 }
 function newDiv()
 {
+
 var div = document.createElement("div");
 div.setAttribute('class', 'myclass');
 div.style.width = "20%";
@@ -260,8 +333,10 @@ div.style.color = "white";
 div.style.fontSize = '18px';
 div.style.textAlign = 'center';
 div.style.overflowY = 'scroll';
-div.innerHTML+= '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Departure: KL to Johor </span> ';
-div.innerHTML += '<br>';
+div.innerHTML += 'Ship: '+JSON.parse(localStorage.getItem('myShip')).boatName;
+div.innerHTML+= '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Departure: ' + JSON.parse(localStorage.getItem('intPort')).portName +'Country: '+JSON.parse(localStorage.getItem('intPort')).country+ '</span><br>';
+div.innerHTML += '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> Destination: ' + JSON.parse(localStorage.getItem('finPort')).portName+ 'Country: '+ JSON.parse(localStorage.getItem('finPort')).country+'</span><br>';
+
 div.innerHTML += 'date: 08/3/2019 <br>';
 div.innerHTML += 'Weather: Sunny <br>';
 div.innerHTML += '...'
@@ -287,12 +362,34 @@ shipInfoSec.innerHTML += 'Comment: ' + JSON.parse(localStorage.getItem('shipInfo
 }
 
 }
+
+if (Detail == 'Choose your boat...')
+{
+  shipInfoSec.innerHTML = '';
+}
+}
+let helpToggle = document.getElementById("helpAssist");
+let helpButton = document.getElementById("helpToggle");
+let closeHelp = document.getElementById("closeHelp");
+
+helpButton.onclick = function() {
+  helpToggle.style.display ="block";
 }
 
+closeHelp.onclick = function() {
+  helpToggle.style.display ='none';
+}
 
+window.onclick = function(event){
+  if (event.target == helpToggle){
+    helpToggle.style.display = 'none';
+  }
+}
 </script>
 
     </body>
     <script src="ship.js"></script>
+    <script src="Weather.js"></script>
+    <script src="map.js"></script>
 
 </html>

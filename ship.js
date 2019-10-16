@@ -251,10 +251,16 @@ this._ports.push(myPort);
 
 class route
 {
-constructor(intPort, finPort,)
+constructor(intPort, finPort, shipUsed, departDate, wayPoint, arrivalDate, routeDist, fuelCost)
 {
 this._intPort = intPort;
 this._finPort = finPort;
+this._shipUsed = shipUsed;
+this._departDate = departDate;
+this._wayPoint = wayPoint;
+this._arrivalDate = arrivalDate;
+this._routeDist = routeDist;
+this._fuelCost = fuelCost;
 this._routes =[];
 
 }
@@ -274,26 +280,127 @@ set finPort(newFinPort)
 {
   this._finPort = newFinPort;
 }
+get shipUsed()
+{
+  return this._shipUsed;
+}
+
+set shipUsed(newShipUsed)
+{
+  this._shipUsed = newShipUsed;
+}
+get wayPoint()
+{
+  return this._departDate;
+}
+
+set wayPoint(newWayPoint)
+{
+  this._wayPoint = newWayPoint;
+}
+
+get departDate()
+{
+  return this._departDate;
+}
+
+set departDate(newDepartDate)
+{
+  this._departDate = newDepartDate;
+}
+get arrivalDate()
+{
+  return this._arrivalDate;
+}
+
+set arrivalDate(newArrivalDate)
+{
+  this._arrivalDate = newArrivalDate;
+}
+get routeDist()
+{
+  return this._routeDist;
+}
+
+set routeDist(newRouteDist)
+{
+  this._routeDist = newRouteDist;
+}
+get fuelCost()
+{
+  return this._fuelCost;
+}
+
+set fuelCost(newFuelCost)
+{
+  this._fuelCost = newFuelCost;
+}
 innerData(routeDetails)
 {
   this._intPort = routeDetails._intPort;
   this._finPort = portDetails._finPort;
 
 }
-  shortestRoute()
-  {
-
-
-
-  }
-
-
 
 }
 
+class routeStorage
+{
+constructor(setRoute)
+{
+  this._setRoute =setRoute;
+  this._routes = [];
+}
 
+get setRoute()
+{
+  return this._setRoute;
+}
+set setRoute(newRoute)
+{
+this._setRoute = newRoute;
+}
+get routes()
+{
+  return this._routes;
+}
+_searchRoutes(intPort)
+{
+let routes = this._routes;
+let routesResult = -1; //let it be 'none'
+if (routes.length >= 1)
+{
+    routesResult = routes.findIndex(
+        function(arrayItem)
+        {
+            return arrayItem.intPort == intPort;
+        }
+    );
+}
+return routesResult;
 
+}
 
+createRoute(ownRoute)
+{
+      // check if student is an instance of Student
+      if (ownRoute instanceof route)
+      {
+          // check if student already enrolled
+          let searchResult = this._searchRoutes(ownRoute.intPort);
+          if (searchResult == -1) // student not found
+          {
+              // we can enrol the student
+              this._routes.push(ownRoute);
+          }
+      }
+      else
+      {
+          console.log("Error: not an instance of port!");
+      }
+  }
+
+}
 
 
     function jsonpRequest(url, data)
@@ -428,7 +535,7 @@ else
 {
   alert("Your Browser does not support local storage.");
 }
-
+  return shipA;
 }
 
 
@@ -476,6 +583,7 @@ for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length 
 
 let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng);
 
+
 if (localStorage.getItem('initialPort') == null)
 {
   let intPorts = new PortClass('Initial Port');
@@ -491,11 +599,13 @@ else if(localStorage.getItem('initialPort') !== null)
   localStorage.setItem('initialPort',intPortStr)
 
 }
+
 else
 {
   alert("Your Browser does not support local storage.");
 }
 
+return firstPort;
 }
 
 function finPortInfo()
@@ -554,9 +664,40 @@ else
   alert("Your Browser does not support local storage.");
 }
 
+return secPort;
 }
 
 
+function storingRoute()
+{
+  let shipUsed = shipInfo();
+  let departPort = intPortInfo();
+  let destiPort = finPortInfo();
+  let date = document.getElementById('date').value;
+  let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost);
+
+  if (localStorage.getItem('Routes') == null)
+  {
+    let new_route = new routeStorage([]);
+    new_route.createRoute(routeA);
+    localStorage.setItem('Routes', JSON.stringify(new_route))
+  }
+
+  else if(localStorage.getItem('Routes') !== null)
+  {
+    let new_route = new routeStorage([]);
+    new_route.createRoute(routeA);
+    let finRouteStr = localStorage.getItem('Routes') + JSON.stringify(new_route);
+    localStorage.setItem('Routes',finRouteStr)
+
+  }
+  else
+  {
+    alert("Your Browser does not support local storage.");
+  }
+
+
+}
 
 
 

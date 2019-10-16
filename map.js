@@ -8,14 +8,11 @@ let map = new mapboxgl.Map({
 ;
 
 
-function setDeparture()
+/*function setDeparture()
 {
 let markers = [];
-
-
   let locations=
   {
-
       lon:[],
       lat:[],
       name:[]
@@ -24,23 +21,16 @@ let markers = [];
   {
   if (document.getElementById("departure").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
   {
-
         locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
         locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
-        locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]]);
-
+        locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j]);
         let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
         marker.setLngLat([locations.lon[0], locations.lat[0]]);
-
-
         let popup = new mapboxgl.Popup({ offset: 45});
         popup.setText(locations.name[0].toString());
-
         marker.setPopup(popup)
-
         // Display the marker.
         marker.addTo(map);
-
         // Display the popup.
         popup.addTo(map);
         markers.push(marker);
@@ -51,8 +41,88 @@ let markers = [];
       alert('Please insert a valid departure port name or type "Other"');
     }
 }
+*/
 
-function setDestination()
+
+
+function findAPIPort(nameOfPort)
+{
+let portFound;
+let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;
+let locations=
+{
+
+    lon:[],
+    lat:[],
+    name:[]
+};
+
+portFound = allAPIPorts.findIndex(
+    function(arrayItem)
+    {
+        return arrayItem == nameOfPort;
+    }
+  )
+
+if (portFound !== undefined)
+{
+  locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
+  locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
+  locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[portFound]);
+
+  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  marker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+  let popup = new mapboxgl.Popup({ offset: 45});
+  popup.setText(locations.name[0].toString());
+
+  marker.setPopup(popup)
+
+  // Display the marker.
+  marker.addTo(map);
+
+  // Display the popup.
+  popup.addTo(map);
+
+  currentMarkers.push(marker);
+
+  if (localStorage.getItem('portCoord') == null)
+  {
+
+    localStorage.setItem('portCoord', JSON.stringify(locations));
+
+  }
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
+  {
+    localStorage.removeItem('portCoord');
+    localStorage.setItem('portCoord', JSON.stringify(locations));
+  }
+
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
+  {
+    console.log(JSON.parse(localStorage.getItem('portCoord')).lon.length)
+    let object = JSON.parse(localStorage.getItem('portCoord'));
+
+    object.lon.push(locations.lon[0]);
+    object.lat.push(locations.lat[0]);
+    object.name.push(locations.name[0]);
+    localStorage.setItem('portCoord', JSON.stringify(object));
+
+  }
+
+
+}
+
+else
+{
+  alert('Please insert a valid departure port name or type "Other"');
+}
+
+}
+
+
+///////
+/*function setDestination()
 {
   let locations=
   {
@@ -64,36 +134,26 @@ function setDestination()
   {
   if (document.getElementById("destination").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
   {
-
         locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
         locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
         locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]])
-
         let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
         marker.setLngLat([locations.lon[0], locations.lat[0]]);
-
-
         let popup = new mapboxgl.Popup({ offset: 45});
         popup.setText(locations.name[0].toString());
-
         marker.setPopup(popup)
-
         // Display the marker.
         marker.addTo(map);
-
         // Display the popup.
         popup.addTo(map);
-
       }
     }
-
     if (locations.lon.length == 0)
     {
       alert('Please insert a valid destination port name or type "Other" ');
     }
 }
-
-
+*/
 let object = {
 type: "geojson",
 data: {
@@ -105,40 +165,35 @@ coordinates: []
 }
 }
 };
-map.on('click', function (e) {
-	 // gives you coorindates of the location where the map is clicked
 
-   map.addLayer({
-     id: 'dropoffs-symbol',
-     type: 'symbol',
-     source: {
-       data: dropoffs,
-       type: 'geojson'
-     },
-     layout: {
-       'icon-allow-overlap': true,
-       'icon-ignore-placement': true,
-       'icon-image': 'marker-15',
-     }
-   });
-   newDropoff(map.unproject(e.point));
-    updateDropoffs(dropoffs);
+let currentMarkers=[];
+let wayPointslat=[];
+let wayPointslng=[];
 
 
-});
-
-function panToClayton(){
-
-  let monashClayton = [145.1343136, -37.9110467];
-	map.panTo(monashClayton);
-}
-function showPath(){
-  removeLayerWithId('polygon')
-  for(let i = 0; i < locations.length; i++)
+function mapping(){
+wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
+wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
+object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[0],JSON.parse(localStorage.getItem("portCoord")).lat[0]])
+console.log(wayPointslat+","+wayPointslng)
+  map.on('click', function (e)
   {
-  object.data.geometry.coordinates.push(locations[i].coordinates);
-  }
+    let earthRadius = 6371e3; // metres earth radius
+    let d =0
+    object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
+    let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
+    markers.setLngLat([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat) ]);
+    // Display the marker.
+    markers.addTo(map);
+    wayPointslat.push(e.lngLat.lat)
+    wayPointslng.push(e.lngLat.lng)
+    currentMarkers.push(markers);
+    console.log(wayPointslat)
+    })
+}
 
+function showRoute(){
+  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1],JSON.parse(localStorage.getItem("portCoord")).lat[1]])
   map.addLayer({
   id: "routes",
   type: "line",
@@ -147,38 +202,60 @@ function showPath(){
   paint: { "line-color": "#888", "line-width": 6 }
   });
 }
-function showPolygon(){
+
+function reset()
+{
   removeLayerWithId('routes')
-  let object = {
-type: 'geojson',
-data: {
-type: 'Feature',
-geometry: {
-type: 'Polygon',
-coordinates: [[]]
+  if (currentMarkers!==null) {
+      for (var i = 0; i < currentMarkers.length; i++) {
+        currentMarkers[i].remove();
+        object.data.geometry.coordinates.pop();
+        wayPointslat.pop()
+        wayPointslng.pop()
+      }
 }
 }
-};
 
-	for(let i = 0; i < locations.length; i++)
-	{
-		object.data.geometry.coordinates[0][i] = locations[i].coordinates;
-	}
-
-	// adding the first location again to the last
-	 object.data.geometry.coordinates[0][locations.length] = locations[0].coordinates;
-
-	map.addLayer({
-		id: 'polygon',
-		type: 'fill',
-		source: object,
-		layout: {},
-		paint: {
-			'fill-color': '#088',
-			'fill-opacity': 0.8
-		}
-		});
+function toRadians(value)
+{
+  return (value)*Math.PI/180
 }
+function calculateDistance()
+{
+  let earthRadius = 6371e3; // metres earth radius
+  let d =0
+
+  wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[1])
+  wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[1])
+  console.log(wayPointslat.length)
+  for(i=0;i<wayPointslat.length-1;i++)
+  {
+    let lattitude1 = wayPointslat[i]
+    let lattitude2 = wayPointslat[i+1]
+    let longitude1=wayPointslng[i]
+    let longitude2=wayPointslng[i+1]
+    let difflattitude=toRadians((lattitude2-lattitude1))
+    let difflongitude=toRadians((longitude2-longitude1));
+    let a = Math.sin(difflattitude/2) * Math.sin(difflattitude/2) +(Math.cos(toRadians(lattitude1)) * Math.cos(toRadians(lattitude2)) *Math.sin(difflongitude/2) * Math.sin(difflongitude/2));
+
+    console.log(earthRadius)
+    console.log(a)
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    console.log(c)
+     d += earthRadius * c;
+
+  }
+  localStorage.setItem('distanceCalculated',JSON.stringify(d))
+}
+
+function calculateTime()
+{
+  let travelTime=JSON.parse(localStorage.getItem('distanceCalculated'))/JSON.parse(localStorage.getItem('myShip')).maxSpeed;
+  localStorage.setItem('totalTravelTime',JSON.stringify(travelTime));
+}
+
+
+
 function removeLayerWithId(idToRemove)
 {
 	let hasPoly = map.getLayer(idToRemove)
@@ -209,4 +286,4 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
-alert('press "Enter" to toggle search bar after input!');
+alert('press "enter" to toggle search bar after input!');
