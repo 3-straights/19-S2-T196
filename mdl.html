@@ -256,7 +256,7 @@ height: 70%;
   </p>
 </div>
 <br><br>
-<button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Enter</button> <br>
+<button type = 'button' class = 'enterButton' onmouseup =" storingRoute();newDiv()">Enter</button> <br>
 <button type = 'button' onmouseup='shipInfo()'>yoyooy</button>
 <script>
 
@@ -360,7 +360,7 @@ else if (localStorage.getItem('Routes') == null)
 function boatDetail(Detail)
 {
 
-
+let shipInfoSec = document.getElementById('boatDetail');
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
 if (Detail == JSON.parse(localStorage.getItem('shipInformation')).name[i])
