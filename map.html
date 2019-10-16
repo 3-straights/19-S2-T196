@@ -182,7 +182,7 @@ p {
   </div>
   <div class= 'destination' >
     <b>Destination:</b>
-    <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes();searchDesPort()'>
+    <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes()' onkeyup = "searchDesPort()">
     <div class ='otherDes' id = 'otherDes'></div>
   </div>
   <button type = 'button' class = 'enterButton' onmouseup ='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>Set</button>
@@ -264,9 +264,13 @@ function searchDepPort()
 
   let filterDepPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery));
 
-    document.getElementById('portSection').innerText += filterDepPort +"\n";
-
-
+for (let i = 0; i<20; i++)
+{
+  if (filterDepPort[i] !== undefined)
+  {
+    document.getElementById('portSection').innerText += filterDepPort[i] +"\n";
+}
+}
 
 }
 function searchDesPort()
@@ -275,7 +279,13 @@ function searchDesPort()
   let searchQuery2 = document.getElementById('destination').value.toUpperCase();
 
   let filterDesPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery2));
-  filterDesPort.forEach(x => document.getElementById('portSection').innerText += x + "\n");
+  for (let i = 0; i<20; i++)
+  {
+    if (filterDesPort[i] !== undefined)
+    {
+      document.getElementById('portSection').innerText += filterDesPort[i] +"\n";
+  }
+  }
 }
 
 
