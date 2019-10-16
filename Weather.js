@@ -40,7 +40,7 @@ function testInt(data)
     listHTML += "<tr><th>" + header_needed[i] + "</th><td>" + stuff_needed[i] + "</td></tr>" + "<br>";
     document.getElementById('intPortWeatherTable').innerHTML = listHTML;
   }
-  let weatherIntOverall = 'Source port current date is ' + JSON.parse(localStorage.getItem('date')) + ' and the current weather is ' + data.currently.summary;
+  let weatherIntOverall = 'Source port current date is ' + JSON.parse(localStorage.getItem('date')) + ', current time is ' + JSON.parse(localStorage.getItem('time')) + ', and the current weather is ' + data.currently.summary;
   document.getElementById('weatherIntSummary').innerHTML = weatherIntOverall;
   localStorage.setItem('intWeather',JSON.stringify(data.currently.summary));
 }
@@ -103,5 +103,5 @@ function testFin(data)
   localStorage.setItem('finWeather',JSON.stringify(data.currently.summary));
 }
 
-
+document.getElementById("totalDistance").innerHTML = JSON.parse(localStorage.getItem('distanceCalculated'));
 document.getElementById("fuelOfTheBoat").innerHTML = JSON.parse(localStorage.getItem('myShip')).range;
