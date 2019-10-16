@@ -698,10 +698,13 @@ function storeDate()
 {
   let date = document.getElementById('date').value;
   localStorage.setItem('date', JSON.stringify(date))
-
 }
 
-
+function storeTime()
+{
+  let time = document.getElementById('time').value;
+  localStorage.setItem('time', JSON.stringify(time))
+}
 
   let shipData={
       callback:"extractShip"
