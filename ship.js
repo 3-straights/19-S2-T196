@@ -541,30 +541,10 @@ function intPortInfo()
 {
 let portName, country, lat, lng;
 
-
-for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
-{
-  if (document.getElementById("departure").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
-  {
-
-    portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
-    country = JSON.parse(localStorage.getItem('portInformation')).country[i];
-    lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-    lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
-
-  }
-
-  else if (document.getElementById("departure").value == "Other" || document.getElementById("departure").value == "other")
-  {
-    portName = document.getElementById("depPort").value;
-    country = document.getElementById("depCountry").value;
-    lat = document.getElementById("depLat").value;
-    lng = document.getElementById("depLng").value;
-
-  }
-
-}
-
+portName = JSON.parse(localStorage.getItem('portCoord')).name[0];
+country = JSON.parse(localStorage.getItem('portCoord')).country[0];
+lat = JSON.parse(localStorage.getItem('portCoord')).lat[0];
+lng = JSON.parse(localStorage.getItem('portCoord')).lon[0];
 
   let intPort =
   {
@@ -606,26 +586,11 @@ return firstPort;
 function finPortInfo()
 {
   let portName, country, lat, lng;
-  for (let i=0; i<JSON.parse(localStorage.getItem('portInformation')).name.length ;i++)
-  {
-    if (document.getElementById("destination").value == JSON.parse(localStorage.getItem('portInformation')).name[i])
-    {
 
-      portName = JSON.parse(localStorage.getItem('portInformation')).name[i];
-      country = JSON.parse(localStorage.getItem('portInformation')).country[i];
-      lat = JSON.parse(localStorage.getItem('portInformation')).lat[i];
-      lng = JSON.parse(localStorage.getItem('portInformation')).lng[i];
-
-    }
-    else if(document.getElementById("destination").value == "Other" || document.getElementById("destination").value == "other")
-    {
-      portName = document.getElementById("desPort").value;
-      country = document.getElementById("desCountry").value;
-      lat = document.getElementById("desLat").value;
-      lng = document.getElementById("desLng").value;
-
-    }
-  }
+  portName = JSON.parse(localStorage.getItem('portCoord')).name[1];
+  country = JSON.parse(localStorage.getItem('portCoord')).country[1];
+  lat = JSON.parse(localStorage.getItem('portCoord')).lat[1];
+  lng = JSON.parse(localStorage.getItem('portCoord')).lon[1];
 
 let finPort =
 {
@@ -667,8 +632,11 @@ function storingRoute()
   let shipUsed = shipInfo();
   let departPort = intPortInfo();
   let destiPort = finPortInfo();
-  let date = document.getElementById('date').value;
-
+  let date = JSON.parse(localStorage.getItem('date'));
+  let routeDist = JSON.parse(localStorage.getItem('routeDistance'));
+  let fuelCost = JSON.parse(localStorage.getItem('myShip')).cost * routeDist;
+  wayPoint =3;
+  arrivalDate =17;
   let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost);
 
   if (localStorage.getItem('Routes') == null)
@@ -698,13 +666,10 @@ function storeDate()
 {
   let date = document.getElementById('date').value;
   localStorage.setItem('date', JSON.stringify(date))
+
 }
 
-function storeTime()
-{
-  let time = document.getElementById('time').value;
-  localStorage.setItem('time', JSON.stringify(time))
-}
+
 
   let shipData={
       callback:"extractShip"
