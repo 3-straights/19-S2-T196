@@ -255,6 +255,17 @@ map.on('click', function (e)
   currentMarkers.push(markers);
   })
 
+function zoom()
+{
+  map.flyTo({
+center: [
+(JSON.parse(localStorage.getItem("portCoord")).lon[0]+JSON.parse(localStorage.getItem("portCoord")).lon[1])/2,(JSON.parse(localStorage.getItem("portCoord")).lat[0]+JSON.parse(localStorage.getItem("portCoord")).lat[1])/2],
+zoom:2.5,
+speed:1.5
+});
+}
+
+
 
 function showRoute(){
 
@@ -370,3 +381,4 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
+
