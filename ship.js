@@ -1,14 +1,15 @@
-class ship
+class ship //creating ship object using class
 {
-  constructor(boatName,maxSpeed,range,cost,status,comment)
+  constructor(boatName,maxSpeed,range,cost,status,comment,desc)
   {
 
-  this._boatName = boatName;
-  this._maxSpeed = maxSpeed;
-  this._range = range;
-  this._cost = cost;
-  this._status = status;
-  this._comment = comment;
+  this._boatName = boatName; //extracting the ship name
+  this._maxSpeed = maxSpeed; //extracting the maximum speed of ship
+  this._range = range; //extracting the ship full tank data
+  this._cost = cost; // cost of oil per range
+  this._status = status; //the availability of ship
+  this._comment = comment; //feedback of the ship
+  this._desc = desc; //providing description(size) of the boat object
   }
 
   get boatName()
@@ -63,14 +64,24 @@ set comment(newComment)
 {
   this._comment = newComment;
 }
+
+get desc()
+{
+  return this._desc;
+}
+
+set desc(newDesc)
+{
+this._desc = newDesc;
+}
 }
 
 
-class shipFaculty{
+class shipFaculty{  //creating a place that stores all the called ships into an array called _ships with class
 constructor(shipFacultyName)
 {
-this._shipFacultyName = shipFacultyName;
-this._ships = [];
+this._shipFacultyName = shipFacultyName; //creating a name for the ships storage
+this._ships = []; //creating an empty array to store selected ships
 }
 get shipFacultyName()
 {
@@ -81,38 +92,38 @@ set shipFacultyName(newName)
   this._shipFacultyName = newName;
  }
 
-_searchForShip(shipName)
+_searchForShip(shipName) //searching the ships information by finding the index of the ship name
 {
 let ships = this._ships;
-let shipResult = -1; //let it be 'none'
+let shipResult = -1; //initiate the index value to be 'none'
 if (ships.length >= 1)
 {
     shipResult = ships.findIndex(
         function(arrayItem)
         {
-            return arrayItem.boatName == shipName;
+            return arrayItem.boatName == shipName; //shipResults = index of ship from the API
         }
     );
 }
-return shipResult;
+return shipResult; //An index value should be obtained
 
 }
 
 createShip(newShip)
 {
-      // check if student is an instance of Student
+      // check if chosen ship is an instance of the ship class
       if (newShip instanceof ship)
       {
           // check if student already enrolled
-          let searchResult = this._searchForShip(newShip.boatName);
+          let searchResult = this._searchForShip(newShip.boatName); //searching ship with the found index
           if (searchResult == -1)
           {
-            this._ships.push(newShip);
+            this._ships.push(newShip); //storing the newly selected ships into an array
           }
 
       else
       {
-          console.log("Error: not an instance of ship!");
+          alert("Error: not an instance of ship!"); //if it doesn't meet the condition, alert the user
       }
   }
 
@@ -121,17 +132,20 @@ createShip(newShip)
 }
 }
 
-class port
+class port //creating an object that refers to port
 {
-constructor(portName,country,lat,lng)
+constructor(portName,country,lat,lng,type,size,locPrec)
 {
-  this._portName = portName;
+  this._portName = portName; //name of port
 
-  this._country = country;
+  this._country = country; //the country of port
 
-  this._lat = lat;
+  this._lat = lat; //the latitude of the selected port
 
-  this._lng = lng;
+  this._lng = lng; //the longitude of the selected port
+  this._type = type; //locations of port(eg: river, sea...)
+  this._size = size; //size of port(large, small)
+  this._locPrec = locPrec; //precised location
 }
 get portName()
 {
@@ -170,22 +184,43 @@ set lng(newLng)
   this._lng = newLng;
 }
 
-innerData(portDetails)
+get type()
 {
-  this._portName = portDetails._portName;
-  this._country = portDetails._country;
-  this._lat = portDetails._lat;
-  this._lng = portDetails._lng;
+  return this._type;
 }
 
+set type(newType)
+{
+this._type = newType;
 }
 
-class PortClass
+get size()
+{
+  return this._size;
+}
+
+set size(newSize)
+{
+  this._size = newSize;
+}
+
+get locPrec()
+{
+  return this._locPrec;
+}
+
+set locPrec(newLocPrec)
+{
+  this._locPrec = newLocPrec;
+}
+}
+
+class PortClass //creating a class that stores port object
 {
 constructor(portPlace)
 {
-this._portPlace= portPlace;
-this._ports = [];
+this._portPlace= portPlace; //name of port storage
+this._ports = []; // same as in ship faculty, _ports initiates with an empty array to store selected ports
 }
 get portPlace()
 {
@@ -199,16 +234,16 @@ get ports()
 {
   return this._ports;
 }
-_searchForPorts(nameOfPort)
+_searchForPorts(nameOfPort) //finding the index of port in the array list by using the selected port name
 {
 let ports = this._ports;
-let portsResult = -1; //let it be 'none'
+let portsResult = -1; //initiate the value to be undefined
 if (ports.length >= 1)
 {
     portsResult = ports.findIndex(
         function(arrayItem)
         {
-            return arrayItem.portName == nameOfPort;
+            return arrayItem.portName == nameOfPort; //portsResult is the index found
         }
     );
 }
@@ -218,50 +253,39 @@ return portsResult;
 
 createPort(ownPort)
 {
-      // check if student is an instance of Student
+      // check if port is instance of Port class
       if (ownPort instanceof port)
       {
           // check if student already enrolled
-          let searchResult = this._searchForPorts(ownPort.portName);
-          if (searchResult == -1) // student not found
+          let searchResult = this._searchForPorts(ownPort.portName);//using index found in the method _searchForPorts
+          if (searchResult == -1) // if port not found
           {
               // we can enrol the student
-              this._ports.push(ownPort);
+              this._ports.push(ownPort); // push into _ports array
           }
       }
       else
       {
-          console.log("Error: not an instance of port!");
+          alert("Error: not an instance of port!"); //else, alerting the user to input correct value
       }
   }
 
-  overallPort(portDetails)
-  {
-this._portPlace = portDetails._portPlace;
 
-for (let p=0; p<portDetails._ports.length; p++)
-{
-  var myPort = new port();
-  myport.innerData(portDetails._ports[p]);
-this._ports.push(myPort);
-}
-  }
 
 }
 
-class route
+class route //route that stores all the chosen information by users
 {
 constructor(intPort, finPort, shipUsed, departDate, wayPoint, arrivalDate, routeDist, fuelCost)
 {
-this._intPort = intPort;
-this._finPort = finPort;
-this._shipUsed = shipUsed;
-this._departDate = departDate;
-this._wayPoint = wayPoint;
-this._arrivalDate = arrivalDate;
-this._routeDist = routeDist;
-this._fuelCost = fuelCost;
-this._routes =[];
+this._intPort = intPort; //departed port
+this._finPort = finPort; // destination
+this._shipUsed = shipUsed; //selected ship
+this._departDate = departDate; //started date
+this._wayPoint = wayPoint; //selected way points
+this._arrivalDate = arrivalDate; // date arrival
+this._routeDist = routeDist; //total distance of selected route
+this._fuelCost = fuelCost; //fuel cost
 
 }
 get intPort()
@@ -339,12 +363,12 @@ set fuelCost(newFuelCost)
 
 }
 
-class routeStorage
+class routeStorage //class that stores all the chosen routes
 {
 constructor(setRoute)
 {
   this._setRoute =setRoute;
-  this._routes = [];
+  this._routes = []; //empty array that stores route
 }
 
 get setRoute()
@@ -362,13 +386,13 @@ get routes()
 _searchRoutes(intPort)
 {
 let routes = this._routes;
-let routesResult = -1; //let it be 'none'
+let routesResult = -1; //let it be undefined at first
 if (routes.length >= 1)
 {
     routesResult = routes.findIndex(
         function(arrayItem)
         {
-            return arrayItem.intPort == intPort;
+            return arrayItem.intPort == intPort; //returning index of selected route
         }
     );
 }
@@ -378,10 +402,10 @@ return routesResult;
 
 createRoute(ownRoute)
 {
-      // check if student is an instance of Student
+      // check if selected route is an instance of route
       if (ownRoute instanceof route)
       {
-          // check if student already enrolled
+          // check if route already present in array list
           let searchResult = this._searchRoutes(ownRoute.intPort);
           if (searchResult == -1) // student not found
           {
@@ -430,16 +454,16 @@ createRoute(ownRoute)
   }
 
   let portData={
-      callback:"extractPort"
+      callback:"extractPort" //calling back the function: extractPort()
   }
 
 
-  jsonpRequest("https://eng1003.monash/api/v1/ports/",portData)
+  jsonpRequest("https://eng1003.monash/api/v1/ports/",portData) //retrieving port informations from API
 
   function extractPort(portData)
 {
     let porto={
-        name:[portData.ports[0].name] ,
+        name:[portData.ports[0].name] ,  //storing the ports values from API into arrays from porto
         country:[portData.ports[0].country],
         type:[portData.ports[0].type],
         size:[portData.ports[0].size],
@@ -448,7 +472,7 @@ createRoute(ownRoute)
         lng:[portData.ports[0].lng]
 
     }
-    for (let i=1;i<(portData.ports.length);i++)
+    for (let i=1;i<(portData.ports.length);i++) //pushing all the ports information one by one into the created array through for loop
         {
             porto.name.push(portData.ports[i].name)
             porto.country.push(portData.ports[i].country)
@@ -460,13 +484,13 @@ createRoute(ownRoute)
 
         }
 
-    localStorage.setItem("portInformation",JSON.stringify(porto))
+    localStorage.setItem("portInformation",JSON.stringify(porto)) //storing the new array extracted from API into local Storage
 
 }
 
 function shipInfo()
 {
-let boat_name, maxSpeed, range, cost, status, comments;
+let boat_name, maxSpeed, range, cost, status, comments,desc;
 
 for (let i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length ;i++)
 {
@@ -479,6 +503,7 @@ range = JSON.parse(localStorage.getItem('shipInformation')).range[i];
 cost = JSON.parse(localStorage.getItem('shipInformation')).cost[i];
 status = JSON.parse(localStorage.getItem('shipInformation')).status[i];
 comments = JSON.parse(localStorage.getItem('shipInformation')).comments[i];
+desc = JSON.parse(localStorage.getItem('shipInformation')).desc[i]
 }
 }
 
@@ -490,6 +515,7 @@ if (document.getElementById("boatOpt").value == 'Other')
   cost = document.getElementById('shipCost').value;
   status = document.getElementById('shipStatus').value;
   comments = document.getElementById('shipComments').value;
+  desc = document.getElementById('shipDesc').value;
 }
 
 let myShip =
@@ -500,13 +526,14 @@ let myShip =
   range: range,
   cost: cost,
   status: status,
-  comments: comments
+  comments: comments,
+  desc: desc
 
 
 };
 localStorage.setItem('myShip', JSON.stringify(myShip));
 
-var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments)
+var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments, myShip.desc)
 
 
 if (localStorage.getItem('selectedShip') == null)
@@ -539,12 +566,15 @@ else
 
 function intPortInfo()
 {
-let portName, country, lat, lng;
+let portName, country, lat, lng, type, size, locPrec;
 
 portName = JSON.parse(localStorage.getItem('portCoord')).name[0];
 country = JSON.parse(localStorage.getItem('portCoord')).country[0];
 lat = JSON.parse(localStorage.getItem('portCoord')).lat[0];
 lng = JSON.parse(localStorage.getItem('portCoord')).lon[0];
+type = JSON.parse(localStorage.getItem('portCoord')).type[0];
+size = JSON.parse(localStorage.getItem('portCoord')).size[0];
+locPrec = JSON.parse(localStorage.getItem('portCoord')).locprecision[0];
 
   let intPort =
   {
@@ -552,12 +582,24 @@ lng = JSON.parse(localStorage.getItem('portCoord')).lon[0];
     portName: portName,
     country: country,
     lat: lat,
-    lng: lng
+    lng: lng,
+    type: type,
+    size: size,
+    locprecision: locPrec
 
   };
-  localStorage.setItem('intPort', JSON.stringify(intPort));
 
-let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng);
+  if (!localStorage.getItem('intPort'))
+  {
+  localStorage.setItem('intPort', JSON.stringify(intPort));
+  }
+
+  else if (localStorage.getItem('intPort') !== null)
+  {
+    localStorage.removeItem('intPort');
+    localStorage.setItem('intPort', JSON.stringify(intPort));
+  }
+let firstPort = new port(intPort.portName, intPort.country, intPort.lat, intPort.lng, intPort.type, intPort.size, intPort.locprecision);
 
 
 if (localStorage.getItem('initialPort') == null)
@@ -585,24 +627,39 @@ return firstPort;
 
 function finPortInfo()
 {
-  let portName, country, lat, lng;
+  let portName, country, lat, lng, type, size, locPrec;
 
   portName = JSON.parse(localStorage.getItem('portCoord')).name[1];
   country = JSON.parse(localStorage.getItem('portCoord')).country[1];
   lat = JSON.parse(localStorage.getItem('portCoord')).lat[1];
   lng = JSON.parse(localStorage.getItem('portCoord')).lon[1];
+  type = JSON.parse(localStorage.getItem('portCoord')).type[1];
+  size = JSON.parse(localStorage.getItem('portCoord')).size[1];
+  locPrec = JSON.parse(localStorage.getItem('portCoord')).locprecision[1];
 
 let finPort =
 {
   portName: portName,
   country: country,
   lat: lat,
-  lng: lng
+  lng: lng,
+  type: type,
+  size: size,
+  locprecision: locPrec
 
 };
-  localStorage.setItem('finPort', JSON.stringify(finPort))
+if (!localStorage.getItem('finPort'))
+{
+  localStorage.setItem('finPort', JSON.stringify(finPort));
+}
 
-let secPort = new port(finPort.portName, finPort.country, finPort.lat, finPort.lng);
+else if (localStorage.getItem('finPort') !== null)
+{
+  localStorage.removeItem('finPort');
+  localStorage.setItem('finPort', JSON.stringify(finPort));
+}
+
+let secPort = new port(finPort.portName, finPort.country, finPort.lat, finPort.lng, finPort.type, finPort.size, finPort.locprecision);
 
 if (localStorage.getItem('finalPort') == null)
 {
@@ -665,8 +722,17 @@ function storingRoute()
 function storeDate()
 {
   let date = document.getElementById('date').value;
-  localStorage.setItem('date', JSON.stringify(date))
+  if (!localStorage.getItem('date'))
+  {
+    localStorage.setItem('date', JSON.stringify(date))
+  }
 
+  else if (localStorage.getItem('date') !== null)
+  {
+    localStorage.removeItem('date');
+    localStorage.setItem('date', JSON.stringify(date))
+
+  }
 }
 
 
