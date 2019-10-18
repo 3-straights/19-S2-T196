@@ -240,9 +240,7 @@
 <br><br>
 <button type="button" class="collapsible" title='Click to view/hide selected route'><strong>Display
     Route: </strong><span class='mdl_arrow1' style="font-size:14pt">🔽</span></button>
-<div class="content" id='content' style = 'text-align: center'><br>
-
-</div>
+<div class="content" id='content' style = 'text-align: center' ></div>
 <div class='clear'></div>
 
 <button type='button' class='collapsible' title='location...'><b>Choose your location: </b><span class='mdl_arrow1'
@@ -281,14 +279,14 @@
 </button>
 <div class='content'><br>
     <p style='text-align: center'>Set Date: <input id='date' type='date' onchange='storeDate()'> <br><br>
-        Set Time: <input id='time' type='time'>
+
         <br>
     </p>
 </div>
 <br><br>
 <button type='button' class='enterButton' onmouseup=" storingRoute();newDiv()">Enter</button>
 <br>
-<button type='button' onmouseup='shipInfo()'>yoyooy</button>
+
 <script>
 
 
@@ -347,7 +345,9 @@
     }
 
     function newDiv() {
-        if (localStorage.getItem('intPort') !== null && localStorage.getItem('Routes') !== null) {
+
+        if ( localStorage.getItem('Routes') !== null && JSON.parse(localStorage.getItem('Routes'))._routes.length > 0 ) {
+            document.getElementById("content").innerHTML ='';
 
             let route_array = JSON.parse(localStorage.getItem('Routes'))._routes;
 
@@ -356,8 +356,9 @@
                 console.log(route);
 
                 var div = document.createElement("div");
-                div.setAttribute('class', 'myClass');
-                div.setAttribute('id', 'myClass')
+
+                div.setAttribute('class', `myClass_${i}`);
+                div.setAttribute('id', `myClass_${i}`)
                 div.style.width = "20%";
                 div.style.height = "200px";
                 div.style.background = "#191970";
@@ -391,8 +392,11 @@
                 div.innerHTML +=
                     'Destination Weather: ' + '<br>';
 
-                div.innerHTML += '...';
+                div.innerHTML += '...<br>';
 
+                div.innerHTML += ` <button id="deleteRoute_${i}" type = "button" onclick="routeDeletor(this)">Delete</button> &nbsp; &nbsp;`
+
+                div.innerHTML += `<button id="postponeRoute_${i}" type = "button" onclick="postponeRoute(this)">postpone</button>`
                 document.getElementById("content").appendChild(div);
             }
 
@@ -445,6 +449,48 @@
         }
     }
 
+  function routeDeletor(item)
+  {
+      item.closest("div").remove();
+
+      for (let i=0; i<JSON.parse(localStorage.getItem("Routes"))._routes.length; i++)
+      {
+          if (!document.getElementById(`myClass_${i}`) )
+          {
+              let trueRoute=JSON.parse(localStorage.getItem("Routes"));
+              trueRoute._routes.splice(i,1);
+              localStorage.removeItem('Routes');
+              localStorage.setItem('Routes', JSON.stringify(trueRoute))
+
+          }
+
+      }
+  }
+
+  function postponeRoute(item)
+  {
+      let extendDate='';
+      extendDate += '<input type="date" id= "extendDate" placeholder = "select a new date... " style="float: right"> <br>';
+      extendDate += '<button type= "button" id = "changeDate" class = "changeDate" onclick = "setNewDate()" >Comfirm</button><br>'
+      item.closest("div").innerHTML +=  extendDate;
+    return extendDate;
+  }
+
+function setNewDate()
+{
+  let intDate = JSON.parse(localStorage.getItem('date')).split('-');
+  let newDate = document.getElementById('extendDate').value.split('-');
+  let year_diff = newDate[0] - intDate[0];
+  let month_diff = newDate[1] - intDate[1];
+  let day_diff = newDate[2] - intDate[2];
+let diffInDay = day_diff + ' day ' + month_diff + ' month ' + year_diff + ' year! '
+  alert(diffInDay)
+  localStorage.removeItem('date');
+  localStorage.setItem('date', HIUGYFGHUJ)
+
+
+
+}
 
 </script>
 
