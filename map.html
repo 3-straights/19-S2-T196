@@ -29,270 +29,313 @@
 -->
 <html>
 <head>
-  <title>Utilising Mapbox API</title>
-  <style type="text/css">
-    .map {
-      height: calc(70vh - 40px);
-    }
+    <title>Utilising Mapbox API</title>
+    <style type="text/css">
+        .map {
+            height: calc(70vh - 40px);
+        }
 
 
-  .otherDep
-  {
-    width: 100%;
-    overflow-y: scroll;
-    background-color: #f1f1f1;
-  }
+        .otherDep {
+            width: 100%;
+            overflow-y: scroll;
+            background-color: #f1f1f1;
+        }
 
-  .otherDes
-  {
-    width: 100%;
-    overflow-y: scroll;
-    background-color: #f1f1f1;
-  }
-.destination{
-  width: 20%;
-  margin-left: 200px;
-  border-width: 3px;
-  border-style: solid;
-  border-color: orange;
-}
+        .otherDes {
+            width: 100%;
+            overflow-y: scroll;
+            background-color: #f1f1f1;
+        }
 
-.departure
-{
-  width: 20%;
-  margin-left: 360px;
-  border-width: 3px;
-  border-style: solid;
-  border-color: orange;
-}
-.enterButton {
-  background-color: #0000FF; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  float: right;
-  cursor: pointer
-}
-.enterButton:hover {background-color: #3e8e41}
+        .destination {
+            width: 20%;
+            margin-left: 200px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: orange;
+        }
 
-.enterButton:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+        .departure {
+            width: 20%;
+            margin-left: 360px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: orange;
+        }
 
-}
-.mdl-layout__header-row {
-  margin-left: 550px;
-  width: 100%;
-  height: 100%;
+        .enterButton {
+            background-color: #0000FF; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            float: right;
+            cursor: pointer
+        }
 
-}
-.helpAssist {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  padding-top: 100px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);}
+        .enterButton:hover {
+            background-color: #3e8e41
+        }
 
-/* Modal Content */
-.helpContent {
-  background-color: lightgrey;
-  color: darkBlue;
-  margin: auto;
-  height: 45%;
-  border: 1px solid #888;
-  width: 35%;
-}
+        .enterButton:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
 
-.helpToggle {
-cursor: pointer;
-margin-left: 50px;
-font-weight: bold;
-color: darkBlue;
-}
-/* The Close Button */
-.closeHelp {
-  color: black;
-  float: right;
-  font-size: 26px;
-  font-weight: bold;
-}
+        }
 
-.closeHelp:hover,
-.closeHelp:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-p {
-  width: 100%;
-  text-align: center;
-}
-  div.yoyo div {float:left}
-  </style>
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
-  </head>
-  <body>
-    <header class="mdl-layout__header" >
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-<div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
-  <a onclick="location.href= 'mdl.html'"><input type='image' name = 'home' src = 'https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg' title="home" width = '50' height = '50'></a>
-  <button id= 'helpToggle' class = 'helpToggle'>HELP!? </button>
-  <div id = 'helpAssist' class = 'helpAssist'>
-    <div class = 'helpContent' id= 'helpContent'>
-    <span class="closeHelp" id = 'closeHelp'> &times; </span>
-    <p>
-      <span class = 'help_use' style = "font-size:18pt"><b>How to use?</b> <hr></span>
-      1) Press the button 'Choose your location' once <br>
-      2) Select your ports through the world icon <br>
-      3) Input values into 'Departure' and 'Destination' <br>
-      4) Press 'Enter' to toggle searchbar <br>
-      5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
-      #  Fill in the given sections if 'Other' is selected
-      6) Click 'Set' once the inputs have been filled <br>
-      7) The selected ports will be shown in the given map <br>
-      8) Select 'Confirm' to proceed <br>
-      9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
-      10) Set date & time
-      11) Click 'Enter' and you will see the selected result <br>
-      12) Transition history(ies) can be found in 'Display Route' <br>
-    </p>
+        .mdl-layout__header-row {
+            margin-left: 550px;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .helpAssist {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal Content */
+        .helpContent {
+            background-color: lightgrey;
+            color: darkBlue;
+            margin: auto;
+            height: 45%;
+            border: 1px solid #888;
+            width: 35%;
+        }
+
+        .helpToggle {
+            cursor: pointer;
+            margin-left: 50px;
+            font-weight: bold;
+            color: darkBlue;
+        }
+
+        /* The Close Button */
+        .closeHelp {
+            color: black;
+            float: right;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .closeHelp:hover,
+        .closeHelp:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        p {
+            width: 100%;
+            text-align: center;
+        }
+
+        div.yoyo div {
+            float: left
+        }
+    </style>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet'/>
+</head>
+<body>
+<header class="mdl-layout__header">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <div class="mdl-layout__header-row"><span class="mdl-layout-title"
+                                                  style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
+            <a onclick="location.href= 'mdl.html'"><input type='image' name='home'
+                                                          src='https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg'
+                                                          title="home" width='50' height='50'></a>
+            <button id='helpToggle' class='helpToggle'>HELP!?</button>
+            <div id='helpAssist' class='helpAssist'>
+                <div class='helpContent' id='helpContent'>
+                    <span class="closeHelp" id='closeHelp'> &times; </span>
+                    <p>
+                        <span class='help_use' style="font-size:18pt"><b>How to use?</b> <hr></span>
+                        1) Press the button 'Choose your location' once <br>
+                        2) Select your ports through the world icon <br>
+                        3) Input values into 'Departure' and 'Destination' <br>
+                        4) Press 'Enter' to toggle searchbar <br>
+                        5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
+                        # Fill in the given sections if 'Other' is selected
+                        6) Click 'Set' once the inputs have been filled <br>
+                        7) The selected ports will be shown in the given map <br>
+                        8) Select 'Confirm' to proceed <br>
+                        9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
+                        10) Set date & time
+                        11) Click 'Enter' and you will see the selected result <br>
+                        12) Transition history(ies) can be found in 'Display Route' <br>
+                    </p>
+                    <br><br><br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+<div class='yoyo'>
+    <div class='departure'>
+        <b>Departure:</b>
+        <input type="text" id="departure" name="departure" style="float: right" placeholder="From.."
+               onchange='otherDep()' onkeyup="searchDepPort()">
+        <div class='otherDep' id='otherDep'></div>
+    </div>
+    <div class='destination'>
+        <b>Destination:</b>
+        <input type="text" id="destination" name="destination" style="float: right" placeholder="To.."
+               onchange='otherDes()' onkeyup="searchDesPort()">
+        <div class='otherDes' id='otherDes'></div>
+    </div>
+    <button type='button' class='enterButton'
+            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>
+        Set
+    </button>
     <br><br><br><br>
+    <button type='button' class='enterButton' onmouseup='showRoute()'>Set route</button>
+    <br><br><br><br>
+    <button type='button' class='enterButton' onmouseup='reset()'>Reset</button>
+    <br><br><br><br>
+    <button type='button' class='enterButton' onmouseup='calculateDistance()'>Calculate Distance</button>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
-</div>
-  </div>
-</div>
-
-  </header>
-    <div class='yoyo'>
-      <div class='departure'>
-    <b>Departure:</b>
-    <input type="text" id="departure" name="departure" style="float: right" placeholder="From.." onchange = 'otherDep()' onkeyup = "searchDepPort()">
-    <div class= 'otherDep' id='otherDep'></div>
-  </div>
-  <div class= 'destination' >
-    <b>Destination:</b>
-    <input type="text" id="destination" name="destination" style="float: right" placeholder="To.." onchange = 'otherDes()' onkeyup = "searchDesPort()">
-    <div class ='otherDes' id = 'otherDes'></div>
-  </div>
-  <button type = 'button' class = 'enterButton' onmouseup ='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>Set</button>
-  <br><br><br><br>
-  <button type = 'button' class = 'enterButton' onmouseup ='showRoute()'>Set route</button>
-  <br><br><br><br>
-  <button type = 'button' class = 'enterButton' onmouseup ='reset()'>Reset</button>
-  <br><br><br><br>
-  <button type = 'button' class = 'enterButton' onmouseup ='calculateDistance()'>Calculate Distance</button>
-  <br><br><br><br><br><br><br><br><br><br><br><br><br>
-</div>
-<div id = 'portSection'></div>
+<ul id='portSection' style="list-style-type: none;"></ul>
 <br><br>
-    <div class='map' id="map"></div>
-    <a onclick="location.href= 'mdl.html'"><button type = 'button' class = 'enterButton'>Confirm</button></a>
+<div class='map' id="map"></div>
+<a onclick="location.href= 'mdl.html'">
+    <button type='button' class='enterButton'>Confirm</button>
+</a>
 
-  </body>
+</body>
 
-  <script>
-  let helpToggle = document.getElementById("helpAssist");
-  let helpButton = document.getElementById("helpToggle");
-  let closeHelp = document.getElementById("closeHelp");
+<script>
+    let helpToggle = document.getElementById("helpAssist");
+    let helpButton = document.getElementById("helpToggle");
+    let closeHelp = document.getElementById("closeHelp");
 
-  helpButton.onclick = function() {
-    helpToggle.style.display ="block";
-  }
-
-  closeHelp.onclick = function() {
-    helpToggle.style.display ='none';
-  }
-
-  window.onclick = function(event){
-    if (event.target == helpToggle){
-      helpToggle.style.display = 'none';
+    helpButton.onclick = function () {
+        helpToggle.style.display = "block";
     }
-  }
 
-function otherDep()
-{
-  let newDep;
-  if (document.getElementById('departure').value == 'other'|| document.getElementById('departure').value == 'Other')
-  {
-    newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br><br>';
-    newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br><br>';
-    newDep += 'Longtitude: <input type="text" name="depLng" id="depLng" style="float: right"/><br><br><br>';
-    newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br>';
-  }
-  else
-   {
-    newDep = '';
-  }
-    document.getElementById('otherDep').innerHTML = newDep;
-  }
+    closeHelp.onclick = function () {
+        helpToggle.style.display = 'none';
+    }
 
-function otherDes()
+    window.onclick = function (event) {
+        if (event.target == helpToggle) {
+            helpToggle.style.display = 'none';
+        }
+    }
 
-{
-  let newDes;
+    function otherDep() {
+        let newDep;
+        if (document.getElementById('departure').value == 'other' || document.getElementById('departure').value == 'Other') {
+            newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br><br>';
+            newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br><br>';
+            newDep += 'Longtitude: <input type="text" name="depLng" id="depLng" style="float: right"/><br><br><br>';
+            newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br>';
+        } else {
+            newDep = '';
+        }
+        document.getElementById('otherDep').innerHTML = newDep;
+    }
 
-  if (document.getElementById('destination').value == 'other'|| document.getElementById('destination').value == 'Other')
-  {
-    newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
-    newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
-    newDes += 'Longtitude: <input type="text" name="desLng" id="desLng" style="float: right"/><br><br><br>';
-    newDes += 'Latitude: <input type="text" name="desLat" id="desLat" style="float: right"/><br><br>';
-  }
-  else
-  {
-    newDes ='';
+    function otherDes() {
+        let newDes;
 
-  }
-  document.getElementById('otherDes').innerHTML = newDes;
-}
+        if (document.getElementById('destination').value == 'other' || document.getElementById('destination').value == 'Other') {
+            newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
+            newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
+            newDes += 'Longtitude: <input type="text" name="desLng" id="desLng" style="float: right"/><br><br><br>';
+            newDes += 'Latitude: <input type="text" name="desLat" id="desLat" style="float: right"/><br><br>';
+        } else {
+            newDes = '';
 
-function searchDepPort()
-{
-  document.getElementById("portSection").innerHTML = '';
-  let searchQuery = document.getElementById('departure').value.toUpperCase();
+        }
+        document.getElementById('otherDes').innerHTML = newDes;
+    }
 
-  let filterDepPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery));
+    function searchDepPort() {
+        document.getElementById("portSection").innerHTML = '';
+        let searchQuery = document.getElementById('departure').value.toUpperCase();
 
-for (let i = 0; i<20; i++)
-{
-  if (filterDepPort[i] !== undefined)
-  {
-    document.getElementById('portSection').innerText += filterDepPort[i] +"\n";
-}
-}
+        let portInfo = JSON.parse(localStorage.getItem("portInformation"));
+        let count = 0;
 
-}
-function searchDesPort()
-{
-  document.getElementById("portSection").innerHTML = '';
-  let searchQuery2 = document.getElementById('destination').value.toUpperCase();
+        for (let i = 0; i < portInfo.name.length && count < 10; i++) {
+            if (portInfo.name[i]) {
+                if (portInfo.name[i].toUpperCase().includes(searchQuery)) {
+                    count++;
+                    document.getElementById('portSection').innerHTML +=
+                        `<li style="list-style-type: circle"><b>${portInfo.name[i]}</b></li>` +
+                        `<li><button id="a_${i}" onclick="selectIntPort(this)">Select</button></li>` +
+                            `<li><button id="b_${i}" onclick="showPortInfo(this)">Info</button></li>` +
+                        `<div id = "portDIV_${i}"></div><hr>`;
+                }
+            }
+        }
+    }
 
-  let filterDesPort = JSON.parse(localStorage.getItem("portInformation")).name.filter(x => x.toUpperCase().includes(searchQuery2));
-  for (let i = 0; i<20; i++)
-  {
-    if (filterDesPort[i] !== undefined)
-    {
-      document.getElementById('portSection').innerText += filterDesPort[i] +"\n";
-  }
-  }
-}
+    function searchDesPort() {
+        document.getElementById("portSection").innerHTML = '';
+        let searchQuery2 = document.getElementById('destination').value.toUpperCase();
+        let portInfo = JSON.parse(localStorage.getItem("portInformation"));
+        let count = 0;
+      for (let i = 0; i < portInfo.name.length && count < 10; i++) {
+        if (portInfo.name[i]) {
+          if (portInfo.name[i].toUpperCase().includes(searchQuery2)) {
+            count++;
+            document.getElementById('portSection').innerHTML +=
+                    `<li style="list-style-type: circle"><b>${portInfo.name[i]}</b></li>` +
+                    `<li><button id="a_${i}" onclick="selectDesPort(this)">Select</button></li>` +
+                    `<li><button id="b_${i}" onclick="showPortInfo(this)">Info</button></li>` +
+                    `<div id = "portDIV_${i}"></div><hr>`;
+          }
+        }
+      }
+    }
 
+    function selectIntPort(context) {
+        let id = Number(context.id.replace("a_", ""));
+        let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById('departure').value = port;
+    }
 
+    function selectDesPort(context) {
+      let id = Number(context.id.replace("a_", ""));
+      let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById('destination').value = port;
+    }
 
-  </script>
-    <script src="map.js"></script>
+    function showPortInfo(context) {
+      let id = Number(context.id.replace("b_", ""));
+      let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById(`portDIV_${id}`).innerHTML =
+              'Name: ' + `${array.name[id]}` + '|'+
+              ' Type: '+ `${array.type[id]}` + '|'+
+              ' Size: ' + `${array.size[id]}` + '|' +
+              ' Location Precision: ' + `${array.locprecision[id]}` + '|';
 
+    }
+
+</script>
+<script src="map.js"></script>
 
 
 </html>
