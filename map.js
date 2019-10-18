@@ -243,29 +243,23 @@ let wayPointslat=[];
 let wayPointslng=[];
 
 
-function mapping(){
-wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
-wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
-object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[0],JSON.parse(localStorage.getItem("portCoord")).lat[0]])
-console.log(wayPointslat+","+wayPointslng)
-  map.on('click', function (e)
-  {
-    let earthRadius = 6371e3; // metres earth radius
-    let d =0
-    object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
-    let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
-    markers.setLngLat([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat) ]);
-    // Display the marker.
-    markers.addTo(map);
-    wayPointslat.push(e.lngLat.lat)
-    wayPointslng.push(e.lngLat.lng)
-    currentMarkers.push(markers);
-    console.log(wayPointslat)
-    })
-}
+map.on('click', function (e)
+{
+  object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
+  let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
+  markers.setLngLat([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat) ]);
+  // Display the marker.
+  markers.addTo(map);
+  wayPointslat.push(e.lngLat.lat)
+  wayPointslng.push(e.lngLat.lng)
+  currentMarkers.push(markers);
+  })
+
 
 function showRoute(){
-  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1],JSON.parse(localStorage.getItem("portCoord")).lat[1]])
+
+  object.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
+  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
   map.addLayer({
   id: "routes",
   type: "line",
@@ -273,6 +267,8 @@ function showRoute(){
   layout: { "line-join": "round", "line-cap": "round" },
   paint: { "line-color": "#888", "line-width": 6 }
   });
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
+
 }
 
 function reset()
@@ -281,12 +277,28 @@ function reset()
   if (currentMarkers!==null) {
       for (var i = 0; i < currentMarkers.length; i++) {
         currentMarkers[i].remove();
-        object.data.geometry.coordinates.pop();
-        wayPointslat.pop()
-        wayPointslng.pop()
       }
 }
+currentMarkers=[];
+wayPointlng=[];
+wayPointslat=[];
+
+
 }
+
+function resetStorage()
+{
+  localStorage.removeItem('wayPointsCoordinate')
+  localStorage.removeItem('routeDistance')
+  object.data.geometry.coordinates=[];
+  d=0;
+
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
+  localStorage.setItem('routeDistance', JSON.stringify(d))
+
+
+}
+
 
 function toRadians(value)
 {
@@ -297,6 +309,9 @@ function calculateDistance()
 {
   let earthRadius = 6371e3; // metres earth radius
   let d =0
+
+  wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
+  wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
 
   wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[1])
   wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[1])
@@ -320,7 +335,6 @@ function calculateDistance()
 
   }
   localStorage.setItem('routeDistance', JSON.stringify(d))
-      return d;
 
 }
 
