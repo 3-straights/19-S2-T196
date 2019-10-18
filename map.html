@@ -246,7 +246,10 @@
             newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br><br>';
             newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br><br>';
             newDep += 'Longtitude: <input type="text" name="depLng" id="depLng" style="float: right"/><br><br><br>';
-            newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br>';
+            newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br><br>';
+            newDep += 'Size: <input type="text" name="depSize" id="depSize" style="float: right"/><br><br><br>';
+            newDep += 'Type: <input type="text" name="depType" id="depType" style="float: right"/><br><br><br>';
+            newDep += 'Location Precision: <input type="text" name="depLocPrec" id="depLocPrec" style="float: right"/><br><br>';
         } else {
             newDep = '';
         }
@@ -261,6 +264,9 @@
             newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
             newDes += 'Longtitude: <input type="text" name="desLng" id="desLng" style="float: right"/><br><br><br>';
             newDes += 'Latitude: <input type="text" name="desLat" id="desLat" style="float: right"/><br><br>';
+            newDes += 'Size: <input type="text" name="desSize" id="desSize" style="float: right"/><br><br><br>';
+            newDes += 'Type: <input type="text" name="desType" id="desType" style="float: right"/><br><br><br>';
+            newDes += 'Location Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
         } else {
             newDes = '';
 
@@ -330,7 +336,8 @@
               'Name: ' + `${array.name[id]}` + '|'+
               ' Type: '+ `${array.type[id]}` + '|'+
               ' Size: ' + `${array.size[id]}` + '|' +
-              ' Location Precision: ' + `${array.locprecision[id]}` + '|';
+              ' Location Precision: ' + `${array.locprecision[id]}` + '|' +
+              ' Country: ' + `${array.country[id]}` +'|'
 
     }
 
