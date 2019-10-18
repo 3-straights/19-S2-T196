@@ -34,20 +34,16 @@
         .map {
             height: calc(70vh - 40px);
         }
-
-
         .otherDep {
             width: 100%;
             overflow-y: scroll;
             background-color: #f1f1f1;
         }
-
         .otherDes {
             width: 100%;
             overflow-y: scroll;
             background-color: #f1f1f1;
         }
-
         .destination {
             width: 20%;
             margin-left: 200px;
@@ -55,7 +51,6 @@
             border-style: solid;
             border-color: orange;
         }
-
         .departure {
             width: 20%;
             margin-left: 360px;
@@ -63,7 +58,6 @@
             border-style: solid;
             border-color: orange;
         }
-
         .enterButton {
             background-color: #0000FF; /* Green */
             border: none;
@@ -75,25 +69,19 @@
             float: right;
             cursor: pointer
         }
-
         .enterButton:hover {
             background-color: #3e8e41
         }
-
         .enterButton:active {
             background-color: #3e8e41;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
-
         }
-
         .mdl-layout__header-row {
             margin-left: 550px;
             width: 100%;
             height: 100%;
-
         }
-
         .helpAssist {
             display: none;
             position: fixed;
@@ -107,7 +95,6 @@
             background-color: rgb(0, 0, 0);
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         /* Modal Content */
         .helpContent {
             background-color: lightgrey;
@@ -117,14 +104,12 @@
             border: 1px solid #888;
             width: 35%;
         }
-
         .helpToggle {
             cursor: pointer;
             margin-left: 50px;
             font-weight: bold;
             color: darkBlue;
         }
-
         /* The Close Button */
         .closeHelp {
             color: black;
@@ -132,19 +117,16 @@
             font-size: 26px;
             font-weight: bold;
         }
-
         .closeHelp:hover,
         .closeHelp:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
         }
-
         p {
             width: 100%;
             text-align: center;
         }
-
         div.yoyo div {
             float: left
         }
@@ -201,15 +183,13 @@
         <div class='otherDes' id='otherDes'></div>
     </div>
     <button type='button' class='enterButton'
-            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);mapping()'>
+            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);'>
         Set
     </button>
     <br><br><br><br>
-    <button type='button' class='enterButton' onmouseup='showRoute()'>Set route</button>
+    <button type='button' class='enterButton' onmouseup='showRoute();calculateDistance()'>Set route</button>
     <br><br><br><br>
-    <button type='button' class='enterButton' onmouseup='reset()'>Reset</button>
-    <br><br><br><br>
-    <button type='button' class='enterButton' onmouseup='calculateDistance()'>Calculate Distance</button>
+    <button type='button' class='enterButton' onmouseup='reset();resetStorage()'>Reset</button>
     <br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 <ul id='portSection' style="list-style-type: none;"></ul>
@@ -225,21 +205,17 @@
     let helpToggle = document.getElementById("helpAssist");
     let helpButton = document.getElementById("helpToggle");
     let closeHelp = document.getElementById("closeHelp");
-
     helpButton.onclick = function () {
         helpToggle.style.display = "block";
     }
-
     closeHelp.onclick = function () {
         helpToggle.style.display = 'none';
     }
-
     window.onclick = function (event) {
         if (event.target == helpToggle) {
             helpToggle.style.display = 'none';
         }
     }
-
     function otherDep() {
         let newDep;
         if (document.getElementById('departure').value == 'other' || document.getElementById('departure').value == 'Other') {
@@ -255,10 +231,8 @@
         }
         document.getElementById('otherDep').innerHTML = newDep;
     }
-
     function otherDes() {
         let newDes;
-
         if (document.getElementById('destination').value == 'other' || document.getElementById('destination').value == 'Other') {
             newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
             newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
@@ -269,18 +243,14 @@
             newDes += 'Location Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
         } else {
             newDes = '';
-
         }
         document.getElementById('otherDes').innerHTML = newDes;
     }
-
     function searchDepPort() {
         document.getElementById("portSection").innerHTML = '';
         let searchQuery = document.getElementById('departure').value.toUpperCase();
-
         let portInfo = JSON.parse(localStorage.getItem("portInformation"));
         let count = 0;
-
         for (let i = 0; i < portInfo.name.length && count < 10; i++) {
             if (portInfo.name[i]) {
                 if (portInfo.name[i].toUpperCase().includes(searchQuery)) {
@@ -294,7 +264,6 @@
             }
         }
     }
-
     function searchDesPort() {
         document.getElementById("portSection").innerHTML = '';
         let searchQuery2 = document.getElementById('destination').value.toUpperCase();
@@ -313,21 +282,18 @@
         }
       }
     }
-
     function selectIntPort(context) {
         let id = Number(context.id.replace("a_", ""));
         let array = JSON.parse(localStorage.getItem("portInformation"));
       let port = array.name[id];
       document.getElementById('departure').value = port;
     }
-
     function selectDesPort(context) {
       let id = Number(context.id.replace("a_", ""));
       let array = JSON.parse(localStorage.getItem("portInformation"));
       let port = array.name[id];
       document.getElementById('destination').value = port;
     }
-
     function showPortInfo(context) {
       let id = Number(context.id.replace("b_", ""));
       let array = JSON.parse(localStorage.getItem("portInformation"));
@@ -338,11 +304,10 @@
               ' Size: ' + `${array.size[id]}` + '|' +
               ' Location Precision: ' + `${array.locprecision[id]}` + '|' +
               ' Country: ' + `${array.country[id]}` +'|'
-
     }
-
 </script>
 <script src="map.js"></script>
 
 
 </html>
+
