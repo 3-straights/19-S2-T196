@@ -337,8 +337,9 @@
             document.getElementById('Other').innerHTML += 'Max Speed: <input type="text" name="speed" id="shipSpeed" style="float: right"/><br><br>';
             document.getElementById('Other').innerHTML += 'Full tank: <input type="text" name="fullTank" id="fullTank"  style="float: right"/><br><br> ';
             document.getElementById('Other').innerHTML += 'Cost: <input type="text" name= "cost" id="shipCost" style="float: right"><br><br>';
-            document.getElementById('Other').innerHTML += 'status: <input type="text" name= "status" id="shipStatus" style="float: right" ><br><br>';
-            document.getElementById('Other').innerHTML += 'comment: <input type="text" name= "comment" id="shipComments" style="float: right" ><br>';
+            document.getElementById('Other').innerHTML += 'Status: <input type="text" name= "status" id="shipStatus" style="float: right" ><br><br>';
+            document.getElementById('Other').innerHTML += 'Comment: <input type="text" name= "comment" id="shipComments" style="float: right" ><br>';
+            document.getElementById('Other').innerHTML += 'Description: <input type="text" name= "desc" id="shipDesc" style="float: right" ><br>';
         } else {
             document.getElementById('Other').innerHTML = '';
         }
@@ -422,6 +423,7 @@
                 shipInfoSec.innerHTML += 'Full tank range: ' + JSON.parse(localStorage.getItem('shipInformation')).range[i] + '<br>';
                 shipInfoSec.innerHTML += 'Cost: ' + JSON.parse(localStorage.getItem('shipInformation')).cost[i] + ' /L <br>';
                 shipInfoSec.innerHTML += 'Comment: ' + JSON.parse(localStorage.getItem('shipInformation')).comments[i] + '<br>';
+                shipInfoSec.innerHTML += 'Description: ' + JSON.parse(localStorage.getItem('shipInformation')).desc[i] + '<br>';
             }
 
         }
