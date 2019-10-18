@@ -31,6 +31,7 @@
 <head>
     <title>Utilising Mapbox API</title>
     <style type="text/css">
+
         .map {
             height: calc(70vh - 40px);
         }
@@ -182,8 +183,8 @@
                onchange='otherDes()' onkeyup="searchDesPort()">
         <div class='otherDes' id='otherDes'></div>
     </div>
-    <button type='button' class='enterButton'
-            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);'>
+    <button type='button'  class='enterButton'
+            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);zoom()'>
         Set
     </button>
     <br><br><br><br>
@@ -305,9 +306,9 @@
               ' Location Precision: ' + `${array.locprecision[id]}` + '|' +
               ' Country: ' + `${array.country[id]}` +'|'
     }
+
 </script>
 <script src="map.js"></script>
 
 
 </html>
-
