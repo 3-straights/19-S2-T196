@@ -54,7 +54,11 @@ let locations=
 
     lon:[],
     lat:[],
-    name:[]
+    name:[],
+    country:[],
+    size: [],
+    type: [],
+    locprecision: []
 };
 
 portFound = allAPIPorts.findIndex(
@@ -69,6 +73,10 @@ if (portFound !== undefined)
   locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
   locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
   locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[portFound]);
+  locations.country.push(JSON.parse(localStorage.getItem("portInformation")).country[portFound]);
+  locations.size.push(JSON.parse(localStorage.getItem("portInformation")).size[portFound]);
+  locations.type.push(JSON.parse(localStorage.getItem("portInformation")).type[portFound]);
+  locations.locprecision.push(JSON.parse(localStorage.getItem("portInformation")).locprecision[portFound]);
 
   let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
   marker.setLngLat([locations.lon[0], locations.lat[0]]);
@@ -100,17 +108,81 @@ if (portFound !== undefined)
 
   else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
   {
-    console.log(JSON.parse(localStorage.getItem('portCoord')).lon.length)
+
     let object = JSON.parse(localStorage.getItem('portCoord'));
 
     object.lon.push(locations.lon[0]);
     object.lat.push(locations.lat[0]);
     object.name.push(locations.name[0]);
+    object.country.push(locations.country[0])
     localStorage.setItem('portCoord', JSON.stringify(object));
 
   }
 
 
+}
+
+else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)
+{
+  let other_lng, other_lat, other_name, other_country, other_type, other_size, other_locPrec;
+
+  if (document.getElementById('depPort') !== null)
+  {
+   other_lng = document.getElementById('depLng').value;
+   other_lat = document.getElementById('depLat').value;
+   other_name = document.getElementById('depPort').value;
+   other_country = document.getElementById('depCountry').value;
+   other_size = document.getElementById('depSize').value;
+   other_type = document.getElementById('depType').value;
+   other_locPrec = document.getElementById('depLocPrec').value;
+  }
+
+  else if (document.getElementById('desPort') !== null)
+  {
+    other_lng = document.getElementById('desLng').value;
+    other_lat = document.getElementById('desLat').value;
+    other_name = document.getElementById('desPort').value;
+    other_country = document.getElementById('desCountry').value;
+    other_size = document.getElementById('desSize').value;
+    other_type = document.getElementById('desType').value;
+    other_locPrec = document.getElementById('desLocPrec').value;
+  }
+
+    locations.lon.push(other_lng);
+    locations.lat.push(other_lat);
+    locations.name.push(other_name);
+    locations.country.push(other_country);
+    locations.size.push(other_size);
+    locastions.type.push(other_type);
+    locations.locprecision.push(other_locPrec)
+
+  if (localStorage.getItem('portCoord') == null)
+  {
+
+    localStorage.setItem('portCoord', JSON.stringify(locations));
+
+  }
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
+  {
+    localStorage.removeItem('portCoord');
+    localStorage.setItem('portCoord', JSON.stringify(locations));
+  }
+
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
+  {
+
+    let object = JSON.parse(localStorage.getItem('portCoord'));
+
+    object.lon.push(locations.lon[0]);
+    object.lat.push(locations.lat[0]);
+    object.name.push(locations.name[0]);
+    object.country.push(locations.country[0]);
+    object.type.push(locations.type[0]);
+    object.size.push(locations.size[0]);
+    object.locprecision.push(locations.locprecision[0])
+    localStorage.setItem('portCoord', JSON.stringify(object));
+
+  }
 }
 
 else
@@ -220,6 +292,7 @@ function toRadians(value)
 {
   return (value)*Math.PI/180
 }
+
 function calculateDistance()
 {
   let earthRadius = 6371e3; // metres earth radius
@@ -244,14 +317,11 @@ function calculateDistance()
     console.log(c)
      d += earthRadius * c;
 
-  }
-  localStorage.setItem('distanceCalculated',JSON.stringify(d))
-}
 
-function calculateTime()
-{
-  let travelTime=JSON.parse(localStorage.getItem('distanceCalculated'))/JSON.parse(localStorage.getItem('myShip')).maxSpeed;
-  localStorage.setItem('totalTravelTime',JSON.stringify(travelTime));
+  }
+  localStorage.setItem('routeDistance', JSON.stringify(d))
+      return d;
+
 }
 
 
@@ -286,4 +356,3 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
-alert('press "enter" to toggle search bar after input!');
