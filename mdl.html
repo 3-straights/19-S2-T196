@@ -201,7 +201,7 @@
     </style>
     <title>Ships Detail & Route Information</title>
 </head>
-<body onload="newDiv()">
+<body onload="newDiv(); showDistance()">
 <header class="mdl-layout__header">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <div class="mdl-layout__header-row"><span class="mdl-layout-title"
@@ -260,6 +260,7 @@
 
 </div>
 <div class='chooseBoat' id='chooseBoat'>
+
     <div>
         <p>
             <select name="boatOpt" id="boatOpt"
@@ -272,19 +273,18 @@
     <div class='boatDetail' id='boatDetail'></div>
     <div class='inputOther' id="Other" style='background-color: #F0F8FF; color: black'></div>
 </div>
-
+<div id='routeDistance'></div>
 
 <button type="button" class="collapsible" title='Click to expand/hide'><b>Date & Time: </b> <span style="font-size:14pt"
                                                                                                   class="mdl-cell mdl-cell--1-col">🔽</span>
 </button>
 <div class='content'><br>
-    <p style='text-align: center'>Set Date: <input id='date' type='date' onchange='storeDate()'> <br><br>
-
-        <br>
+    <p style='text-align: center'>Set Date: <input id='date' type='date' > <br><br><br>
+      <button type = 'button' onclick='storeDate()'>Set Date</button>
     </p>
 </div>
 <br><br>
-<button type='button' class='enterButton' onmouseup=" storingRoute();newDiv()">Enter</button>
+<a onclick="location.href= 'weather.html'"><button type='button' class='enterButton' onmouseup=" storingRoute()">Enter</button></a>
 <br>
 
 <script>
@@ -338,8 +338,8 @@
             document.getElementById('Other').innerHTML += 'Full tank: <input type="text" name="fullTank" id="fullTank"  style="float: right"/><br><br> ';
             document.getElementById('Other').innerHTML += 'Cost: <input type="text" name= "cost" id="shipCost" style="float: right"><br><br>';
             document.getElementById('Other').innerHTML += 'Status: <input type="text" name= "status" id="shipStatus" style="float: right" ><br><br>';
-            document.getElementById('Other').innerHTML += 'Comment: <input type="text" name= "comment" id="shipComments" style="float: right" ><br>';
-            document.getElementById('Other').innerHTML += 'Description: <input type="text" name= "desc" id="shipDesc" style="float: right" ><br>';
+            document.getElementById('Other').innerHTML += 'Comment: <input type="text" name= "comment" id="shipComments" style="float: right" ><br><br>';
+            document.getElementById('Other').innerHTML += 'Size: <input type="text" name= "desc" id="shipDesc" style="float: right" ><br>';
         } else {
             document.getElementById('Other').innerHTML = '';
         }
@@ -388,10 +388,10 @@
                     'date:' + route._departDate + ' <br>';
 
                 div.innerHTML +=
-                    'Departure Weather:' + '<br>';
+                    'Departure Weather summary:' + '<br>';
 
                 div.innerHTML +=
-                    'Destination Weather: ' + '<br>';
+                    'Destination Weather summary: ' + '<br>';
 
                 div.innerHTML += '...<br>';
 
@@ -473,24 +473,119 @@
   {
       let extendDate='';
       extendDate += '<input type="date" id= "extendDate" placeholder = "select a new date... " style="float: right"> <br>';
-      extendDate += '<button type= "button" id = "changeDate" class = "changeDate" onclick = "setNewDate()" >Comfirm</button><br>'
+      extendDate += '<button type= "button" id = "changeDate" class = "changeDate" onclick = "setNewDate(this)" >Comfirm</button><br>'
       item.closest("div").innerHTML +=  extendDate;
+
+
     return extendDate;
   }
 
-function setNewDate()
+function setNewDate(item)
 {
   let intDate = JSON.parse(localStorage.getItem('date')).split('-');
   let newDate = document.getElementById('extendDate').value.split('-');
-  let year_diff = newDate[0] - intDate[0];
-  let month_diff = newDate[1] - intDate[1];
-  let day_diff = newDate[2] - intDate[2];
-let diffInDay = day_diff + ' day ' + month_diff + ' month ' + year_diff + ' year! '
-  alert(diffInDay)
+  let monthDay = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+  let year_diff, month_diff, day_diff;
+
+if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
+{
+  if (parseInt(newDate[2]) - parseInt(intDate[2]) < 0)
+  {
+    newDate[1] = parseInt(newDate[1]) - 1;
+    newDate[2] = newDate[2] + monthDay[parseInt(newDate[1]) + 1] ;
+  }
+      day_diff = parseInt(newDate[2]) - parseInt(intDate[2]);
+
+
+  if (parseInt(newDate[1]) - parseInt(intDate[1]) < 0)
+  {
+    newDate[0] = parseInt(newDate[0]) - 1;
+
+    newDate[1] = parseInt(newDate[1]) + 12 ;
+
+  }
+      month_diff = parseInt(newDate[1]) - parseInt(intDate[1]);
+
+      year_diff = parseInt(newDate[0]) - parseInt(intDate[0]);
+
+  let diffInDay = 'you have posponed your trip by ' + day_diff + ' day(s) ' + month_diff + ' month(s) & ' + year_diff + ' year(s)! ';
+
+  alert(diffInDay);
+
   localStorage.removeItem('date');
-  localStorage.setItem('date', HIUGYFGHUJ)
+  localStorage.setItem('date', JSON.stringify(document.getElementById('extendDate').value))
 
 
+  for (let u=0; u<JSON.parse(localStorage.getItem('Routes'))._routes.length; u++)
+  {
+    if (item.closest("div") == document.getElementById(`myClass_${u}`) )
+    {
+
+      let tempClass = JSON.parse(localStorage.getItem('Routes'))
+      let temporRoute = tempClass._routes[u];
+
+      document.getElementById(`myClass_${u}`).innerHTML = 'Ship: ' + temporRoute._shipUsed._boatName+'<br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML +=
+          '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> ' +
+          'Departure: ' +
+          temporRoute._intPort._portName + '<br>'
+          'Country: ' +
+          temporRoute._intPort._country+
+          '</span><br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML += '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> ' +
+          'Destination: ' +
+          temporRoute._finPort._portName + '<br>' +
+          'Country: ' +
+          temporRoute._finPort._country + '</span><br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML +=
+          'date:' + JSON.parse(localStorage.getItem('date'))+ ' <br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML +=
+          'Departure Weather summary:' + '<br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML +=
+          'Destination Weather summary: ' + '<br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML += '...<br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML += ` <button id="deleteRoute_${i}" type = "button" onclick="routeDeletor(this)">Delete</button> &nbsp; &nbsp;`
+
+      document.getElementById(`myClass_${u}`).innerHTML += `<button id="postponeRoute_${i}" type = "button" onclick="postponeRoute(this)">postpone</button>`
+
+      temporRoute._departDate = JSON.parse(localStorage.getItem('date'));
+
+      temporRoute._arrivalDate = temporRoute._departDate;
+
+      temporRoute._wayPoint.splice(0, temporRoute._wayPoint.length, 'dk wat function');
+
+      tempClass._routes.splice(u,1,temporRoute);
+      localStorage.removeItem('Routes');
+      localStorage.setItem('Routes', JSON.stringify(tempClass))
+    }
+
+  }
+
+}
+
+else {
+  alert('You can only pospone your travel date, and not the other way round!')
+}
+}
+
+function  showDistance()
+{
+  let routeDist = document.getElementById('routeDistance')
+
+  routeDist.innerHTML = '';
+
+  if (localStorage.getItem('Routes') !== null)
+  {
+    routeDist.innerHTML = '<h5><b>Distance of Chosen Route:</b>  ' + JSON.parse(localStorage.getItem('Routes'))._routes[JSON.parse(localStorage.getItem('Routes'))._routes.length-1]._routeDist + 'm </h5>';
+  }
 
 }
 
