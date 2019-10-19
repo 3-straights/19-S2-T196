@@ -531,8 +531,22 @@ let myShip =
 
 
 };
-localStorage.setItem('myShip', JSON.stringify(myShip));
 
+if (!localStorage.getItem('myShip'))
+{
+localStorage.setItem('myShip', JSON.stringify(myShip));
+}
+else if (localStorage.getItem !== null)
+{
+  localStorage.removeItem('myShip')
+  localStorage.setItem('myShip', JSON.stringify(myShip));
+}
+
+let iniPort = JSON.parse(localStorage.getItem('intPort')).type[0]
+let finaPort =JSON.parse(localStorage.getItem('finPort')).type[0]
+let choseShip = JSON.parse(localStorage.getItem('myShip')).desc[0]
+if ((iniPort !== "River" && finaPort !== "River") && (choseShip !== "supermaxtanker" && choseShip !== "maxtanker"))
+{
 var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments, myShip.desc)
 
 
@@ -557,6 +571,13 @@ else if(localStorage.getItem('selectedShip') !== null)
 else
 {
   alert("Your Browser does not support local storage.");
+}
+}
+
+else
+{
+   alert('The size of ship does not fit the type of locations, please choose another boat instead!')
+   let shipA = 'unknown';
 }
   return shipA;
 }
@@ -648,7 +669,7 @@ let finPort =
   locprecision: locPrec
 
 };
-if (!localStorage.getItem('finPort'))
+if (localStorage.getItem('finPort') == null)
 {
   localStorage.setItem('finPort', JSON.stringify(finPort));
 }
@@ -670,6 +691,7 @@ if (localStorage.getItem('finalPort') == null)
 
 else if(localStorage.getItem('finalPort') !== null)
 {
+
   let finPortStr = JSON.parse(localStorage.getItem('finalPort'));
   finPortStr._ports.push(secPort);
   localStorage.setItem('finalPort',JSON.stringify(finPortStr))
@@ -692,8 +714,34 @@ function storingRoute()
   let date = JSON.parse(localStorage.getItem('date'));
   let routeDist = JSON.parse(localStorage.getItem('routeDistance'));
   let fuelCost = JSON.parse(localStorage.getItem('myShip')).cost * routeDist;
-  wayPoint =3;
-  arrivalDate =17;
+  let wayPoint =JSON.parse(localStorage.getItem('wayPointsCoordinate'));
+  let timeTaken = (routeDist/ Math.round(JSON.parse(localStorage.getItem('myShip')).maxSpeed))/24;
+  let intDate = JSON.parse(localStorage.getItem('date')).split('-');
+  let arrivalDays = Math.round(intDate[2]) + Math.round(timeTaken);
+  let monthArray = ['Jan', 'Feb','Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let dayArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  for (let i=0; i<monthArray.length; i++)
+  {
+
+  if (monthArray[intDate[1]] == monthArray[i])
+  {
+    if (arrivalDays > dayArray[i])
+    {
+      arrivalDays = arrivalDays - dayArray[i];
+      intDate[1] = intDate[1] + 1;
+
+      if (intDate[1] > 12)
+      {
+        intDate[1] = Math.round(intDate[1]) - 12;
+        intDate[0] = Math.round(intDate[0]) + 1;
+      }
+    }
+  }
+
+  }
+
+  let arrivalDate = intDate[0] + '-' + intDate[1] + '-' + intDate[2];
   let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost);
 
   if (localStorage.getItem('Routes') == null)
