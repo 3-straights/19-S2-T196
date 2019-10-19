@@ -45,10 +45,10 @@ let markers = [];
 
 
 
-function findAPIPort(nameOfPort)
+function findAPIPort(nameOfPort)//to check whether we provide the port.
 {
 let portFound;
-let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;
+let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;//get every port name from local storage
 let locations=
 {
 
@@ -61,14 +61,14 @@ let locations=
     locprecision: []
 };
 
-portFound = allAPIPorts.findIndex(
+portFound = allAPIPorts.findIndex(//finding whether the port is provided
     function(arrayItem)
     {
         return arrayItem == nameOfPort;
     }
   )
 
-if (portFound !== undefined)
+if (portFound !== undefined)//if port is listed in the list, extract the corresponding information for departure and arrival port
 {
   locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
   locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
@@ -77,39 +77,70 @@ if (portFound !== undefined)
   locations.size.push(JSON.parse(localStorage.getItem("portInformation")).size[portFound]);
   locations.type.push(JSON.parse(localStorage.getItem("portInformation")).type[portFound]);
   locations.locprecision.push(JSON.parse(localStorage.getItem("portInformation")).locprecision[portFound]);
+  console.log(locations.lon.length)
 
-  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
-  marker.setLngLat([locations.lon[0], locations.lat[0]]);
-
-  let popup = new mapboxgl.Popup({ offset: 45});
-  popup.setText(locations.name[0].toString());
-
-  marker.setPopup(popup)
-
-  // Display the marker.
-  marker.addTo(map);
-
-  // Display the popup.
-  popup.addTo(map);
-
-  currentMarkers.push(marker);
-
-  if (localStorage.getItem('portCoord') == null)
+  //set marker coordinates
+  if (currentMarkers.length==0)
   {
+    let inimarker = new mapboxgl.Marker({ "color": "#00ff1e" });
+    inimarker.setLngLat([locations.lon[0], locations.lat[0]]);
 
-    localStorage.setItem('portCoord', JSON.stringify(locations));
+    //set port name on corresponding popup
+    let popup = new mapboxgl.Popup({ offset: 45});
+    popup.setText(locations.name[0].toString());
+
+    //set popup on marker
+    inimarker.setPopup(popup)
+
+    // Display the marker.
+    inimarker.addTo(map);
+
+    // Display the popup.
+    popup.addTo(map);
+
+    //for reseting purpose,it will remove the marker one by one later
+    currentMarkers.push(inimarker);
 
   }
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
+  else
+  {
+    let finmarker = new mapboxgl.Marker({ "color": "#ff0d00" });
+    finmarker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+    //set port name on corresponding popup
+    let popup = new mapboxgl.Popup({ offset: 45});
+    popup.setText(locations.name[0].toString());
+
+    //set popup on marker
+    finmarker.setPopup(popup)
+
+    // Display the marker.
+    finmarker.addTo(map);
+
+    // Display the popup.
+    popup.addTo(map);
+
+    //for reseting purpose,it will remove the marker one by one later
+    currentMarkers.push(finmarker);
+  }
+
+  //store selected departure and arrival port in local storage
+  if (localStorage.getItem('portCoord') == null)//check existance of local storage
+  {
+
+    localStorage.setItem('portCoord', JSON.stringify(locations));//set storage for selected departure or arrival port in local storage
+
+  }
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)//if user accidentally press set twice, refresh the storage to the correct one without duplicating information
   {
     localStorage.removeItem('portCoord');
     localStorage.setItem('portCoord', JSON.stringify(locations));
   }
 
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)//as this function is ran twice to store both arrival and departure information.
   {
 
-    let object = JSON.parse(localStorage.getItem('portCoord'));
+    let object = JSON.parse(localStorage.getItem('portCoord'));//extract to make the storage contain both initial and final port.
 
     object.lon.push(locations.lon[0]);
     object.lat.push(locations.lat[0]);
@@ -122,7 +153,7 @@ if (portFound !== undefined)
 
 }
 
-else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)
+else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)//if user input other
 {
   let other_lng, other_lat, other_name, other_country, other_type, other_size, other_locPrec;
 
@@ -187,7 +218,7 @@ else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefi
 
 else
 {
-  alert('Please insert a valid departure port name or type "Other"');
+  alert('Please insert a valid departure port name or type "Other"');// alert user due to error input
 }
 
 }
@@ -226,7 +257,9 @@ else
     }
 }
 */
-let object = {
+
+//for mapping waypoints purpose so it can display the line route
+let objects = {
 type: "geojson",
 data: {
 type: "Feature",
@@ -243,16 +276,19 @@ let wayPointslat=[];
 let wayPointslng=[];
 
 
-map.on('click', function (e)
+map.on('click', function (e)//plot waypoints
 {
-  object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
+  objects.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
   let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
+
+  //set coordinate for marker
   markers.setLngLat([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat) ]);
   // Display the marker.
   markers.addTo(map);
-  wayPointslat.push(e.lngLat.lat)
+
+  wayPointslat.push(e.lngLat.lat)//calculation purpose
   wayPointslng.push(e.lngLat.lng)
-  currentMarkers.push(markers);
+  currentMarkers.push(markers);//for reset purpose
   })
 
 function zoom()
@@ -260,7 +296,7 @@ function zoom()
   map.flyTo({
 center: [
 (JSON.parse(localStorage.getItem("portCoord")).lon[0]+JSON.parse(localStorage.getItem("portCoord")).lon[1])/2,(JSON.parse(localStorage.getItem("portCoord")).lat[0]+JSON.parse(localStorage.getItem("portCoord")).lat[1])/2],
-zoom:2.5,
+zoom:2.1,
 speed:1.5
 });
 }
@@ -268,21 +304,24 @@ speed:1.5
 
 
 function showRoute(){
+//these push and unshift is to add back departure and arrival coordinates for setting the route purpose
+  objects.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
+  objects.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
 
-  object.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
-  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
+//set the route connect the route together
   map.addLayer({
   id: "routes",
   type: "line",
-  source: object,
+  source: objects,
   layout: { "line-join": "round", "line-cap": "round" },
   paint: { "line-color": "#888", "line-width": 6 }
   });
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
+  //store the coordinates for all waypoints include departure and arrival port for weather purpose
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(objects.data.geometry.coordinates))
 
 }
 
-function reset()
+function reset()//user can press reset to make their decision again
 {
   removeLayerWithId('routes')
   if (currentMarkers!==null) {
@@ -290,6 +329,7 @@ function reset()
         currentMarkers[i].remove();
       }
 }
+//refresh the datas
 currentMarkers=[];
 wayPointlng=[];
 wayPointslat=[];
@@ -297,37 +337,38 @@ wayPointslat=[];
 
 }
 
-function resetStorage()
+function resetStorage()//reset storage
 {
   localStorage.removeItem('wayPointsCoordinate')
   localStorage.removeItem('routeDistance')
-  object.data.geometry.coordinates=[];
+  objects.data.geometry.coordinates=[];
   d=0;
-
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
+//set everything to empty for new data
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(objects.data.geometry.coordinates))
   localStorage.setItem('routeDistance', JSON.stringify(d))
 
 
 }
 
 
-function toRadians(value)
+function toRadians(value)//convert degree to radians
 {
   return (value)*Math.PI/180
 }
 
-function calculateDistance()
+function calculateDistance()//to calculate total distance travelled for the cost of fuel purpose and time taken to arrive
 {
   let earthRadius = 6371e3; // metres earth radius
-  let d =0
+  let d =0//distancce travelled
 
+//all the push and unshift is to add the coordinates of departure and arrival port coordinates so the calculation is correct
   wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
   wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
 
   wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[1])
   wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[1])
-  console.log(wayPointslat.length)
-  for(i=0;i<wayPointslat.length-1;i++)
+
+  for(i=0;i<wayPointslat.length-1;i++)//formula to calculate the distance
   {
     let lattitude1 = wayPointslat[i]
     let lattitude2 = wayPointslat[i+1]
@@ -337,21 +378,19 @@ function calculateDistance()
     let difflongitude=toRadians((longitude2-longitude1));
     let a = Math.sin(difflattitude/2) * Math.sin(difflattitude/2) +(Math.cos(toRadians(lattitude1)) * Math.cos(toRadians(lattitude2)) *Math.sin(difflongitude/2) * Math.sin(difflongitude/2));
 
-    console.log(earthRadius)
-    console.log(a)
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    console.log(c)
      d += earthRadius * c;
 
 
   }
+  //store distance travelled
   localStorage.setItem('routeDistance', JSON.stringify(d))
 
 }
 
 
 
-function removeLayerWithId(idToRemove)
+function removeLayerWithId(idToRemove)// for remove the route when reseting
 {
 	let hasPoly = map.getLayer(idToRemove)
 	if (hasPoly !== undefined)
@@ -381,4 +420,3 @@ function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
 }
-
