@@ -39,11 +39,16 @@
             width: 100%;
             overflow-y: scroll;
             background-color: #f1f1f1;
+            display: none;
+            font-weight: bold;
+
         }
         .otherDes {
             width: 100%;
             overflow-y: scroll;
             background-color: #f1f1f1;
+            display: none;
+            font-weight: bold;
         }
         .destination {
             width: 20%;
@@ -131,6 +136,36 @@
         div.yoyo div {
             float: left
         }
+
+        .closeOtherDep{
+          background-color: lightblue;
+          font-size: 20px;
+          font-weight: bold;
+          color: white;
+          margin-left: 220px
+        }
+
+        .closeOtherDes{
+          background-color: lightblue;
+          font-size: 20px;
+          font-weight: bold;
+          color: white;
+          margin-left: 220px
+        }
+
+        .setDes{
+        margin-left: 7.5px;
+        background-color: darkblue;
+        color: white;
+        }
+
+        .setDep{
+          margin-left: 7.5px;
+          background-color: darkblue;
+          color: white;
+
+        }
+
     </style>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet'/>
@@ -174,13 +209,16 @@
     <div class='departure'>
         <b>Departure:</b>
         <input type="text" id="departure" name="departure" style="float: right" placeholder="From.."
-               onchange='otherDep()' onkeyup="searchDepPort()">
+                onkeyup="searchDepPort()"> <br><br>
+                <button type='button' id='setDep' class='setDep' onclick='otherDep()'>No port found? 'Click' to create departure port!</button>
         <div class='otherDep' id='otherDep'></div>
+
     </div>
     <div class='destination'>
         <b>Destination:</b>
         <input type="text" id="destination" name="destination" style="float: right" placeholder="To.."
-               onchange='otherDes()' onkeyup="searchDesPort()">
+               onkeyup="searchDesPort()"> <br><br>
+               <button type='button' id='setDes' class='setDes' onclick='otherDes()'>No port found? 'Click' to create destinate port!</button>
         <div class='otherDes' id='otherDes'></div>
     </div>
     <button type='button'  class='enterButton'
@@ -217,36 +255,59 @@
             helpToggle.style.display = 'none';
         }
     }
+
     function otherDep() {
         let newDep;
-        if (document.getElementById('departure').value == 'other' || document.getElementById('departure').value == 'Other') {
-            newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br><br>';
-            newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br><br>';
-            newDep += 'Longtitude: <input type="text" name="depLng" id="depLng" style="float: right"/><br><br><br>';
-            newDep += 'Latitude: <input type="text" name="depLat" id="depLat" style="float: right"/><br><br><br>';
-            newDep += 'Size: <input type="text" name="depSize" id="depSize" style="float: right"/><br><br><br>';
-            newDep += 'Type: <input type="text" name="depType" id="depType" style="float: right"/><br><br><br>';
-            newDep += 'Location Precision: <input type="text" name="depLocPrec" id="depLocPrec" style="float: right"/><br><br>';
-        } else {
-            newDep = '';
-        }
+        let otherDep = document.getElementById('otherDep');
+        if (otherDep.style.display = 'none')
+        {
+            newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br>';
+            newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br>';
+            newDep += 'Valid address: <input type="text" name="depAddress" id="depAddress" style="float: right"/><br><br>';
+            newDep += 'Size: <input type="text" name="depSize" id="depSize" style="float: right"/><br><br>';
+            newDep += 'Type: <input type="text" name="depType" id="depType" style="float: right"/><br><br>';
+            newDep += 'Loc Precision: <input type="text" name="depLocPrec" id="depLocPrec" style="float: right"/><br><br>';
+            newDep += '<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="closeOtherDep()">close</button>'
+            otherDep.style.display = "block";
+          }
+
         document.getElementById('otherDep').innerHTML = newDep;
     }
-    function otherDes() {
+    function closeOtherDep()
+    {
+      if (document.getElementById('otherDep').style.display = "block")
+      {
+        document.getElementById('otherDep').style.display = "none";
+      }
+    }
+
+    function otherDes()
+    {
         let newDes;
-        if (document.getElementById('destination').value == 'other' || document.getElementById('destination').value == 'Other') {
-            newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br><br>';
-            newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br><br>';
-            newDes += 'Longtitude: <input type="text" name="desLng" id="desLng" style="float: right"/><br><br><br>';
-            newDes += 'Latitude: <input type="text" name="desLat" id="desLat" style="float: right"/><br><br>';
-            newDes += 'Size: <input type="text" name="desSize" id="desSize" style="float: right"/><br><br><br>';
-            newDes += 'Type: <input type="text" name="desType" id="desType" style="float: right"/><br><br><br>';
-            newDes += 'Location Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
-        } else {
-            newDes = '';
+        let otherDes = document.getElementById('otherDes');
+        if (otherDes.style.display = 'none')
+        {
+            newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br>';
+            newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br>';
+            newDes += 'Valid address: <input type="text" name="desAddress" id="desAddress" style="float: right"/><br><br>';
+            newDes += 'Size: <input type="text" name="desSize" id="desSize" style="float: right"/><br><br>';
+            newDes += 'Type: <input type="text" name="desType" id="desType" style="float: right"/><br><br>';
+            newDes += 'Loc Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
+            newDes += '<button type = "button" id = "closeOtherDes" class = "closeOtherDes" onclick="closeOtherDes()">close</button>'
+            otherDes.style.display = "block";
         }
+
         document.getElementById('otherDes').innerHTML = newDes;
     }
+
+function closeOtherDes()
+{
+  if (document.getElementById('otherDes').style.display = "block")
+  {
+    document.getElementById('otherDes').style.display = "none";
+  }
+}
+
     function searchDepPort() {
         document.getElementById("portSection").innerHTML = '';
         let searchQuery = document.getElementById('departure').value.toUpperCase();
@@ -264,6 +325,8 @@
                 }
             }
         }
+
+
     }
     function searchDesPort() {
         document.getElementById("portSection").innerHTML = '';
@@ -283,18 +346,21 @@
         }
       }
     }
+
     function selectIntPort(context) {
         let id = Number(context.id.replace("a_", ""));
         let array = JSON.parse(localStorage.getItem("portInformation"));
       let port = array.name[id];
       document.getElementById('departure').value = port;
     }
+
     function selectDesPort(context) {
       let id = Number(context.id.replace("a_", ""));
       let array = JSON.parse(localStorage.getItem("portInformation"));
       let port = array.name[id];
       document.getElementById('destination').value = port;
     }
+
     function showPortInfo(context) {
       let id = Number(context.id.replace("b_", ""));
       let array = JSON.parse(localStorage.getItem("portInformation"));
