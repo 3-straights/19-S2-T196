@@ -45,10 +45,10 @@ let markers = [];
 
 
 
-function findAPIPort(nameOfPort)//to check whether we provide the port.
+function findAPIPort(nameOfPort)
 {
 let portFound;
-let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;//get every port name from local storage
+let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;
 let locations=
 {
 
@@ -61,14 +61,14 @@ let locations=
     locprecision: []
 };
 
-portFound = allAPIPorts.findIndex(//finding whether the port is provided
+portFound = allAPIPorts.findIndex(
     function(arrayItem)
     {
         return arrayItem == nameOfPort;
     }
   )
 
-if (portFound !== undefined)//if port is listed in the list, extract the corresponding information for departure and arrival port
+if (portFound !== undefined)
 {
   locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
   locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
@@ -77,70 +77,25 @@ if (portFound !== undefined)//if port is listed in the list, extract the corresp
   locations.size.push(JSON.parse(localStorage.getItem("portInformation")).size[portFound]);
   locations.type.push(JSON.parse(localStorage.getItem("portInformation")).type[portFound]);
   locations.locprecision.push(JSON.parse(localStorage.getItem("portInformation")).locprecision[portFound]);
-  console.log(locations.lon.length)
 
-  //set marker coordinates
-  if (currentMarkers.length==0)
-  {
-    let inimarker = new mapboxgl.Marker({ "color": "#00ff1e" });
-    inimarker.setLngLat([locations.lon[0], locations.lat[0]]);
 
-    //set port name on corresponding popup
-    let popup = new mapboxgl.Popup({ offset: 45});
-    popup.setText(locations.name[0].toString());
 
-    //set popup on marker
-    inimarker.setPopup(popup)
-
-    // Display the marker.
-    inimarker.addTo(map);
-
-    // Display the popup.
-    popup.addTo(map);
-
-    //for reseting purpose,it will remove the marker one by one later
-    currentMarkers.push(inimarker);
-
-  }
-  else
-  {
-    let finmarker = new mapboxgl.Marker({ "color": "#ff0d00" });
-    finmarker.setLngLat([locations.lon[0], locations.lat[0]]);
-
-    //set port name on corresponding popup
-    let popup = new mapboxgl.Popup({ offset: 45});
-    popup.setText(locations.name[0].toString());
-
-    //set popup on marker
-    finmarker.setPopup(popup)
-
-    // Display the marker.
-    finmarker.addTo(map);
-
-    // Display the popup.
-    popup.addTo(map);
-
-    //for reseting purpose,it will remove the marker one by one later
-    currentMarkers.push(finmarker);
-  }
-
-  //store selected departure and arrival port in local storage
-  if (localStorage.getItem('portCoord') == null)//check existance of local storage
+  if (localStorage.getItem('portCoord') == null)
   {
 
-    localStorage.setItem('portCoord', JSON.stringify(locations));//set storage for selected departure or arrival port in local storage
+    localStorage.setItem('portCoord', JSON.stringify(locations));
 
   }
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)//if user accidentally press set twice, refresh the storage to the correct one without duplicating information
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
   {
     localStorage.removeItem('portCoord');
     localStorage.setItem('portCoord', JSON.stringify(locations));
   }
 
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)//as this function is ran twice to store both arrival and departure information.
+  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
   {
 
-    let object = JSON.parse(localStorage.getItem('portCoord'));//extract to make the storage contain both initial and final port.
+    let object = JSON.parse(localStorage.getItem('portCoord'));
 
     object.lon.push(locations.lon[0]);
     object.lat.push(locations.lat[0]);
@@ -153,7 +108,7 @@ if (portFound !== undefined)//if port is listed in the list, extract the corresp
 
 }
 
-else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)//if user input other
+else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)
 {
   let other_lng, other_lat, other_name, other_country, other_type, other_size, other_locPrec;
 
@@ -218,11 +173,96 @@ else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefi
 
 else
 {
-  alert('Please insert a valid departure port name or type "Other"');// alert user due to error input
+  alert('Please insert a valid departure port name or type "Other"');
 }
 
 }
 
+
+function getIntWeather()
+{
+  //seperate year, month, and day
+  let dateSet = JSON.parse(localStorage.getItem('date'));
+  let year = dateSet.substring(0,4);
+  let month = String(dateSet.substring(5,7) - 1);
+  //month have to minus 1 to have the correct data
+  let day = dateSet.substring(8,10);
+  if (day < 10)
+  {
+    day = day.substring(1,2);
+  }
+  let unixTime = Math.round((new Date(year, month, day)).getTime() / 1000);//Change local date to UNIX Time
+  localStorage.setItem('unixTime', JSON.stringify(unixTime))
+  //Request to DarkShy Api
+  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
+            JSON.parse(localStorage.getItem('portCoord')).lat[0] + "," + JSON.parse(localStorage.getItem('portCoord')).lon[0] + "," +
+            unixTime + "?exclude=minutely,hourly&units=si&callback=getIntWeatherData";
+  let script = document.createElement('script'); // create script element in HTML
+  script.src = url; // set link to sources
+  document.body.appendChild(script); // to append script element into body.
+}
+
+// Callback function to retrieve weather data
+function getIntWeatherData(data)
+{
+  let weatherInt = data.currently.summary;
+
+  //set marker coordinates
+  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[0], JSON.parse(localStorage.getItem('portCoord')).lat[0]]);
+
+  //set port name and weather on corresponding popup
+  let popup = new mapboxgl.Popup({ offset: 45});
+  popup.setText(JSON.parse(localStorage.getItem('portCoord')).name[0].toString() + ": " + weatherInt);
+
+  //set popup on marker
+  marker.setPopup(popup)
+
+  // Display the marker.
+  marker.addTo(map);
+
+  // Display the popup.
+  popup.addTo(map);
+
+  //for reseting purpose,it will remove the marker one by one later
+  currentMarkers.push(marker);
+}
+
+function getFinWeather()
+{
+  //Request to DarkShy Api
+  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
+            JSON.parse(localStorage.getItem('portCoord')).lat[1] + "," + JSON.parse(localStorage.getItem('portCoord')).lon[1] + "," +
+            JSON.parse(localStorage.getItem('unixTime')) + "?exclude=minutely,hourly&units=si&callback=getFinWeatherData";
+  let script = document.createElement('script'); // create script element in HTML
+  script.src = url; // set link to sources
+  document.body.appendChild(script); // to append script element into body.
+}
+
+// Callback function to retrieve weather data
+function getFinWeatherData(data) {
+  let weatherSevenDays = data.currently.summary;
+
+  //set marker coordinates
+  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[1], JSON.parse(localStorage.getItem('portCoord')).lat[1]]);
+
+  //set port name and weather on corresponding popup
+  let popup = new mapboxgl.Popup({ offset: 45});
+  popup.setText(JSON.parse(localStorage.getItem('portCoord')).name[1].toString() + ": " + weatherSevenDays);
+
+  //set popup on marker
+  marker.setPopup(popup)
+
+  // Display the marker.
+  marker.addTo(map);
+
+  // Display the popup.
+  popup.addTo(map);
+
+  //for reseting purpose,it will remove the marker one by one later
+  currentMarkers.push(marker);
+}
 
 ///////
 /*function setDestination()
@@ -257,9 +297,7 @@ else
     }
 }
 */
-
-//for mapping waypoints purpose so it can display the line route
-let objects = {
+let object = {
 type: "geojson",
 data: {
 type: "Feature",
@@ -276,27 +314,50 @@ let wayPointslat=[];
 let wayPointslng=[];
 
 
-map.on('click', function (e)//plot waypoints
+map.on('click', function (e)
 {
-  objects.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
-  let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
+  object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
+  //Request to DarkShy Api
+  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
+            JSON.stringify(e.lngLat.lat) + "," + JSON.stringify(e.lngLat.lng) + "," +
+            JSON.parse(localStorage.getItem('unixTime')) + "?exclude=minutely,hourly&units=si&callback=getWeatherDataWayPoints";
+  let script = document.createElement('script'); // create script element in HTML
+  script.src = url; // set link to sources
+  document.body.appendChild(script); // to append script element into body.
+})
 
-  //set coordinate for marker
-  markers.setLngLat([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat) ]);
-  // Display the marker.
-  markers.addTo(map);
+function getWeatherDataWayPoints(data)
+{
+    let weatherWayPoint = data.currently.summary;
 
-  wayPointslat.push(e.lngLat.lat)//calculation purpose
-  wayPointslng.push(e.lngLat.lng)
-  currentMarkers.push(markers);//for reset purpose
-  })
+    //set coordinate for marker
+    let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
+    markers.setLngLat([data.longitude,data.latitude]);
+
+    //set weather on corresponding popup
+    let popup = new mapboxgl.Popup({ offset: 45});
+    popup.setText(weatherWayPoint);
+
+    //set popup on marker
+    markers.setPopup(popup)
+
+    // Display the marker.
+    markers.addTo(map);
+
+    // Display the popup.
+    popup.addTo(map);
+
+    wayPointslat.push(data.latitude)//calculation purpose
+    wayPointslng.push(data.longitude)
+    currentMarkers.push(markers);//for reset purpose
+}
 
 function zoom()
 {
   map.flyTo({
 center: [
 (JSON.parse(localStorage.getItem("portCoord")).lon[0]+JSON.parse(localStorage.getItem("portCoord")).lon[1])/2,(JSON.parse(localStorage.getItem("portCoord")).lat[0]+JSON.parse(localStorage.getItem("portCoord")).lat[1])/2],
-zoom:2.1,
+zoom:2.5,
 speed:1.5
 });
 }
@@ -304,24 +365,21 @@ speed:1.5
 
 
 function showRoute(){
-//these push and unshift is to add back departure and arrival coordinates for setting the route purpose
-  objects.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
-  objects.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
 
-//set the route connect the route together
+  object.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
+  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
   map.addLayer({
   id: "routes",
   type: "line",
-  source: objects,
+  source: object,
   layout: { "line-join": "round", "line-cap": "round" },
   paint: { "line-color": "#888", "line-width": 6 }
   });
-  //store the coordinates for all waypoints include departure and arrival port for weather purpose
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(objects.data.geometry.coordinates))
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
 
 }
 
-function reset()//user can press reset to make their decision again
+function reset()
 {
   removeLayerWithId('routes')
   if (currentMarkers!==null) {
@@ -329,7 +387,6 @@ function reset()//user can press reset to make their decision again
         currentMarkers[i].remove();
       }
 }
-//refresh the datas
 currentMarkers=[];
 wayPointlng=[];
 wayPointslat=[];
@@ -337,38 +394,37 @@ wayPointslat=[];
 
 }
 
-function resetStorage()//reset storage
+function resetStorage()
 {
   localStorage.removeItem('wayPointsCoordinate')
   localStorage.removeItem('routeDistance')
-  objects.data.geometry.coordinates=[];
+  object.data.geometry.coordinates=[];
   d=0;
-//set everything to empty for new data
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(objects.data.geometry.coordinates))
+
+  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
   localStorage.setItem('routeDistance', JSON.stringify(d))
 
 
 }
 
 
-function toRadians(value)//convert degree to radians
+function toRadians(value)
 {
   return (value)*Math.PI/180
 }
 
-function calculateDistance()//to calculate total distance travelled for the cost of fuel purpose and time taken to arrive
+function calculateDistance()
 {
   let earthRadius = 6371e3; // metres earth radius
-  let d =0//distancce travelled
+  let d =0
 
-//all the push and unshift is to add the coordinates of departure and arrival port coordinates so the calculation is correct
   wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
   wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
 
   wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[1])
   wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[1])
-
-  for(i=0;i<wayPointslat.length-1;i++)//formula to calculate the distance
+  console.log(wayPointslat.length)
+  for(i=0;i<wayPointslat.length-1;i++)
   {
     let lattitude1 = wayPointslat[i]
     let lattitude2 = wayPointslat[i+1]
@@ -378,19 +434,24 @@ function calculateDistance()//to calculate total distance travelled for the cost
     let difflongitude=toRadians((longitude2-longitude1));
     let a = Math.sin(difflattitude/2) * Math.sin(difflattitude/2) +(Math.cos(toRadians(lattitude1)) * Math.cos(toRadians(lattitude2)) *Math.sin(difflongitude/2) * Math.sin(difflongitude/2));
 
+    console.log(earthRadius)
+    console.log(a)
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    console.log(c)
      d += earthRadius * c;
 
 
   }
-  //store distance travelled
   localStorage.setItem('routeDistance', JSON.stringify(d))
-
+}
+function calculateTime()
+{
+  let travelTime = Number(JSON.parse(localStorage.getItem('distanceCalculated')))/(Number(JSON.parse(localStorage.getItem('myShip')).maxSpeed)*0.51444);
+  //1 knot = 0.51444m/s
+  localStorage.setItem('totalTravelTime',JSON.stringify(travelTime));
 }
 
-
-
-function removeLayerWithId(idToRemove)// for remove the route when reseting
+function removeLayerWithId(idToRemove)
 {
 	let hasPoly = map.getLayer(idToRemove)
 	if (hasPoly !== undefined)
