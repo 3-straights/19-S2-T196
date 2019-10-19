@@ -208,7 +208,7 @@ function getIntWeatherData(data)
   let weatherInt = data.currently.summary;
 
   //set marker coordinates
-  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  let marker = new mapboxgl.Marker({ "color": "#00FF00" });
   marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[0], JSON.parse(localStorage.getItem('portCoord')).lat[0]]);
 
   //set port name and weather on corresponding popup
@@ -244,7 +244,7 @@ function getFinWeatherData(data) {
   let weatherSevenDays = data.currently.summary;
 
   //set marker coordinates
-  let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
+  let marker = new mapboxgl.Marker({ "color": "#FF0000" });
   marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[1], JSON.parse(localStorage.getItem('portCoord')).lat[1]]);
 
   //set port name and weather on corresponding popup
