@@ -19,11 +19,9 @@
     outline: none;
     font-size: 15px;
   }
-
 .active, .collapsible:hover {
   background-color: #555;
 }
-
 .content {
   padding: 0 18px;
   display: none;
@@ -99,20 +97,10 @@ tr:nth-child(odd){
             <button type="button" name="button" onclick='intPortWeather(time);finPortWeather()'>Get current Weather</button>
         </div>
         Initial Port: <output id = 'intPortName' type = 'text'></output><br>
-          <table id='intPortWeatherTable'>
-            <tr>
-              <th>Time</th>
-              <th>Weather</th>
-              <th>Current temperature</th>
-            </tr>
-          </table>
+          <table id='intPortWeatherTable'></table>
         Final Port: <output id = 'finPortName' type = 'text'></output><br>
           <table id='finPortWeatherTable'>
-            <tr>
-              <th>Time</th>
-              <th>Weather</th>
-              <th>Current temperature</th>
-            </tr>
+            <tr></tr>
           </table>
         <output id = 'weatherIntSummary' type = 'text'></output>
         <output id = 'weatherFinSummary' type = 'text'></output>
@@ -122,8 +110,8 @@ tr:nth-child(odd){
         <div class='typeOfShip' style='text-align: left'>
           Total Ports Passed: <output id='totalPortsPass' type = 'number' >
         </div>
-        <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'cancelButton' onmouseup =" newDiv()">Cancel</button></a>
-        <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Confirm</button></a>
+        <a onclick = "location.href= 'mdl.html'"><button type = 'button' class = 'cancelButton' onmouseup =" newDiv()">Cancel</button></a>
+        <a onclick = "location.href= 'mdl.html'"><button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Confirm</button></a>
     </body>
     <script src="weather.js"></script>
 </html>
