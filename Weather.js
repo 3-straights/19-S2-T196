@@ -61,8 +61,7 @@ function testInt(data)
   store[num] = [data.currently.summary, data.currently.temperature]
   num += 1;
   localStorage.setItem('store', JSON.stringify(store))
-  let header_needed = ["Time", "Weather", "Current Temperature (&#8451;) "];
-  let symbol_needed = ["&#8451;"]
+
   // need to redo .
 
 // for(let i = 0; i < header_needed.length; i++)
@@ -77,17 +76,38 @@ function testInt(data)
 //  localStorage.setItem('intWeather',JSON.stringify(data.currently.summary));
 }
 
-for (let c = 0; c < 7; c++)
+let rowsA = "<tr><th>Date</th><th>Weather</th><th>Current temperature (℃) </th></tr>" ;
+let dateA = parseInt(JSON.parse(localStorage.getItem('date')).split('-')[2]);
+let monthA = parseInt(JSON.parse(localStorage.getItem('date')).split('-')[1]);
+for (let c = 0; c < JSON.parse(localStorage.getItem('store')).length; c++)
 {
-  document.getElementById('intPortWeatherTable').innerHTML += "<tr>";
-  for (let c = 0; c < 7; c++)
-  {
-    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
-    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
-    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][1] + "</td>"
-  }
-  document.getElementById('intPortWeatherTable').innerHTML += "</tr>";
+    rowsA += "<tr>";
+
+    rowsA += "<td>" + dateA + '/' +monthA + "</td>";
+    rowsA += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
+    rowsA += "<td>" + JSON.parse(localStorage.getItem('store'))[c][1] + "</td>"
+    rowsA += "</tr>";
+    dateA++;
 }
+document.getElementById('intPortWeatherTable').innerHTML += rowsA;
+
+let rowsB = "<tr><th>Date</th><th>Weather</th><th>Current temperature (℃) </th></tr>" ;
+let dateB = parseInt(JSON.parse(localStorage.getItem('date')).split('-')[2]);
+let monthB = parseInt(JSON.parse(localStorage.getItem('date')).split('-')[1]);
+for (let c = 0; c < JSON.parse(localStorage.getItem('store')).length; c++)
+{
+    rowsB += "<tr>";
+
+    rowsB += "<td>" + dateB + '/' + monthB + "</td>";
+    rowsB += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
+    rowsB += "<td>" + JSON.parse(localStorage.getItem('store'))[c][1] + "</td>"
+    rowsB += "</tr>";
+    dateB++;
+}
+document.getElementById('finPortWeatherTable').innerHTML += rowsB;
+
+
+
 
     //need to use forloop somehow, problem is between JSONP request and the publish of info. No idea how to extract it.
 
@@ -124,6 +144,8 @@ function finPortWeather()
   script.src = link_needed; // set link to sources
   document.body.appendChild(script); // to append script element into body.
 }
+
+
 function testFin(data)
 {
   let listHTML = "";
