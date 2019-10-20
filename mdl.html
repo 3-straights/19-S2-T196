@@ -371,7 +371,12 @@
                 div.style.textAlign = 'center';
                 div.style.overflowY = 'scroll';
 
-                div.innerHTML = 'Ship: ' + route._shipUsed._boatName +'<br>';
+
+                div.innerHTML =
+                    'Depart date:' + route._departDate + ' <br>';
+
+                div.innerHTML += "Arrival date: " + route._arrivalDate + '<br>'
+                div.innerHTML += 'Ship: ' + route._shipUsed._boatName +'<br>';
 
                 div.innerHTML +=
                     '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> ' +
@@ -388,13 +393,10 @@
                     route._finPort._country + '</span><br>';
 
                 div.innerHTML +=
-                    'date:' + route._departDate + ' <br>';
+                    'Departure Weather summary:' + route._departWeather+ '<br>';
 
                 div.innerHTML +=
-                    'Departure Weather summary:' + '<br>';
-
-                div.innerHTML +=
-                    'Destination Weather summary: ' + '<br>';
+                    'Destination Weather summary: ' + route._destiWeather+ '<br>';
 
                 div.innerHTML += '...<br>';
 
@@ -548,10 +550,10 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
           'date:' + JSON.parse(localStorage.getItem('date'))+ ' <br>';
 
       document.getElementById(`myClass_${u}`).innerHTML +=
-          'Departure Weather summary:' + '<br>';
+          'Departure Weather summary:' +temporRoute._departWeather + '<br>';
 
       document.getElementById(`myClass_${u}`).innerHTML +=
-          'Destination Weather summary: ' + '<br>';
+          'Destination Weather summary: ' + temporRoute._destiWeather+ '<br>';
 
       document.getElementById(`myClass_${u}`).innerHTML += '...<br>';
 
@@ -561,9 +563,10 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
 
       temporRoute._departDate = JSON.parse(localStorage.getItem('date'));
 
-      temporRoute._arrivalDate = temporRoute._departDate;
+      let newArrival = temporRoute._arrivalDate.split('-')
 
-      temporRoute._wayPoint.splice(0, temporRoute._wayPoint.length, 'dk wat function');
+      temporRoute._arrivalDate = parseInt(newArrival[0]) + parseInt(year_diff) + '-' + parseInt(newArrival[1]) + parseInt(month_diff) + '-' + parseInt(newArrival[2]) + parseInt(day_diff);
+
 
       tempClass._routes.splice(u,1,temporRoute);
       localStorage.removeItem('Routes');
