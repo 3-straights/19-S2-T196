@@ -101,6 +101,9 @@ if (portFound !== undefined)
     object.lat.push(locations.lat[0]);
     object.name.push(locations.name[0]);
     object.country.push(locations.country[0])
+    object.size.push(locations.size[0])
+    object.type.push(locations.type[0])
+    object.locprecision.push(locations.locprecision[0])
     localStorage.setItem('portCoord', JSON.stringify(object));
 
   }
@@ -215,6 +218,16 @@ function getIntWeatherData(data)
   let popup = new mapboxgl.Popup({ offset: 45});
   popup.setText(JSON.parse(localStorage.getItem('portCoord')).name[0].toString() + ": " + weatherInt);
 
+  if (!localStorage.getItem('intWeather'))
+  {
+    localStorage.setItem('intWeather', JSON.stringify(weatherInt))
+  }
+  else if (localStorage.getItem('intWeather') !== null)
+  {
+    localStorage.removeItem('intWeather')
+    localStorage.setItem('intWeather', JSON.stringify(weatherInt))
+  }
+
   //set popup on marker
   marker.setPopup(popup)
 
@@ -226,6 +239,8 @@ function getIntWeatherData(data)
 
   //for reseting purpose,it will remove the marker one by one later
   currentMarkers.push(marker);
+
+  return weatherInt
 }
 
 function getFinWeather()
@@ -242,6 +257,16 @@ function getFinWeather()
 // Callback function to retrieve weather data
 function getFinWeatherData(data) {
   let weatherSevenDays = data.currently.summary;
+
+  if (!localStorage.getItem('finWeather'))
+  {
+    localStorage.setItem('finWeather', JSON.stringify(weatherSevenDays))
+  }
+  else if (localStorage.getItem('finWeather') !== null)
+  {
+    localStorage.removeItem('finWeather')
+    localStorage.setItem('finWeather', JSON.stringify(weatherSevenDays))
+  }
 
   //set marker coordinates
   let marker = new mapboxgl.Marker({ "color": "#FF0000" });
@@ -262,6 +287,8 @@ function getFinWeatherData(data) {
 
   //for reseting purpose,it will remove the marker one by one later
   currentMarkers.push(marker);
+
+  return weatherSevenDays;
 }
 
 ///////
