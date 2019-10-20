@@ -443,7 +443,7 @@ function toRadians(value)
 function calculateDistance()
 {
   let earthRadius = 6371e3; // metres earth radius
-  let d =0
+  let d =0;
 
   wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
   wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
@@ -465,11 +465,12 @@ function calculateDistance()
     console.log(a)
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     console.log(c)
-     d += earthRadius * c;
-
+     d += (earthRadius * c)/1000;
 
   }
   localStorage.setItem('routeDistance', JSON.stringify(d))
+
+  return d;
 }
 function calculateTime()
 {
