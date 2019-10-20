@@ -498,7 +498,7 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
   if (parseInt(newDate[2]) - parseInt(intDate[2]) < 0)
   {
     newDate[1] = parseInt(newDate[1]) - 1;
-    newDate[2] = newDate[2] + monthDay[parseInt(newDate[1]) + 1] ;
+    newDate[2] = parseInt(newDate[2]) + monthDay[parseInt(newDate[1]) + 1] ;
   }
       day_diff = parseInt(newDate[2]) - parseInt(intDate[2]);
 
@@ -529,8 +529,21 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
 
       let tempClass = JSON.parse(localStorage.getItem('Routes'))
       let temporRoute = tempClass._routes[u];
+      let newArrival = temporRoute._arrivalDate.split('-')
+      temporRoute._departDate = JSON.parse(localStorage.getItem('date'));
+      temporRoute._arrivalDate = (Math.round(newArrival[0]) + Math.round(year_diff)) + "-" + (Math.round(newArrival[1]) + Math.round(month_diff)) + "-" + (Math.round(newArrival[2]) + Math.round(day_diff));
 
-      document.getElementById(`myClass_${u}`).innerHTML = 'Ship: ' + temporRoute._shipUsed._boatName+'<br>';
+
+      tempClass._routes.splice(u,1,temporRoute);
+      localStorage.removeItem('Routes');
+      localStorage.setItem('Routes', JSON.stringify(tempClass));
+
+      document.getElementById(`myClass_${u}`).innerHTML =
+          'Depart date: ' + JSON.parse(localStorage.getItem('date'))+ ' <br>';
+      document.getElementById(`myClass_${u}`).innerHTML +=
+              'Arrival date: ' + temporRoute._arrivalDate+ ' <br>';
+
+      document.getElementById(`myClass_${u}`).innerHTML += 'Ship: ' + temporRoute._shipUsed._boatName+'<br>';
 
       document.getElementById(`myClass_${u}`).innerHTML +=
           '<span style="font-family: times, serif; font-size:14pt; font-style:italic; color:orange"> ' +
@@ -547,9 +560,6 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
           temporRoute._finPort._country + '</span><br>';
 
       document.getElementById(`myClass_${u}`).innerHTML +=
-          'date:' + JSON.parse(localStorage.getItem('date'))+ ' <br>';
-
-      document.getElementById(`myClass_${u}`).innerHTML +=
           'Departure Weather summary:' +temporRoute._departWeather + '<br>';
 
       document.getElementById(`myClass_${u}`).innerHTML +=
@@ -557,20 +567,13 @@ if(parseInt(newDate[0])- parseInt(intDate[0]) >= 0)
 
       document.getElementById(`myClass_${u}`).innerHTML += '...<br>';
 
-      document.getElementById(`myClass_${u}`).innerHTML += ` <button id="deleteRoute_${i}" type = "button" onclick="routeDeletor(this)">Delete</button> &nbsp; &nbsp;`
+      document.getElementById(`myClass_${u}`).innerHTML += ` <button id="deleteRoute_${u}" type = "button" onclick="routeDeletor(this)">Delete</button> &nbsp; &nbsp;`
 
-      document.getElementById(`myClass_${u}`).innerHTML += `<button id="postponeRoute_${i}" type = "button" onclick="postponeRoute(this)">postpone</button>`
-
-      temporRoute._departDate = JSON.parse(localStorage.getItem('date'));
-
-      let newArrival = temporRoute._arrivalDate.split('-')
-
-      temporRoute._arrivalDate = parseInt(newArrival[0]) + parseInt(year_diff) + '-' + parseInt(newArrival[1]) + parseInt(month_diff) + '-' + parseInt(newArrival[2]) + parseInt(day_diff);
+      document.getElementById(`myClass_${u}`).innerHTML += `<button id="postponeRoute_${u}" type = "button" onclick="postponeRoute(this)">postpone</button>`
 
 
-      tempClass._routes.splice(u,1,temporRoute);
-      localStorage.removeItem('Routes');
-      localStorage.setItem('Routes', JSON.stringify(tempClass))
+
+
     }
 
   }
@@ -590,7 +593,7 @@ function  showDistance()
 
   if (localStorage.getItem('Routes') !== null)
   {
-    routeDist.innerHTML = '<h5><b>Distance of Chosen Route:</b>  ' + JSON.parse(localStorage.getItem('Routes'))._routes[JSON.parse(localStorage.getItem('Routes'))._routes.length-1]._routeDist.toFixed(2) + 'km </h5>';
+    routeDist.innerHTML = '<h5><b>Distance of Chosen Route:</b>  ' + JSON.parse(localStorage.getItem('routeDistance')).toFixed(2) + 'km </h5>';
   }
 
 }
