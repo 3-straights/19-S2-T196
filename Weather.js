@@ -1,11 +1,36 @@
 //Weather of initial port
-function intPortWeather()
+//var ts = Math.round((new Date(2019,12,2,9,0)).getTime() / 1000); change to UNIX
+let time;
+let dateSet = JSON.parse(localStorage.getItem('date'));
+let year = dateSet.substring(0,4);
+//month have to minus 1 to have the correct data
+let month = String(dateSet.substring(5,7) - 1);
+localStorage.setItem('month', JSON.stringify(month))
+let day = dateSet.substring(8,10);
+if (day < 10)
 {
-  document.getElementById("intPortName").innerHTML = JSON.parse(localStorage.getItem('intPort')).portName;
+  day = day.substring(1,2);
+}
+localStorage.setItem('day', JSON.stringify(day))
+let unixTime = Math.round((new Date(year, month, day)).getTime() / 1000);
+let unixTimeSevenDays = [];
+for (let i = 0; i < 7; i++)
+{
+  unixTimeSevenDays.push(unixTime)
+  unixTime += 86400;
+}
+localStorage.setItem('unixTimeSevenDays', JSON.stringify(unixTimeSevenDays))
+unixTimeSevenDays.forEach(element => intPortWeather(element));
+let store = [];
+let num = 0;
+
+function intPortWeather(time)
+{
+  document.getElementById("intPortName").innerHTML = JSON.parse(localStorage.getItem('portCoord')).name[0];
   let data =
     {
-      latitude: JSON.parse(localStorage.getItem('intPort')).lat,
-      longitude: JSON.parse(localStorage.getItem('intPort')).lng
+      latitude: JSON.parse(localStorage.getItem('portCoord')).lat[0],
+      longitude: JSON.parse(localStorage.getItem('portCoord')).lon[0]
     };
   //apikey: 2f325944bde3b00d86bdabaf4ac091be
   //"https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/[latitude],[longitude]"
@@ -13,7 +38,7 @@ function intPortWeather()
     exclude:["minutely","hourly","daily","flags","offset"],
     units:"si"
   };
-  let link_needed = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" + data.latitude + "," + data.longitude + "?exclude=minutely&exclude=hourly&exclude=daily&exclude=flags&exclude=offset&units=si&callback=testInt"
+  let link_needed = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" + data.latitude + "," + data.longitude + "," + `${time}` +"?exclude=minutely&exclude=hourly&exclude=daily&exclude=flags&exclude=offset&units=si&callback=testInt"
   console.log(link_needed);
   //JSONP method
   //let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/";
@@ -31,19 +56,39 @@ function intPortWeather()
 function testInt(data)
 {
   let listHTML = "";
-  let stuff_needed = [data.currently.time, data.currently.summary, data.currently.temperature, data.currently.pressure,data.currently.humidity, data.currently.dewPoint, data.currently.uvIndex];
-  let header_needed = ["Time", "Weather", "Current Temperature (&#8451;) ", "Pressure (Pa)", "Humidity", "Dew Point (&#8451;)","UV Index"];
-  let symbol_needed = ["&#8451;", "Pa"]
+  let stuff_needed = [JSON.parse(localStorage.getItem('day')) + "/" + (Number(JSON.parse(localStorage.getItem('month'))) + 1),
+                      data.currently.summary, data.currently.temperature];
+  store[num] = [data.currently.summary, data.currently.temperature]
+  num += 1;
+  localStorage.setItem('store', JSON.stringify(store))
+  let header_needed = ["Time", "Weather", "Current Temperature (&#8451;) "];
+  let symbol_needed = ["&#8451;"]
   // need to redo .
-  for(let i = 0; i < header_needed.length; i++)
-  {
-    listHTML += "<tr><th>" + header_needed[i] + "</th><td>" + stuff_needed[i] + "</td></tr>" + "<br>";
-    document.getElementById('intPortWeatherTable').innerHTML = listHTML;
-  }
-  let weatherIntOverall = 'Source port current date is ' + JSON.parse(localStorage.getItem('date')) + ', current time is ' + JSON.parse(localStorage.getItem('time')) + ', and the current weather is ' + data.currently.summary;
-  document.getElementById('weatherIntSummary').innerHTML = weatherIntOverall;
-  localStorage.setItem('intWeather',JSON.stringify(data.currently.summary));
+
+// for(let i = 0; i < header_needed.length; i++)
+// {
+//   document.getElementById('timeSevenDays').innerText += "<td>" + stuff_needed[i] + "</td>";
+// }
+
+//<tr><th>Weather</th></tr>
+//<tr><th>Current Temperature</th></tr>
+//  let weatherIntOverall = 'Source port current date is ' + JSON.parse(localStorage.getItem('date')) + ', and the current weather is ' + data.currently.summary;
+//  document.getElementById('weatherIntSummary').innerHTML = weatherIntOverall;
+//  localStorage.setItem('intWeather',JSON.stringify(data.currently.summary));
 }
+
+for (let c = 0; c < 7; c++)
+{
+  document.getElementById('intPortWeatherTable').innerHTML += "<tr>";
+  for (let c = 0; c < 7; c++)
+  {
+    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
+    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][0] + "</td>";
+    document.getElementById('intPortWeatherTable').innerHTML += "<td>" + JSON.parse(localStorage.getItem('store'))[c][1] + "</td>"
+  }
+  document.getElementById('intPortWeatherTable').innerHTML += "</tr>";
+}
+
     //need to use forloop somehow, problem is between JSONP request and the publish of info. No idea how to extract it.
 
 
@@ -62,26 +107,18 @@ function testInt(data)
 //Weather for final port
 function finPortWeather()
 {
-  document.getElementById("finPortName").innerHTML = JSON.parse(localStorage.getItem('finPort')).portName;
+  document.getElementById("finPortName").innerHTML = JSON.parse(localStorage.getItem('portCoord')).name[1];
   let data =
     {
-      latitude: JSON.parse(localStorage.getItem('finPort')).lat,
-      longitude: JSON.parse(localStorage.getItem('finPort')).lng
+      latitude: JSON.parse(localStorage.getItem('portCoord')).lat[1],
+      longitude: JSON.parse(localStorage.getItem('portCoord')).lon[1]
     };
   let data_needed = {
     exclude:["minutely","hourly","daily","flags","offset"],
     units:"si"
   };
-  let link_needed = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" + data.latitude + "," + data.longitude + "?exclude=minutely&exclude=hourly&exclude=daily&exclude=flags&exclude=offset&units=si&callback=finTime"
-  console.log(link_needed);
-  let script = document.createElement('script'); // create script element in HTML
-  script.src = link_needed; // set link to sources
-  document.body.appendChild(script); // to append script element into body.
-}
-function finTime(data)
-{
-  finCurrentTime = Number(data.currently.time) + 10000;
-  let link_needed = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" + data.latitude + "," + data.longitude + "," + finCurrentTime + "?exclude=minutely&exclude=hourly&exclude=daily&exclude=flags&exclude=offset&units=si&callback=testFin"
+  finCurrentTime = Number(JSON.parse(localStorage.getItem('unixTime'))) + 10000;
+  let link_needed = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" + data.latitude + "," + data.longitude + "," + finCurrentTime +"?exclude=minutely&exclude=hourly&exclude=daily&exclude=flags&exclude=offset&units=si&callback=testFin"
   console.log(link_needed);
   let script = document.createElement('script'); // create script element in HTML
   script.src = link_needed; // set link to sources
@@ -90,9 +127,9 @@ function finTime(data)
 function testFin(data)
 {
   let listHTML = "";
-  let stuff_needed = [data.currently.time, data.currently.summary, data.currently.temperature, data.currently.pressure,data.currently.humidity, data.currently.dewPoint, data.currently.uvIndex];
-  let header_needed = ["Time", "Weather", "Current Temperature (&#8451;) ", "Pressure (Pa)", "Humidity", "Dew Point (&#8451;)","UV Index"];
-  let symbol_needed = ["&#8451;", "Pa"]
+  let stuff_needed = [JSON.parse(localStorage.getItem('day')) + "/" + (Number(JSON.parse(localStorage.getItem('month'))) + 1), data.currently.summary, data.currently.temperature];
+  let header_needed = ["Time", "Weather", "Current Temperature (&#8451;) "];
+  let symbol_needed = ["&#8451;"]
   for(let i = 0; i < header_needed.length; i++)
   {
     listHTML += "<tr><th>" + header_needed[i] + "</th><td>" + stuff_needed[i] + "</td></tr>" + "<br>";
@@ -103,5 +140,9 @@ function testFin(data)
   localStorage.setItem('finWeather',JSON.stringify(data.currently.summary));
 }
 
-document.getElementById("totalDistance").innerHTML = JSON.parse(localStorage.getItem('distanceCalculated'));
+document.getElementById("totalDistance").innerHTML = JSON.parse(localStorage.getItem('routeDistance'))/1000;
 document.getElementById("fuelOfTheBoat").innerHTML = JSON.parse(localStorage.getItem('myShip')).range;
+document.getElementById("totalCost").innerHTML = JSON.parse(localStorage.getItem('myShip')).cost*document.getElementById("totalDistance").value;
+//1 knots = 1.85 km per hour
+document.getElementById("durations").innerHTML = document.getElementById("totalDistance").value/(JSON.parse(localStorage.getItem('myShip')).maxSpeed*1.85);
+document.getElementById("totalPortsPass").innerHTML = JSON.parse(localStorage.getItem('wayPointsCoordinate')).length;
