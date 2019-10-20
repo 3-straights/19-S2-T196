@@ -424,9 +424,9 @@
             if (Detail == JSON.parse(localStorage.getItem('shipInformation')).name[i]) {
                 shipInfoSec.innerHTML = '<br><br><br><br> Status: ' + JSON.parse(localStorage.getItem('shipInformation')).status[i] + '<br>';
                 shipInfoSec.innerHTML += 'Ship Name: ' + Detail + '<br>';
-                shipInfoSec.innerHTML += 'Maximum speed: ' + JSON.parse(localStorage.getItem('shipInformation')).maxSpeed[i] + '<br>';
-                shipInfoSec.innerHTML += 'Full tank range: ' + JSON.parse(localStorage.getItem('shipInformation')).range[i] + '<br>';
-                shipInfoSec.innerHTML += 'Cost: $' + JSON.parse(localStorage.getItem('shipInformation')).cost[i] + ' /km <br>';
+                shipInfoSec.innerHTML += 'Maximum speed: ' + JSON.parse(localStorage.getItem('shipInformation')).maxSpeed[i] + 'km/h <br>';
+                shipInfoSec.innerHTML += 'Full tank range: ' + JSON.parse(localStorage.getItem('shipInformation')).range[i] + 'km <br>';
+                shipInfoSec.innerHTML += 'Cost: $ ' + JSON.parse(localStorage.getItem('shipInformation')).cost[i] + ' /km <br>';
                 shipInfoSec.innerHTML += 'Comment: ' + JSON.parse(localStorage.getItem('shipInformation')).comments[i] + '<br>';
                 shipInfoSec.innerHTML += 'Description: ' + JSON.parse(localStorage.getItem('shipInformation')).desc[i] + '<br>';
             }
@@ -590,7 +590,7 @@ function  showDistance()
 
   if (localStorage.getItem('Routes') !== null)
   {
-    routeDist.innerHTML = '<h5><b>Distance of Chosen Route:</b>  ' + JSON.parse(localStorage.getItem('Routes'))._routes[JSON.parse(localStorage.getItem('Routes'))._routes.length-1]._routeDist + 'km </h5>';
+    routeDist.innerHTML = '<h5><b>Distance of Chosen Route:</b>  ' + JSON.parse(localStorage.getItem('Routes'))._routes[JSON.parse(localStorage.getItem('Routes'))._routes.length-1]._routeDist.toFixed(2) + 'km </h5>';
   }
 
 }
