@@ -564,8 +564,7 @@ else if (localStorage.getItem !== null)
 let iniPort = JSON.parse(localStorage.getItem('intPort')).type[0]
 let finaPort =JSON.parse(localStorage.getItem('finPort')).type[0]
 let choseShip = JSON.parse(localStorage.getItem('myShip')).desc[0]
-if ((iniPort !== "River" && finaPort !== "River") && (choseShip !== "supermaxtanker" && choseShip !== "maxtanker"))
-{
+
 var shipA = new ship(myShip.boatName, myShip.maxSpeed, myShip.range, myShip.cost, myShip.status, myShip.comments, myShip.desc)
 
 
@@ -591,13 +590,7 @@ else
 {
   alert("Your Browser does not support local storage.");
 }
-}
 
-else
-{
-   alert('The size of ship does not fit the type of locations, please choose another boat instead!')
-   let shipA = 'unknown';
-}
   return shipA;
 }
 
@@ -727,32 +720,37 @@ return secPort;
 
 function storingRoute()
 {
-  let shipUsed = shipInfo();
-  let departPort = intPortInfo();
-  let destiPort = finPortInfo();
-  let date = JSON.parse(localStorage.getItem('date'));
-  let routeDist = JSON.parse(localStorage.getItem('routeDistance'));
-  let fuelCost = JSON.parse(localStorage.getItem('myShip')).cost * routeDist;
-  let wayPoint =JSON.parse(localStorage.getItem('wayPointsCoordinate'));
-  let departWeath = JSON.parse(localStorage.getItem('intWeather'));
-  let destiWeath = JSON.parse(localStorage.getItem('finWeather'));
-  let timeTaken = (routeDist/ Math.round(JSON.parse(localStorage.getItem('myShip')).maxSpeed))/24; //converting from hours to days
-  let intDate = JSON.parse(localStorage.getItem('date')).split('-');
+  let shipUsed = shipInfo(); //extracting ship object
+  let departPort = intPortInfo(); //extracting initial port object
+  let destiPort = finPortInfo(); // //extracting final port object
+  let date = JSON.parse(localStorage.getItem('date')); //extracting departure date
+  let routeDist = JSON.parse(localStorage.getItem('routeDistance')); //extracting total route distance
+  let fuelCost = JSON.parse(localStorage.getItem('myShip')).cost * routeDist; //calculating fuel cost by ship
+  let wayPoint =JSON.parse(localStorage.getItem('wayPointsCoordinate')); //extracting selected waypoints
+  let departWeath = JSON.parse(localStorage.getItem('intWeather')); //extracting departure weather informations
+  let destiWeath = JSON.parse(localStorage.getItem('finWeather')); //extracting destination weather informations
+  let timeTaken = (routeDist/ Math.round(JSON.parse(localStorage.getItem('myShip')).maxSpeed))/24; //converting departure period from hours to days
+  let intDate = JSON.parse(localStorage.getItem('date')).split('-'); //splitting up date object into ('year', 'month', 'day')
 
-  let arrivalDays = Math.round(intDate[2]) + Math.round(timeTaken);
-  let monthArray = ['Jan', 'Feb','Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  let dayArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  let day_diff, month_diff, year_diff;
+  let arrivalDays = Math.round(intDate[2]) + Math.round(timeTaken); //Rounding up values, converting string to number
+  let monthArray = ['Jan', 'Feb','Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; //creating a month array
+  let dayArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //creating days contained by each month
+  let day_diff, month_diff, year_diff; //difference in days, month and year
 
-  for (let i=0; i<monthArray.length; i++)
+  for (let i=0; i<monthArray.length; i++) //looping 12 times
   {
 
-  if (monthArray[intDate[1]] == monthArray[i])
+  if (monthArray[intDate[1]] == monthArray[i]) //checking the month with 1-12, where 1 means jan, 2 means feb and respectively
   {
-    while (arrivalDays > dayArray[i])
+    while (arrivalDays > dayArray[i])// difference in day is converting to month until the difference in days does not exist the day contained in that month
     {
       arrivalDays = arrivalDays - dayArray[i];
       intDate[1] = Math.round(intDate[1]) + 1;
+      dayArray[i] = dayArray[i+1]; //as the month increases, the value of day in a month should be changed as well
+      if (dayArray[i] == undefined)// if dayArray exceeded value of 12, the loop returns back to jan, feb and so on..
+      {
+        dayArray[i] = dayArray[i-12];
+      }
     }
     day_diff = arrivalDays;
 
@@ -766,17 +764,17 @@ function storingRoute()
   }
   }
 
-  let arrivalDate = year_diff + '-' + month_diff + '-' + day_diff;
-  let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost, departWeath, destiWeath);
+  let arrivalDate = year_diff + '-' + month_diff + '-' + day_diff; //using the calculated values to find date of arrival
+  let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost, departWeath, destiWeath); //creating object route
 
-  if (localStorage.getItem('Routes') == null)
+  if (localStorage.getItem('Routes') == null) //if no routes has been stored before
   {
-    let new_route = new routeStorage([]);
+    let new_route = new routeStorage([]); //storing it into routeStorage class
     new_route.createRoute(routeA);
     localStorage.setItem('Routes', JSON.stringify(new_route))
   }
 
-  else if(localStorage.getItem('Routes') !== null)
+  else if(localStorage.getItem('Routes') !== null)// if there is atleast one route present
   {
 
     let finRouteStr = JSON.parse(localStorage.getItem('Routes'));
@@ -795,15 +793,15 @@ function storingRoute()
 function storeDate()
 {
   let date = document.getElementById('date').value;
-  if (!localStorage.getItem('date'))
+  if (!localStorage.getItem('date')) //checking if date present in local storage
   {
-    localStorage.setItem('date', JSON.stringify(date))
+    localStorage.setItem('date', JSON.stringify(date));
   }
 
-  else if (localStorage.getItem('date') !== null)
+  else if (localStorage.getItem('date') !== null) //if false
   {
     localStorage.removeItem('date');
-    localStorage.setItem('date', JSON.stringify(date))
+    localStorage.setItem('date', JSON.stringify(date)); //updating the storage key 'date'
 
   }
 }
@@ -841,5 +839,47 @@ function storeDate()
 
     localStorage.setItem("shipInformation",JSON.stringify(shippies))
 
+
+}
+
+
+function checkFuel(boat)
+{
+  let fuelCost; //basically the travel cost
+
+  for (i=0; i<JSON.parse(localStorage.getItem('shipInformation')).name.length; i++) //checking across the stored boat name
+  {
+
+  if (boat == JSON.parse(localStorage.getItem('shipInformation')).name[i])//if boatName found
+  {
+    if (JSON.parse(localStorage.getItem('shipInformation')).range[i] - JSON.parse(localStorage.getItem('routeDistance')) >= 0 )
+      {
+        fuelCost = JSON.parse(localStorage.getItem('routeDistance')) * JSON.parse(localStorage.getItem('shipInformation')).cost[i];
+
+      }
+
+    else if(JSON.parse(localStorage.getItem('shipInformation')).range[i] - JSON.parse(localStorage.getItem('routeDistance')) < 0 )
+      {
+        alert('This boat has not enough fuel to travel from departure port to desired port, please try other options instead!');
+
+      }
+
+    }
+
+  }
+
+  return fuelCost;
+}
+
+function checkOtherFuel()
+{
+  let fuelCost;
+  let retrievedTank = document.getElementById('fullTank').value;
+
+  if (retrievedTank - JSON.parse(localStorage.getItem('routeDistance')) < 0 )
+  {
+    alert('Your boat does not have enough fuel to complete the travel!')
+
+  }
 
 }
