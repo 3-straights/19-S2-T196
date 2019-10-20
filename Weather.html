@@ -86,34 +86,41 @@ tr:nth-child(odd){
             </div>
         </header>
         <div class='typeOfShip' style='number-align: left'>
-          Total Distance (m): <output id='totalDistance' type = 'number' >
+          Total Distance (km): <output id='totalDistance' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
-          Full tank: <output id='fuelOfTheBoat' type = 'number' >
+          Full tank (km): <output id='fuelOfTheBoat' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
-          Fuel required: <output id='fuelRequired' type = 'number' >
-        </div>
-        <div class='typeOfShip' style='text-align: left'>
-          Total Cost: <output id='totalCost' type = 'number' >
+          Total Cost ($): <output id='totalCost' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
           Weather: <output id='weather' type = 'text' >
-            <button type="button" name="button" onclick='intPortWeather();finPortWeather()'>Get current Weather</button>
+            <button type="button" name="button" onclick='intPortWeather(time);finPortWeather()'>Get current Weather</button>
         </div>
         Initial Port: <output id = 'intPortName' type = 'text'></output><br>
           <table id='intPortWeatherTable'>
+            <tr>
+              <th>Time</th>
+              <th>Weather</th>
+              <th>Current temperature</th>
+            </tr>
           </table>
         Final Port: <output id = 'finPortName' type = 'text'></output><br>
           <table id='finPortWeatherTable'>
+            <tr>
+              <th>Time</th>
+              <th>Weather</th>
+              <th>Current temperature</th>
+            </tr>
           </table>
         <output id = 'weatherIntSummary' type = 'text'></output>
         <output id = 'weatherFinSummary' type = 'text'></output>
         <div class='typeOfShip' style='text-align: left'>
-          Durations (mins): <output id='durations' type = 'number' >
+          Durations (hours): <output id='durations' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
-          Number of ports passed: <output id='durations' type = 'number' >
+          Total Ports Passed: <output id='totalPortsPass' type = 'number' >
         </div>
         <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'cancelButton' onmouseup =" newDiv()">Cancel</button></a>
         <a href= 'C:\Users\Hi\Documents\GitKraken\19-S2-T196\mdl.html'><button type = 'button' class = 'enterButton' onmouseup =" newDiv()">Confirm</button></a>
