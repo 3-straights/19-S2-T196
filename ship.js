@@ -820,18 +820,18 @@ function storeDate()
 {
     let shippies={
         name:[shipData.ships[0].name] ,
-        maxSpeed:[shipData.ships[0].maxSpeed],
-        range:[shipData.ships[0].range],
+        maxSpeed:[(shipData.ships[0].maxSpeed * 1.852).toFixed(2)], //km/h
+        range:[shipData.ships[0].range], //km
         desc:[shipData.ships[0].desc],
-        cost:[shipData.ships[0].cost],
-        status:[shipData.ships[0].status]   ,
+        cost:[shipData.ships[0].cost], //km
+        status:[shipData.ships[0].status],
         comments:[shipData.ships[0].comments]
     }
 
     for (let i=1;i<(shipData.ships.length);i++)
         {
             shippies.name.push(shipData.ships[i].name)
-            shippies.maxSpeed.push(shipData.ships[i].maxSpeed)
+            shippies.maxSpeed.push((shipData.ships[i].maxSpeed * 1.852).toFixed(2))
             shippies.range.push(shipData.ships[i].range)
             shippies.desc.push(shipData.ships[i].desc)
             shippies.cost.push(shipData.ships[i].cost)
