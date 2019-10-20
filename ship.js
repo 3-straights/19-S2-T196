@@ -276,7 +276,7 @@ createPort(ownPort)
 
 class route //route that stores all the chosen information by users
 {
-constructor(intPort, finPort, shipUsed, departDate, wayPoint, arrivalDate, routeDist, fuelCost)
+constructor(intPort, finPort, shipUsed, departDate, wayPoint, arrivalDate, routeDist, fuelCost,departWeather, destiWeather)
 {
 this._intPort = intPort; //departed port
 this._finPort = finPort; // destination
@@ -286,7 +286,8 @@ this._wayPoint = wayPoint; //selected way points
 this._arrivalDate = arrivalDate; // date arrival
 this._routeDist = routeDist; //total distance of selected route
 this._fuelCost = fuelCost; //fuel cost
-
+this._departWeather = departWeather;
+this._destiWeather = destiWeather;
 }
 get intPort()
 {
@@ -360,7 +361,25 @@ set fuelCost(newFuelCost)
   this._fuelCost = newFuelCost;
 }
 
+get departWeather()
+{
+  return this._departWeather;
+}
 
+set departWeather(newDepartWeather)
+{
+  this._departWeather = newDepartWeather;
+}
+
+get destiWeather()
+{
+  return this._destiWeather;
+}
+
+set destiWeather(newDestiWeather)
+{
+  this._destiWeather = newDestiWeather
+}
 }
 
 class routeStorage //class that stores all the chosen routes
@@ -715,34 +734,40 @@ function storingRoute()
   let routeDist = JSON.parse(localStorage.getItem('routeDistance'));
   let fuelCost = JSON.parse(localStorage.getItem('myShip')).cost * routeDist;
   let wayPoint =JSON.parse(localStorage.getItem('wayPointsCoordinate'));
-  let timeTaken = (routeDist/ Math.round(JSON.parse(localStorage.getItem('myShip')).maxSpeed))/24;
+  let departWeath = JSON.parse(localStorage.getItem('intWeather'));
+  let destiWeath = JSON.parse(localStorage.getItem('finWeather'));
+  let timeTaken = (routeDist/ Math.round(JSON.parse(localStorage.getItem('myShip')).maxSpeed))/24; //converting from hours to days
   let intDate = JSON.parse(localStorage.getItem('date')).split('-');
+
   let arrivalDays = Math.round(intDate[2]) + Math.round(timeTaken);
   let monthArray = ['Jan', 'Feb','Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   let dayArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  let day_diff, month_diff, year_diff;
 
   for (let i=0; i<monthArray.length; i++)
   {
 
   if (monthArray[intDate[1]] == monthArray[i])
   {
-    if (arrivalDays > dayArray[i])
+    while (arrivalDays > dayArray[i])
     {
       arrivalDays = arrivalDays - dayArray[i];
-      intDate[1] = intDate[1] + 1;
-
-      if (intDate[1] > 12)
-      {
-        intDate[1] = Math.round(intDate[1]) - 12;
-        intDate[0] = Math.round(intDate[0]) + 1;
-      }
+      intDate[1] = Math.round(intDate[1]) + 1;
     }
+    day_diff = arrivalDays;
+
+    while (intDate[1] > 12)
+    {
+      intDate[1] = Math.round(intDate[1]) - 12;
+      intDate[0] = Math.round(intDate[0]) + 1;
+    }
+    month_diff = intDate[1];
+    year_diff = intDate[0];
+  }
   }
 
-  }
-
-  let arrivalDate = intDate[0] + '-' + intDate[1] + '-' + intDate[2];
-  let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost);
+  let arrivalDate = year_diff + '-' + month_diff + '-' + day_diff;
+  let routeA = new route(departPort, destiPort, shipUsed, date, wayPoint, arrivalDate, routeDist, fuelCost, departWeath, destiWeath);
 
   if (localStorage.getItem('Routes') == null)
   {
