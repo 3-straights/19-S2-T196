@@ -274,7 +274,7 @@
     <div>
         <p>
             <select name="boatOpt" id="boatOpt"
-                    onchange=" boatDetail(this.options[this.selectedIndex].value); insertOther(this.options[this.selectedIndex].value); insertShipName(this.options[this.selectedIndex].value) ">
+                    onchange=" boatDetail(this.options[this.selectedIndex].value); insertOther(this.options[this.selectedIndex].value); insertShipName(this.options[this.selectedIndex].value);checkFuel(this.options[this.selectedIndex].value) ">
                 <option selected="selected">Choose your boat...</option>
             </select>
 
@@ -337,9 +337,9 @@
     function insertOther(boatName) {
         if (boatName == 'Other') {
             document.getElementById('Other').innerHTML = 'Ship Name: <input type="text" name="Name" id="shipName" " style="float: right"/><br><br>';
-            document.getElementById('Other').innerHTML += 'Max Speed: <input type="text" name="speed" id="shipSpeed" style="float: right"/><br><br>';
-            document.getElementById('Other').innerHTML += 'Full tank: <input type="text" name="fullTank" id="fullTank"  style="float: right"/><br><br> ';
-            document.getElementById('Other').innerHTML += 'Cost: <input type="text" name= "cost" id="shipCost" style="float: right"><br><br>';
+            document.getElementById('Other').innerHTML += 'Max Speed: <input type="number" name="speed" id="shipSpeed" placeholder = "km/h" style="float: right"/><br><br>';
+            document.getElementById('Other').innerHTML += 'Full tank: <input type="number" name="fullTank" id="fullTank" placeholder = "km"  style="float: right" onchange = "checkOtherFuel()"/><br><br> ';
+            document.getElementById('Other').innerHTML += 'Cost: <input type="number" name= "cost" id="shipCost" style="float: right" placeholder = "$/km"><br><br>';
             document.getElementById('Other').innerHTML += 'Status: <input type="text" name= "status" id="shipStatus" style="float: right" ><br><br>';
             document.getElementById('Other').innerHTML += 'Comment: <input type="text" name= "comment" id="shipComments" style="float: right" ><br><br>';
             document.getElementById('Other').innerHTML += 'Size: <input type="text" name= "desc" id="shipDesc" style="float: right" ><br>';
