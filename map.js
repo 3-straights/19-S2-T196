@@ -42,7 +42,21 @@ let markers = [];
     }
 }
 */
+//clear all markers and reset data if user accidentally click on the map before setting departure and arrival
+function clearMarker()
+{
+  if (wayPointslat.length>0)
+  {
+    objects.data.geometry.coordinates=[];
+    wayPointslat=[];
+    wayPointslng=[];
+    for (var i = 0; i < currentMarkers.length; i++) {
+      currentMarkers[i].remove();
+    }
+    currentMarkers=[];
 
+  }
+}
 
 
 function findAPIPort(nameOfPort)
@@ -68,7 +82,7 @@ portFound = allAPIPorts.findIndex(
     }
   )
 
-if (portFound !== undefined)
+if (portFound !== -1)
 {
   locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
   locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
@@ -77,6 +91,50 @@ if (portFound !== undefined)
   locations.size.push(JSON.parse(localStorage.getItem("portInformation")).size[portFound]);
   locations.type.push(JSON.parse(localStorage.getItem("portInformation")).type[portFound]);
   locations.locprecision.push(JSON.parse(localStorage.getItem("portInformation")).locprecision[portFound]);
+  if (currentMarkers.length==0)
+  {
+    let inimarker = new mapboxgl.Marker({ "color": "#00ff1e" });
+    inimarker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+    //set port name on corresponding popup
+    let popup = new mapboxgl.Popup({ offset: 45});
+    popup.setText(locations.name[0].toString());
+
+    //set popup on marker
+    inimarker.setPopup(popup)
+
+    // Display the marker.
+    inimarker.addTo(map);
+
+    // Display the popup.
+    popup.addTo(map);
+
+    //for reseting purpose,it will remove the marker one by one later
+    currentMarkers.push(inimarker);
+
+  }
+  else
+  {
+    let finmarker = new mapboxgl.Marker({ "color": "#ff0d00" });
+    finmarker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+    //set port name on corresponding popup
+    let popup = new mapboxgl.Popup({ offset: 45});
+    popup.setText(locations.name[0].toString());
+
+    //set popup on marker
+    finmarker.setPopup(popup)
+
+    // Display the marker.
+    finmarker.addTo(map);
+
+    // Display the popup.
+    popup.addTo(map);
+
+    //for reseting purpose,it will remove the marker one by one later
+    currentMarkers.push(finmarker);
+  }
+
 
 
 
@@ -111,39 +169,98 @@ if (portFound !== undefined)
 
 }
 
-else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)
+else if (document.getElementById("departure").innerHTML == '' && portFound == -1)//create port
 {
-  let other_lng, other_lat, other_name, other_country, other_type, other_size, other_locPrec;
+  let  other_name, other_country, other_type, other_size, other_locPrec;
 
-  if (document.getElementById('depPort') !== null)
+  if (currentMarkers.length==0)
   {
-   other_lng = document.getElementById('depLng').value;
-   other_lat = document.getElementById('depLat').value;
+
    other_name = document.getElementById('depPort').value;
    other_country = document.getElementById('depCountry').value;
    other_size = document.getElementById('depSize').value;
    other_type = document.getElementById('depType').value;
    other_locPrec = document.getElementById('depLocPrec').value;
+   if (locations.lon.length==0)
+   {
+     locations.lon.push(JSON.parse(localStorage.getItem("otherdepcoordinate"))[0]);
+     locations.lat.push(JSON.parse(localStorage.getItem("otherdepcoordinate"))[1]);
+   }
+   else
+   {
+     locations.lon=[]
+     locations.lat=[]
+     locations.lon.push(JSON.parse(localStorage.getItem("otherdepcoordinate"))[0]);
+     locations.lat.push(JSON.parse(localStorage.getItem("otherdepcoordinate"))[1]);
+   }
+
+
   }
 
-  else if (document.getElementById('desPort') !== null)
+  else
   {
-    other_lng = document.getElementById('desLng').value;
-    other_lat = document.getElementById('desLat').value;
+
     other_name = document.getElementById('desPort').value;
     other_country = document.getElementById('desCountry').value;
     other_size = document.getElementById('desSize').value;
     other_type = document.getElementById('desType').value;
     other_locPrec = document.getElementById('desLocPrec').value;
+    locations.lon.push(JSON.parse(localStorage.getItem("otherdescoordinate"))[0]);
+    locations.lat.push(JSON.parse(localStorage.getItem("otherdescoordinate"))[1]);
   }
 
-    locations.lon.push(other_lng);
-    locations.lat.push(other_lat);
-    locations.name.push(other_name);
-    locations.country.push(other_country);
-    locations.size.push(other_size);
-    locastions.type.push(other_type);
+
+
+    locations.name.push(other_name)
+    locations.country.push(other_country)
+    locations.size.push(other_size)
+    locations.type.push(other_type)
     locations.locprecision.push(other_locPrec)
+
+    if (currentMarkers.length==0)
+    {
+      let inimarker = new mapboxgl.Marker({ "color": "#00ff1e" });
+      inimarker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+      //set port name on corresponding popup
+      let popup = new mapboxgl.Popup({ offset: 45});
+      popup.setText(locations.name[0].toString());
+
+      //set popup on marker
+      inimarker.setPopup(popup)
+
+      // Display the marker.
+      inimarker.addTo(map);
+
+      // Display the popup.
+      popup.addTo(map);
+
+      //for reseting purpose,it will remove the marker one by one later
+      currentMarkers.push(inimarker);
+
+    }
+    else
+    {
+      let finmarker = new mapboxgl.Marker({ "color": "#ff0d00" });
+      finmarker.setLngLat([locations.lon[0], locations.lat[0]]);
+
+      //set port name on corresponding popup
+      let popup = new mapboxgl.Popup({ offset: 45});
+      popup.setText(locations.name[0].toString());
+
+      //set popup on marker
+      finmarker.setPopup(popup)
+
+      // Display the marker.
+      finmarker.addTo(map);
+
+      // Display the popup.
+      popup.addTo(map);
+
+      //for reseting purpose,it will remove the marker one by one later
+      currentMarkers.push(finmarker);
+    }
+
 
   if (localStorage.getItem('portCoord') == null)
   {
@@ -173,11 +290,37 @@ else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefi
 
   }
 }
-
 else
-{
-  alert('Please insert a valid departure port name or type "Other"');
+  {
+    alert('Please insert a valid departure port name or type "Other"');
+  }
 }
+
+
+function otheriniInformation()
+{
+  if (document.getElementById("depAddress").value!=="")
+{
+    jsonpinilocation(document.getElementById('depAddress').value)
+}
+else
+  {
+    alert("Please Enter a valid address")
+  }
+}
+
+function otherfinInformation()
+{
+  if(document.getElementById("desAddress").value!=="")
+{
+
+    jsonpfinlocation(document.getElementById('desAddress').value)
+}
+else
+  {
+    alert("Please Enter a valid address")
+  }
+
 
 }
 
@@ -384,7 +527,7 @@ function zoom()
   map.flyTo({
 center: [
 (JSON.parse(localStorage.getItem("portCoord")).lon[0]+JSON.parse(localStorage.getItem("portCoord")).lon[1])/2,(JSON.parse(localStorage.getItem("portCoord")).lat[0]+JSON.parse(localStorage.getItem("portCoord")).lat[1])/2],
-zoom:2.5,
+zoom:2.1,
 speed:1.5
 });
 }
@@ -444,7 +587,10 @@ function calculateDistance()
 {
   let earthRadius = 6371e3; // metres earth radius
   let d =0;
+if (!localStorage.getItem('routeDistane')){
 
+  localStorage.removeItem('routeDistane')
+}
   wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
   wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
 
@@ -508,4 +654,61 @@ function newDropoff(coords) {
 function updateDropoffs(geojson) {
   map.getSource('dropoffs-symbol')
     .setData(geojson);
+}
+function jsonpinilocation(targetLocation)
+{
+	let encodedLocation = encodeURIComponent(targetLocation);
+
+	let url = "https://api.opencagedata.com/geocode/v1/json?q=" + encodedLocation + "&key=c3d93d98f0264ab196efc62f2bb1555a&jsonp=displayiniMap";
+
+	let script = document.createElement('script');
+	script.src = url;
+	document.body.appendChild(script);
+
+}
+function jsonpfinlocation(targetLocation)
+{
+console.log(4)
+	let encodedLocation = encodeURIComponent(targetLocation);
+
+	let url = "https://api.opencagedata.com/geocode/v1/json?q=" + encodedLocation + "&key=c3d93d98f0264ab196efc62f2bb1555a&jsonp=displayfinMap";
+
+	let script = document.createElement('script');
+	script.src = url;
+	document.body.appendChild(script);
+
+}
+function displayiniMap(address) // all data passed to address variable
+{
+
+	let latRef = address.results[0].geometry.lat;
+	let lngRef = address.results[0].geometry.lng;
+if (localStorage.getItem("otherdepcoordinate")==null)
+{
+  localStorage.setItem("otherdepcoordinate",JSON.stringify([lngRef,latRef]))
+}
+else
+{
+  localStorage.removeItem("otherdepcoordinate")
+  localStorage.setItem("otherdepcoordinate",JSON.stringify([lngRef,latRef]))
+}
+
+}
+function displayfinMap(address) // all data passed to address variable
+{
+
+	let latRef = address.results[0].geometry.lat;
+	let lngRef = address.results[0].geometry.lng;
+
+  if (localStorage.getItem("otherdescoordinate")==null)
+  {
+    localStorage.setItem("otherdescoordinate",JSON.stringify([lngRef,latRef]))
+  }
+  else
+  {
+    localStorage.removeItem("otherdescoordinate")
+    localStorage.setItem("otherdescoordinate",JSON.stringify([lngRef,latRef]))
+  }
+
+
 }
