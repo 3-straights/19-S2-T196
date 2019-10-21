@@ -75,7 +75,7 @@ tr:nth-child(odd){
 }
 </style>
 </head>
-    <body>
+    <body onload="intWeatherTable(); finWeatherTable(); wayPointsTable()">
         <header class="mdl-layout__header" >
             <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
               <div class="mdl-layout__header-row"><span class="mdl-layout-title" style="font-family: times, serif; font-size:18pt; font-style:italic"><font color='black'>Weather</font> </span>
@@ -93,25 +93,32 @@ tr:nth-child(odd){
           Total Cost ($): <output id='totalCost' type = 'number' >
         </div>
         <div class='typeOfShip' style='text-align: left'>
+          Durations (hours): <output id='durations' type = 'number' >
+        </div>
+        <div class='typeOfShip' style='text-align: left'>
+          Total Ports Passed: <output id='totalPortsPass' type = 'number' >
+        </div>
+        <div class='typeOfShip' style='text-align: left'>
           Weather: <output id='weather' type = 'text' >
             <button type="button" name="button" onclick='intPortWeather(time);finPortWeather()'>Get current Weather</button>
         </div>
         Initial Port: <output id = 'intPortName' type = 'text'></output><br>
           <table id='intPortWeatherTable'></table>
         Final Port: <output id = 'finPortName' type = 'text'></output><br>
-          <table id='finPortWeatherTable'>
-            <tr></tr>
-          </table>
+          <table id='finPortWeatherTable'></table>
+        Way Points: <br>
+        <div id='wayPointsWeatherTable'>
+          
+        </div>
+
+
+
+
         <output id = 'weatherIntSummary' type = 'text'></output>
         <output id = 'weatherFinSummary' type = 'text'></output>
-        <div class='typeOfShip' style='text-align: left'>
-          Durations (hours): <output id='durations' type = 'number' >
-        </div>
-        <div class='typeOfShip' style='text-align: left'>
-          Total Ports Passed: <output id='totalPortsPass' type = 'number' >
-        </div>
+
         <a onclick = "location.href= 'mdl.html'"><button type = 'button' class = 'cancelButton'>Cancel</button></a>
-        <a onclick = "location.href= 'mdl.html'"><button type = 'button' class = 'enterButton' onchange =" newDiv()">Confirm</button></a>
+        <a onclick = "location.href= 'mdl.html'"><button type = 'button' class = 'enterButton'>Confirm</button></a>
     </body>
     <script src="weather.js"></script>
 </html>
