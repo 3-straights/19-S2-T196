@@ -222,7 +222,7 @@
         <div class='otherDes' id='otherDes'></div>
     </div>
     <button type='button'  class='enterButton'
-            onmouseup='findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);zoom();getIntWeather();getFinWeather()'>
+            onmouseup='clearMarker();findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);zoom();getIntWeather();getFinWeather()'>
         Set
     </button>
     <br><br><br><br>
@@ -267,6 +267,7 @@
             newDep += 'Size: <input type="text" name="depSize" id="depSize" style="float: right"/><br><br>';
             newDep += 'Type: <input type="text" name="depType" id="depType" style="float: right"/><br><br>';
             newDep += 'Loc Precision: <input type="text" name="depLocPrec" id="depLocPrec" style="float: right"/><br><br>';
+            newDep +='<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="otheriniInformation()">create</button>'
             newDep += '<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="closeOtherDep()">close</button>'
             otherDep.style.display = "block";
           }
@@ -293,6 +294,7 @@
             newDes += 'Size: <input type="text" name="desSize" id="desSize" style="float: right"/><br><br>';
             newDes += 'Type: <input type="text" name="desType" id="desType" style="float: right"/><br><br>';
             newDes += 'Loc Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
+            newDes +='<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="otherfinInformation()">create</button>'
             newDes += '<button type = "button" id = "closeOtherDes" class = "closeOtherDes" onclick="closeOtherDes()">close</button>'
             otherDes.style.display = "block";
         }
