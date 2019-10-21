@@ -1,511 +1,383 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoiaW5maW5pdHlrYWkiLCJhIjoiY2swemU1dmJzMDAyazNnbnR2Y2t5M3p6YiJ9.x2eR57RbO3WuXy5zsMV6FA';
-let map = new mapboxgl.Map({
-  container: 'map',
-  center: [144.9648731,-37.8182711],
-  zoom: 8,
-  style: 'mapbox://styles/mapbox/streets-v9'
-});
-;
+<!doctype html>
+<!--
+ *
+ * Utilising Mapbox API
+ *
+ * Copyright (c) 2019  Monash University
+ *
+ * Written by Arvind Kaur
+ *
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+-->
+<html>
+<head>
+    <title>Utilising Mapbox API</title>
+    <style type="text/css">
 
+        .map {
+            height: calc(70vh - 40px);
+        }
+        .otherDep {
+            width: 100%;
+            overflow-y: scroll;
+            background-color: #f1f1f1;
+            display: none;
+            font-weight: bold;
 
-/*function setDeparture()
-{
-let markers = [];
-  let locations=
-  {
-      lon:[],
-      lat:[],
-      name:[]
-  };
-  for(let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
-  {
-  if (document.getElementById("departure").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
-  {
-        locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
-        locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
-        locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[j]);
-        let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
-        marker.setLngLat([locations.lon[0], locations.lat[0]]);
-        let popup = new mapboxgl.Popup({ offset: 45});
-        popup.setText(locations.name[0].toString());
-        marker.setPopup(popup)
-        // Display the marker.
-        marker.addTo(map);
-        // Display the popup.
-        popup.addTo(map);
-        markers.push(marker);
+        }
+        .otherDes {
+            width: 100%;
+            overflow-y: scroll;
+            background-color: #f1f1f1;
+            display: none;
+            font-weight: bold;
+        }
+        .destination {
+            width: 20%;
+            margin-left: 200px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: orange;
+        }
+        .departure {
+            width: 20%;
+            margin-left: 360px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: orange;
+        }
+        .enterButton {
+            background-color: #0000FF; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            float: right;
+            cursor: pointer
+        }
+        .enterButton:hover {
+            background-color: #3e8e41
+        }
+        .enterButton:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .mdl-layout__header-row {
+            margin-left: 550px;
+            width: 100%;
+            height: 100%;
+        }
+        .helpAssist {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        /* Modal Content */
+        .helpContent {
+            background-color: lightgrey;
+            color: darkBlue;
+            margin: auto;
+            height: 45%;
+            border: 1px solid #888;
+            width: 35%;
+        }
+        .helpToggle {
+            cursor: pointer;
+            margin-left: 50px;
+            font-weight: bold;
+            color: darkBlue;
+        }
+        /* The Close Button */
+        .closeHelp {
+            color: black;
+            float: right;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .closeHelp:hover,
+        .closeHelp:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        p {
+            width: 100%;
+            text-align: center;
+        }
+        div.yoyo div {
+            float: left
+        }
+
+        .closeOtherDep{
+          background-color: lightblue;
+          font-size: 20px;
+          font-weight: bold;
+          color: white;
+          margin-left: 220px
+        }
+
+        .closeOtherDes{
+          background-color: lightblue;
+          font-size: 20px;
+          font-weight: bold;
+          color: white;
+          margin-left: 220px
+        }
+
+        .setDes{
+        margin-left: 7.5px;
+        background-color: darkblue;
+        color: white;
+        }
+
+        .setDep{
+          margin-left: 7.5px;
+          background-color: darkblue;
+          color: white;
+
+        }
+
+    </style>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet'/>
+</head>
+<body>
+<header class="mdl-layout__header">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <div class="mdl-layout__header-row"><span class="mdl-layout-title"
+                                                  style="font-family: times, serif; font-size:18pt; font-style:italic; color:black "><b>Ship Details & Informations</b></font> </span>
+            <a onclick="location.href= 'mdl.html'"><input type='image' name='home'
+                                                          src='https://icon-library.net/images/home-logo-icon/home-logo-icon-0.jpg'
+                                                          title="home" width='50' height='50'></a>
+            <button id='helpToggle' class='helpToggle'>HELP!?</button>
+            <div id='helpAssist' class='helpAssist'>
+                <div class='helpContent' id='helpContent'>
+                    <span class="closeHelp" id='closeHelp'> &times; </span>
+                    <p>
+                        <span class='help_use' style="font-size:18pt"><b>How to use?</b> <hr></span>
+                        1) Press the button 'Choose your location' once <br>
+                        2) Select your ports through the world icon <br>
+                        3) Input values into 'Departure' and 'Destination' <br>
+                        4) Press 'Enter' to toggle searchbar <br>
+                        5) Type 'Other' or 'other' in searchbar if selected port does not exist <br>
+                        # Fill in the given sections if 'Other' is selected
+                        6) Click 'Set' once the inputs have been filled <br>
+                        7) The selected ports will be shown in the given map <br>
+                        8) Select 'Confirm' to proceed <br>
+                        9) Choose your ship, and select 'Other' if interested ship is not shown in the list <br>
+                        10) Set date & time
+                        11) Click 'Enter' and you will see the selected result <br>
+                        12) Transition history(ies) can be found in 'Display Route' <br>
+                    </p>
+                    <br><br><br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+<div class='yoyo'>
+    <div class='departure'>
+        <b>Departure:</b>
+        <input type="text" id="departure" name="departure" style="float: right" placeholder="From.."
+                onkeyup="searchDepPort()"> <br><br>
+                <button type='button' id='setDep' class='setDep' onclick='otherDep()'>No port found? 'Click' to create departure port!</button>
+        <div class='otherDep' id='otherDep'></div>
+
+    </div>
+    <div class='destination'>
+        <b>Destination:</b>
+        <input type="text" id="destination" name="destination" style="float: right" placeholder="To.."
+               onkeyup="searchDesPort()"> <br><br>
+               <button type='button' id='setDes' class='setDes' onclick='otherDes()'>No port found? 'Click' to create destinate port!</button>
+        <div class='otherDes' id='otherDes'></div>
+    </div>
+    <button type='button'  class='enterButton'
+            onmouseup='clearMarker();findAPIPort(document.getElementById("departure").value);findAPIPort(document.getElementById("destination").value);zoom();getIntWeather();getFinWeather()'>
+        Set
+    </button>
+    <br><br><br><br>
+    <button type='button' class='enterButton' onmouseup='showRoute();calculateDistance()'>Set route</button>
+    <br><br><br><br>
+    <button type='button' class='enterButton' onmouseup='reset();resetStorage()'>Reset</button>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+<ul id='portSection' style="list-style-type: none;"></ul>
+<br><br>
+<div class='map' id="map"></div>
+<a onclick="location.href= 'mdl.html'">
+    <button type='button' class='enterButton' onclick = 'intPortInfo();finPortInfo()'>Confirm</button>
+</a>
+
+</body>
+
+<script>
+    let helpToggle = document.getElementById("helpAssist");
+    let helpButton = document.getElementById("helpToggle");
+    let closeHelp = document.getElementById("closeHelp");
+    helpButton.onclick = function () {
+        helpToggle.style.display = "block";
+    }
+    closeHelp.onclick = function () {
+        helpToggle.style.display = 'none';
+    }
+    window.onclick = function (event) {
+        if (event.target == helpToggle) {
+            helpToggle.style.display = 'none';
+        }
+    }
+
+    function otherDep() {
+        let newDep;
+        let otherDep = document.getElementById('otherDep');
+        if (otherDep.style.display = 'none')
+        {
+            newDep = 'Departure port: <input type="text" name="depPort" id="depPort" style="float: right"/><br><br>';
+            newDep += 'Country: <input type="text" name="depCountry" id="depCountry" style="float: right"/><br><br>';
+            newDep += 'Valid address: <input type="text" name="depAddress" id="depAddress" style="float: right"/><br><br>';
+            newDep += 'Size: <input type="text" name="depSize" id="depSize" style="float: right"/><br><br>';
+            newDep += 'Type: <input type="text" name="depType" id="depType" style="float: right"/><br><br>';
+            newDep += 'Loc Precision: <input type="text" name="depLocPrec" id="depLocPrec" style="float: right"/><br><br>';
+            newDep +='<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="otheriniInformation()">create</button>'
+            newDep += '<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="closeOtherDep()">close</button>'
+            otherDep.style.display = "block";
+          }
+
+        document.getElementById('otherDep').innerHTML = newDep;
+    }
+    function closeOtherDep()
+    {
+      if (document.getElementById('otherDep').style.display = "block")
+      {
+        document.getElementById('otherDep').style.display = "none";
       }
     }
-    if (locations.lon.length == 0)
+
+    function otherDes()
     {
-      alert('Please insert a valid departure port name or type "Other"');
+        let newDes;
+        let otherDes = document.getElementById('otherDes');
+        if (otherDes.style.display = 'none')
+        {
+            newDes = 'Departure port: <input type="text" name="desPort" id="desPort" style="float: right"/><br><br>';
+            newDes += 'Country: <input type="text" name="desCountry" id="desCountry" style="float: right"/><br><br>';
+            newDes += 'Valid address: <input type="text" name="desAddress" id="desAddress" style="float: right"/><br><br>';
+            newDes += 'Size: <input type="text" name="desSize" id="desSize" style="float: right"/><br><br>';
+            newDes += 'Type: <input type="text" name="desType" id="desType" style="float: right"/><br><br>';
+            newDes += 'Loc Precision: <input type="text" name="desLocPrec" id="desLocPrec" style="float: right"/><br><br>';
+            newDes +='<button type = "button" id = "closeOtherDep" class = "closeOtherDep" onclick="otherfinInformation()">create</button>'
+            newDes += '<button type = "button" id = "closeOtherDes" class = "closeOtherDes" onclick="closeOtherDes()">close</button>'
+            otherDes.style.display = "block";
+        }
+
+        document.getElementById('otherDes').innerHTML = newDes;
     }
+
+function closeOtherDes()
+{
+  if (document.getElementById('otherDes').style.display = "block")
+  {
+    document.getElementById('otherDes').style.display = "none";
+  }
 }
-*/
+
+    function searchDepPort() {
+        document.getElementById("portSection").innerHTML = '';
+        let searchQuery = document.getElementById('departure').value.toUpperCase();
+        let portInfo = JSON.parse(localStorage.getItem("portInformation"));
+        let count = 0;
+        for (let i = 0; i < portInfo.name.length && count < 10; i++) {
+            if (portInfo.name[i]) {
+                if (portInfo.name[i].toUpperCase().includes(searchQuery)) {
+                    count++;
+                    document.getElementById('portSection').innerHTML +=
+                        `<li style="list-style-type: circle"><b>${portInfo.name[i]}</b></li>` +
+                        `<li><button id="a_${i}" onclick="selectIntPort(this)">Select</button></li>` +
+                            `<li><button id="b_${i}" onclick="showPortInfo(this)">Info</button></li>` +
+                        `<div id = "portDIV_${i}"></div><hr>`;
+                }
+            }
+        }
 
 
-
-function findAPIPort(nameOfPort)
-{
-let portFound;
-let allAPIPorts = JSON.parse(localStorage.getItem('portInformation')).name;
-let locations=
-{
-
-    lon:[],
-    lat:[],
-    name:[],
-    country:[],
-    size: [],
-    type: [],
-    locprecision: []
-};
-
-portFound = allAPIPorts.findIndex(
-    function(arrayItem)
-    {
-        return arrayItem == nameOfPort;
     }
-  )
-
-if (portFound !== undefined)
-{
-  locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[portFound]);
-  locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[portFound]);
-  locations.name.push(JSON.parse(localStorage.getItem("portInformation")).name[portFound]);
-  locations.country.push(JSON.parse(localStorage.getItem("portInformation")).country[portFound]);
-  locations.size.push(JSON.parse(localStorage.getItem("portInformation")).size[portFound]);
-  locations.type.push(JSON.parse(localStorage.getItem("portInformation")).type[portFound]);
-  locations.locprecision.push(JSON.parse(localStorage.getItem("portInformation")).locprecision[portFound]);
-
-
-
-  if (localStorage.getItem('portCoord') == null)
-  {
-
-    localStorage.setItem('portCoord', JSON.stringify(locations));
-
-  }
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
-  {
-    localStorage.removeItem('portCoord');
-    localStorage.setItem('portCoord', JSON.stringify(locations));
-  }
-
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
-  {
-
-    let object = JSON.parse(localStorage.getItem('portCoord'));
-
-    object.lon.push(locations.lon[0]);
-    object.lat.push(locations.lat[0]);
-    object.name.push(locations.name[0]);
-    object.country.push(locations.country[0])
-    object.size.push(locations.size[0])
-    object.type.push(locations.type[0])
-    object.locprecision.push(locations.locprecision[0])
-    localStorage.setItem('portCoord', JSON.stringify(object));
-
-  }
-
-
-}
-
-else if ((nameOfPort == 'other' || nameOfPort == 'Other' )&& portFound == undefined)
-{
-  let other_lng, other_lat, other_name, other_country, other_type, other_size, other_locPrec;
-
-  if (document.getElementById('depPort') !== null)
-  {
-   other_lng = document.getElementById('depLng').value;
-   other_lat = document.getElementById('depLat').value;
-   other_name = document.getElementById('depPort').value;
-   other_country = document.getElementById('depCountry').value;
-   other_size = document.getElementById('depSize').value;
-   other_type = document.getElementById('depType').value;
-   other_locPrec = document.getElementById('depLocPrec').value;
-  }
-
-  else if (document.getElementById('desPort') !== null)
-  {
-    other_lng = document.getElementById('desLng').value;
-    other_lat = document.getElementById('desLat').value;
-    other_name = document.getElementById('desPort').value;
-    other_country = document.getElementById('desCountry').value;
-    other_size = document.getElementById('desSize').value;
-    other_type = document.getElementById('desType').value;
-    other_locPrec = document.getElementById('desLocPrec').value;
-  }
-
-    locations.lon.push(other_lng);
-    locations.lat.push(other_lat);
-    locations.name.push(other_name);
-    locations.country.push(other_country);
-    locations.size.push(other_size);
-    locastions.type.push(other_type);
-    locations.locprecision.push(other_locPrec)
-
-  if (localStorage.getItem('portCoord') == null)
-  {
-
-    localStorage.setItem('portCoord', JSON.stringify(locations));
-
-  }
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length >= 2)
-  {
-    localStorage.removeItem('portCoord');
-    localStorage.setItem('portCoord', JSON.stringify(locations));
-  }
-
-  else if (localStorage.getItem('portCoord') !== null && JSON.parse(localStorage.getItem('portCoord')).lon.length < 2)
-  {
-
-    let object = JSON.parse(localStorage.getItem('portCoord'));
-
-    object.lon.push(locations.lon[0]);
-    object.lat.push(locations.lat[0]);
-    object.name.push(locations.name[0]);
-    object.country.push(locations.country[0]);
-    object.type.push(locations.type[0]);
-    object.size.push(locations.size[0]);
-    object.locprecision.push(locations.locprecision[0])
-    localStorage.setItem('portCoord', JSON.stringify(object));
-
-  }
-}
-
-else
-{
-  alert('Please insert a valid departure port name or type "Other"');
-}
-
-}
-
-
-function getIntWeather()
-{
-  //seperate year, month, and day
-  let dateSet = JSON.parse(localStorage.getItem('date'));
-  let year = dateSet.substring(0,4);
-  let month = String(dateSet.substring(5,7) - 1);
-  //month have to minus 1 to have the correct data
-  let day = dateSet.substring(8,10);
-  if (day < 10)
-  {
-    day = day.substring(1,2);
-  }
-  let unixTime = Math.round((new Date(year, month, day)).getTime() / 1000);//Change local date to UNIX Time
-  localStorage.setItem('unixTime', JSON.stringify(unixTime))
-  //Request to DarkShy Api
-  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
-            JSON.parse(localStorage.getItem('portCoord')).lat[0] + "," + JSON.parse(localStorage.getItem('portCoord')).lon[0] + "," +
-            unixTime + "?exclude=minutely,hourly&units=si&callback=getIntWeatherData";
-  let script = document.createElement('script'); // create script element in HTML
-  script.src = url; // set link to sources
-  document.body.appendChild(script); // to append script element into body.
-}
-
-// Callback function to retrieve weather data
-function getIntWeatherData(data)
-{
-  let weatherInt = data.currently.summary;
-
-  //set marker coordinates
-  let marker = new mapboxgl.Marker({ "color": "#00FF00" });
-  marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[0], JSON.parse(localStorage.getItem('portCoord')).lat[0]]);
-
-  //set port name and weather on corresponding popup
-  let popup = new mapboxgl.Popup({ offset: 45});
-  popup.setText(JSON.parse(localStorage.getItem('portCoord')).name[0].toString() + ": " + weatherInt);
-
-  if (!localStorage.getItem('intWeather'))
-  {
-    localStorage.setItem('intWeather', JSON.stringify(weatherInt))
-  }
-  else if (localStorage.getItem('intWeather') !== null)
-  {
-    localStorage.removeItem('intWeather')
-    localStorage.setItem('intWeather', JSON.stringify(weatherInt))
-  }
-
-  //set popup on marker
-  marker.setPopup(popup)
-
-  // Display the marker.
-  marker.addTo(map);
-
-  // Display the popup.
-  popup.addTo(map);
-
-  //for reseting purpose,it will remove the marker one by one later
-  currentMarkers.push(marker);
-
-  return weatherInt
-}
-
-function getFinWeather()
-{
-  //Request to DarkShy Api
-  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
-            JSON.parse(localStorage.getItem('portCoord')).lat[1] + "," + JSON.parse(localStorage.getItem('portCoord')).lon[1] + "," +
-            JSON.parse(localStorage.getItem('unixTime')) + "?exclude=minutely,hourly&units=si&callback=getFinWeatherData";
-  let script = document.createElement('script'); // create script element in HTML
-  script.src = url; // set link to sources
-  document.body.appendChild(script); // to append script element into body.
-}
-
-// Callback function to retrieve weather data
-function getFinWeatherData(data) {
-  let weatherSevenDays = data.currently.summary;
-
-  if (!localStorage.getItem('finWeather'))
-  {
-    localStorage.setItem('finWeather', JSON.stringify(weatherSevenDays))
-  }
-  else if (localStorage.getItem('finWeather') !== null)
-  {
-    localStorage.removeItem('finWeather')
-    localStorage.setItem('finWeather', JSON.stringify(weatherSevenDays))
-  }
-
-  //set marker coordinates
-  let marker = new mapboxgl.Marker({ "color": "#FF0000" });
-  marker.setLngLat([JSON.parse(localStorage.getItem('portCoord')).lon[1], JSON.parse(localStorage.getItem('portCoord')).lat[1]]);
-
-  //set port name and weather on corresponding popup
-  let popup = new mapboxgl.Popup({ offset: 45});
-  popup.setText(JSON.parse(localStorage.getItem('portCoord')).name[1].toString() + ": " + weatherSevenDays);
-
-  //set popup on marker
-  marker.setPopup(popup)
-
-  // Display the marker.
-  marker.addTo(map);
-
-  // Display the popup.
-  popup.addTo(map);
-
-  //for reseting purpose,it will remove the marker one by one later
-  currentMarkers.push(marker);
-
-  return weatherSevenDays;
-}
-
-///////
-/*function setDestination()
-{
-  let locations=
-  {
-      lon:[],
-      lat:[],
-      name:[]
-  }
-  for(let j=0;j<JSON.parse(localStorage.getItem("portInformation")).name.length;j++)
-  {
-  if (document.getElementById("destination").value == JSON.parse(localStorage.getItem("portInformation")).name[j])
-  {
-        locations.lon.push(JSON.parse(localStorage.getItem("portInformation")).lng[j]);
-        locations.lat.push(JSON.parse(localStorage.getItem("portInformation")).lat[j]);
-        locations.name.push([JSON.parse(localStorage.getItem("portInformation")).name[j]])
-        let marker = new mapboxgl.Marker({ "color": "#FF8C00" });
-        marker.setLngLat([locations.lon[0], locations.lat[0]]);
-        let popup = new mapboxgl.Popup({ offset: 45});
-        popup.setText(locations.name[0].toString());
-        marker.setPopup(popup)
-        // Display the marker.
-        marker.addTo(map);
-        // Display the popup.
-        popup.addTo(map);
+    function searchDesPort() {
+        document.getElementById("portSection").innerHTML = '';
+        let searchQuery2 = document.getElementById('destination').value.toUpperCase();
+        let portInfo = JSON.parse(localStorage.getItem("portInformation"));
+        let count = 0;
+      for (let i = 0; i < portInfo.name.length && count < 10; i++) {
+        if (portInfo.name[i]) {
+          if (portInfo.name[i].toUpperCase().includes(searchQuery2)) {
+            count++;
+            document.getElementById('portSection').innerHTML +=
+                    `<li style="list-style-type: circle"><b>${portInfo.name[i]}</b></li>` +
+                    `<li><button id="a_${i}" onclick="selectDesPort(this)">Select</button></li>` +
+                    `<li><button id="b_${i}" onclick="showPortInfo(this)">Info</button></li>` +
+                    `<div id = "portDIV_${i}"></div><hr>`;
+          }
+        }
       }
     }
-    if (locations.lon.length == 0)
-    {
-      alert('Please insert a valid destination port name or type "Other" ');
+
+    function selectIntPort(context) {
+        let id = Number(context.id.replace("a_", ""));
+        let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById('departure').value = port;
     }
-}
-*/
-let object = {
-type: "geojson",
-data: {
-type: "Feature",
-properties: {},
-geometry: {
-type: "LineString",
-coordinates: []
-}
-}
-};
 
-let currentMarkers=[];
-let wayPointslat=[];
-let wayPointslng=[];
-
-
-map.on('click', function (e)
-{
-  object.data.geometry.coordinates.push([JSON.stringify(e.lngLat.lng),JSON.stringify(e.lngLat.lat)]);
-  //Request to DarkShy Api
-  let url = "https://api.darksky.net/forecast/2f325944bde3b00d86bdabaf4ac091be/" +
-            JSON.stringify(e.lngLat.lat) + "," + JSON.stringify(e.lngLat.lng) + "," +
-            JSON.parse(localStorage.getItem('unixTime')) + "?exclude=minutely,hourly&units=si&callback=getWeatherDataWayPoints";
-  let script = document.createElement('script'); // create script element in HTML
-  script.src = url; // set link to sources
-  document.body.appendChild(script); // to append script element into body.
-})
-
-function getWeatherDataWayPoints(data)
-{
-    let weatherWayPoint = data.currently.summary;
-
-    //set coordinate for marker
-    let markers = new mapboxgl.Marker({ "color": "#FF8C00" });
-    markers.setLngLat([data.longitude,data.latitude]);
-
-    //set weather on corresponding popup
-    let popup = new mapboxgl.Popup({ offset: 45});
-    popup.setText(weatherWayPoint);
-
-    //set popup on marker
-    markers.setPopup(popup)
-
-    // Display the marker.
-    markers.addTo(map);
-
-    // Display the popup.
-    popup.addTo(map);
-
-    wayPointslat.push(data.latitude)//calculation purpose
-    wayPointslng.push(data.longitude)
-    currentMarkers.push(markers);//for reset purpose
-}
-
-function zoom()
-{
-  map.flyTo({
-center: [
-(JSON.parse(localStorage.getItem("portCoord")).lon[0]+JSON.parse(localStorage.getItem("portCoord")).lon[1])/2,(JSON.parse(localStorage.getItem("portCoord")).lat[0]+JSON.parse(localStorage.getItem("portCoord")).lat[1])/2],
-zoom:2.5,
-speed:1.5
-});
-}
-
-
-
-function showRoute(){
-
-  object.data.geometry.coordinates.unshift([JSON.parse(localStorage.getItem("portCoord")).lon[0].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[0].toString()])
-  object.data.geometry.coordinates.push([JSON.parse(localStorage.getItem("portCoord")).lon[1].toString(),JSON.parse(localStorage.getItem("portCoord")).lat[1].toString()])
-  map.addLayer({
-  id: "routes",
-  type: "line",
-  source: object,
-  layout: { "line-join": "round", "line-cap": "round" },
-  paint: { "line-color": "#888", "line-width": 6 }
-  });
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
-
-}
-
-function reset()
-{
-  removeLayerWithId('routes')
-  if (currentMarkers!==null) {
-      for (var i = 0; i < currentMarkers.length; i++) {
-        currentMarkers[i].remove();
-      }
-}
-currentMarkers=[];
-wayPointlng=[];
-wayPointslat=[];
-
-
-}
-
-function resetStorage()
-{
-  localStorage.removeItem('wayPointsCoordinate')
-  localStorage.removeItem('routeDistance')
-  object.data.geometry.coordinates=[];
-  d=0;
-
-  localStorage.setItem('wayPointsCoordinate',JSON.stringify(object.data.geometry.coordinates))
-  localStorage.setItem('routeDistance', JSON.stringify(d))
-
-
-}
-
-
-function toRadians(value)
-{
-  return (value)*Math.PI/180
-}
-
-function calculateDistance()
-{
-  let earthRadius = 6371e3; // metres earth radius
-  let d =0;
-
-  wayPointslat.unshift((JSON.parse(localStorage.getItem("portCoord"))).lat[0])
-  wayPointslng.unshift((JSON.parse(localStorage.getItem("portCoord"))).lon[0])
-
-  wayPointslat.push((JSON.parse(localStorage.getItem("portCoord"))).lat[1])
-  wayPointslng.push((JSON.parse(localStorage.getItem("portCoord"))).lon[1])
-  console.log(wayPointslat.length)
-  for(i=0;i<wayPointslat.length-1;i++)
-  {
-    let lattitude1 = wayPointslat[i]
-    let lattitude2 = wayPointslat[i+1]
-    let longitude1=wayPointslng[i]
-    let longitude2=wayPointslng[i+1]
-    let difflattitude=toRadians((lattitude2-lattitude1))
-    let difflongitude=toRadians((longitude2-longitude1));
-    let a = Math.sin(difflattitude/2) * Math.sin(difflattitude/2) +(Math.cos(toRadians(lattitude1)) * Math.cos(toRadians(lattitude2)) *Math.sin(difflongitude/2) * Math.sin(difflongitude/2));
-
-    console.log(earthRadius)
-    console.log(a)
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    console.log(c)
-     d += (earthRadius * c)/1000;
-
-  }
-  localStorage.setItem('routeDistance', JSON.stringify(d))
-
-  return d;
-}
-function calculateTime()
-{
-  let travelTime = Number(JSON.parse(localStorage.getItem('distanceCalculated')))/(Number(JSON.parse(localStorage.getItem('myShip')).maxSpeed)*0.51444);
-  //1 knot = 0.51444m/s
-  localStorage.setItem('totalTravelTime',JSON.stringify(travelTime));
-}
-
-function removeLayerWithId(idToRemove)
-{
-	let hasPoly = map.getLayer(idToRemove)
-	if (hasPoly !== undefined)
-	{
-		map.removeLayer(idToRemove)
-		map.removeSource(idToRemove)
-	}
-}
-function newDropoff(coords) {
-  // Store the clicked point as a new GeoJSON feature with
-  // two properties: `orderTime` and `key`
-  var pt = turf.point(
-    [coords.lng, coords.lat],
-    {
-      orderTime: Date.now(),
-      key: Math.random()
+    function selectDesPort(context) {
+      let id = Number(context.id.replace("a_", ""));
+      let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById('destination').value = port;
     }
-  );
-  dropoffs.features.push(pt);
-  new mapboxgl.Popup();
 
-  marker.setLngLat([coords.lng, coords.lat]);
+    function showPortInfo(context) {
+      let id = Number(context.id.replace("b_", ""));
+      let array = JSON.parse(localStorage.getItem("portInformation"));
+      let port = array.name[id];
+      document.getElementById(`portDIV_${id}`).innerHTML =
+              'Name: ' + `${array.name[id]}` + '|'+
+              ' Type: '+ `${array.type[id]}` + '|'+
+              ' Size: ' + `${array.size[id]}` + '|' +
+              ' Location Precision: ' + `${array.locprecision[id]}` + '|' +
+              ' Country: ' + `${array.country[id]}` +'|'
+    }
 
-}
+</script>
+<script src="map.js"></script>
+<script src = "ship.js"></script>
 
-function updateDropoffs(geojson) {
-  map.getSource('dropoffs-symbol')
-    .setData(geojson);
-}
+
+</html>
